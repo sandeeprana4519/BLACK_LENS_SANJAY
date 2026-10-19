@@ -1,0 +1,234 @@
+{
+  "entities": {
+    "Article": {
+      "title": "Article",
+      "description": "A news article published or drafted on the portal",
+      "type": "object",
+      "properties": {
+        "id": { "type": "number", "description": "Numeric or unique identifier" },
+        "title": { "type": "string", "maxLength": 500, "description": "Article headline" },
+        "slug": { "type": "string", "maxLength": 255, "description": "URL slug for the article" },
+        "subtitle": { "type": "string", "maxLength": 500, "description": "Subheading or dek" },
+        "excerpt": { "type": "string", "maxLength": 1000, "description": "Brief summary" },
+        "content": { "type": "string", "maxLength": 50000, "description": "Full article body in HTML or Markdown" },
+        "category_id": { "type": "number", "description": "Category ID" },
+        "category_name": { "type": "string", "maxLength": 100 },
+        "category_slug": { "type": "string", "maxLength": 100 },
+        "author_id": { "type": "number", "description": "Author user ID" },
+        "author_name": { "type": "string", "maxLength": 100 },
+        "location": { "type": "string", "maxLength": 100 },
+        "featured_image": { "type": "string", "maxLength": 2000 },
+        "image_caption": { "type": "string", "maxLength": 500 },
+        "image_credit": { "type": "string", "maxLength": 200 },
+        "video_url": { "type": "string", "maxLength": 2000 },
+        "is_video_news": { "type": "boolean" },
+        "is_breaking": { "type": "boolean" },
+        "is_featured": { "type": "boolean" },
+        "is_trending": { "type": "boolean" },
+        "is_on_home": { "type": "boolean" },
+        "status": {
+          "type": "string",
+          "enum": ["draft", "pending_review", "approved", "scheduled", "published", "rejected", "archived"]
+        },
+        "review_notes": { "type": "string", "maxLength": 1000 },
+        "reviewed_by": { "type": "number" },
+        "reviewed_at": { "type": "string" },
+        "view_count": { "type": "number" },
+        "seo_title": { "type": "string", "maxLength": 255 },
+        "seo_description": { "type": "string", "maxLength": 500 },
+        "seo_keywords": { "type": "string", "maxLength": 500 },
+        "scheduled_at": { "type": "string" },
+        "published_at": { "type": "string" },
+        "created_at": { "type": "string" },
+        "updated_at": { "type": "string" }
+      },
+      "required": ["title", "slug", "content", "status"]
+    },
+    "Category": {
+      "title": "Category",
+      "description": "Editorial category for news classification",
+      "type": "object",
+      "properties": {
+        "id": { "type": "number" },
+        "name_hi": { "type": "string", "maxLength": 100 },
+        "name_en": { "type": "string", "maxLength": 100 },
+        "slug": { "type": "string", "maxLength": 100 },
+        "description": { "type": "string", "maxLength": 500 },
+        "image_url": { "type": "string", "maxLength": 2000 },
+        "parent_id": { "type": "number" },
+        "display_order": { "type": "number" },
+        "is_in_menu": { "type": "boolean" },
+        "is_in_home": { "type": "boolean" },
+        "is_active": { "type": "boolean" },
+        "article_count": { "type": "number" }
+      },
+      "required": ["name_hi", "slug"]
+    },
+    "Tag": {
+      "title": "Tag",
+      "description": "Keywords and topical tags",
+      "type": "object",
+      "properties": {
+        "id": { "type": "number" },
+        "name": { "type": "string", "maxLength": 100 },
+        "slug": { "type": "string", "maxLength": 100 },
+        "is_popular": { "type": "boolean" },
+        "is_active": { "type": "boolean" },
+        "article_count": { "type": "number" }
+      },
+      "required": ["name", "slug"]
+    },
+    "BreakingNewsItem": {
+      "title": "BreakingNewsItem",
+      "description": "Fast-breaking ticker headline",
+      "type": "object",
+      "properties": {
+        "id": { "type": "number" },
+        "title": { "type": "string", "maxLength": 500 },
+        "article_id": { "type": "number" },
+        "external_url": { "type": "string", "maxLength": 2000 },
+        "display_order": { "type": "number" },
+        "is_active": { "type": "boolean" },
+        "created_at": { "type": "string" }
+      },
+      "required": ["title"]
+    },
+    "Advertisement": {
+      "title": "Advertisement",
+      "description": "Ad banner campaign details",
+      "type": "object",
+      "properties": {
+        "id": { "type": "number" },
+        "title": { "type": "string", "maxLength": 255 },
+        "placement": {
+          "type": "string",
+          "enum": ["header_banner", "home_top", "in_feed", "sidebar", "article_inline", "footer_banner"]
+        },
+        "image_url": { "type": "string", "maxLength": 2000 },
+        "destination_url": { "type": "string", "maxLength": 2000 },
+        "advertiser_name": { "type": "string", "maxLength": 255 },
+        "start_date": { "type": "string" },
+        "end_date": { "type": "string" },
+        "impressions_count": { "type": "number" },
+        "clicks_count": { "type": "number" },
+        "is_active": { "type": "boolean" }
+      },
+      "required": ["title", "placement", "image_url"]
+    },
+    "SiteSettings": {
+      "title": "SiteSettings",
+      "description": "Portal global configurations and branding",
+      "type": "object",
+      "properties": {
+        "site_name": { "type": "string", "maxLength": 100 },
+        "tagline": { "type": "string", "maxLength": 200 },
+        "contact_email": { "type": "string", "maxLength": 150 },
+        "contact_phone": { "type": "string", "maxLength": 50 },
+        "office_address": { "type": "string", "maxLength": 500 },
+        "logo_url": { "type": "string", "maxLength": 2000 },
+        "footer_text": { "type": "string", "maxLength": 1000 },
+        "facebook_url": { "type": "string", "maxLength": 1000 },
+        "twitter_url": { "type": "string", "maxLength": 1000 },
+        "youtube_url": { "type": "string", "maxLength": 1000 },
+        "instagram_url": { "type": "string", "maxLength": 1000 },
+        "whatsapp_number": { "type": "string", "maxLength": 50 }
+      }
+    },
+    "ContactMessage": {
+      "title": "ContactMessage",
+      "description": "User reader feedback or editorial inquiry",
+      "type": "object",
+      "properties": {
+        "id": { "type": "number" },
+        "name": { "type": "string", "maxLength": 100 },
+        "email": { "type": "string", "maxLength": 150 },
+        "phone": { "type": "string", "maxLength": 50 },
+        "subject": { "type": "string", "maxLength": 255 },
+        "message": { "type": "string", "maxLength": 5000 },
+        "is_read": { "type": "boolean" },
+        "created_at": { "type": "string" }
+      },
+      "required": ["name", "email", "message"]
+    },
+    "User": {
+      "title": "User",
+      "description": "Portal journalist, editor, or administrator account",
+      "type": "object",
+      "properties": {
+        "id": { "type": "number" },
+        "name": { "type": "string", "maxLength": 100 },
+        "email": { "type": "string", "maxLength": 150 },
+        "password_hash": { "type": "string", "maxLength": 255 },
+        "phone": { "type": "string", "maxLength": 50 },
+        "role_id": { "type": "number" },
+        "role_name": { "type": "string", "maxLength": 50 },
+        "bio": { "type": "string", "maxLength": 1000 },
+        "assigned_region": { "type": "string", "maxLength": 200 },
+        "is_active": { "type": "boolean" },
+        "last_login": { "type": "string" },
+        "created_at": { "type": "string" }
+      },
+      "required": ["name", "email"]
+    },
+    "Admin": {
+      "title": "Admin",
+      "description": "Authorized admin security lookup document",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string", "maxLength": 150 },
+        "role": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["email", "role"]
+    },
+    "TestConnection": {
+      "title": "TestConnection",
+      "description": "Connection test probe document",
+      "type": "object",
+      "properties": {
+        "status": { "type": "string" }
+      }
+    }
+  },
+  "firestore": {
+    "/test/{docId}": {
+      "schema": "TestConnection",
+      "description": "SDK initial connection verification probe"
+    },
+    "/articles/{articleId}": {
+      "schema": "Article",
+      "description": "News articles collection"
+    },
+    "/categories/{categoryId}": {
+      "schema": "Category",
+      "description": "Categories collection"
+    },
+    "/tags/{tagId}": {
+      "schema": "Tag",
+      "description": "Tags collection"
+    },
+    "/breaking_news/{breakingNewsId}": {
+      "schema": "BreakingNewsItem",
+      "description": "Real-time breaking ticker items"
+    },
+    "/advertisements/{adId}": {
+      "schema": "Advertisement",
+      "description": "Ad campaigns and placements"
+    },
+    "/settings/{settingId}": {
+      "schema": "SiteSettings",
+      "description": "Site global branding and metadata"
+    },
+    "/contact_messages/{messageId}": {
+      "schema": "ContactMessage",
+      "description": "Contact submissions from visitors"
+    },
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Editorial staff profiles"
+    },
+    "/admins/{adminId}": {
+      "schema": "Admin",
+      "description": "Admin access control whitelist"
+    }
+  }
+}

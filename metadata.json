@@ -1,0 +1,6 @@
+{
+  "name": "तेज़ नज़र - Tez Nazar Hindi News Portal",
+  "description": "एक संपूर्ण एवं अत्याधुनिक हिंदी डिजिटल न्यूज़ पोर्टल - गाजियाबाद, दिल्ली एनसीआर और देश-विदेश की ताज़ा एवं निष्पक्ष खबरें।",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

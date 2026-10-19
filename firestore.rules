@@ -1,0 +1,135 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global Safety Net: Default Deny Catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Security Primitives
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        ((request.auth.token.email == 'sandeeprana4519@gmail.com' || request.auth.token.email == 'sandeeprana4139@gmail.com') && request.auth.token.email_verified == true) ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    // Entity Validation Helpers
+    function isValidArticle(data) {
+      return data.keys().hasAll(['title', 'slug', 'content', 'status']) &&
+        data.title is string && data.title.size() <= 500 &&
+        data.slug is string && data.slug.size() <= 255 &&
+        data.content is string && data.content.size() <= 50000 &&
+        data.status in ['draft', 'pending_review', 'approved', 'scheduled', 'published', 'rejected', 'archived'];
+    }
+
+    function isValidCategory(data) {
+      return data.keys().hasAll(['name_hi', 'slug']) &&
+        data.name_hi is string && data.name_hi.size() <= 100 &&
+        data.slug is string && data.slug.size() <= 100;
+    }
+
+    function isValidTag(data) {
+      return data.keys().hasAll(['name', 'slug']) &&
+        data.name is string && data.name.size() <= 100 &&
+        data.slug is string && data.slug.size() <= 100;
+    }
+
+    function isValidBreakingNews(data) {
+      return data.keys().hasAll(['title']) &&
+        data.title is string && data.title.size() <= 500;
+    }
+
+    function isValidAdvertisement(data) {
+      return data.keys().hasAll(['title', 'placement', 'image_url']) &&
+        data.title is string && data.title.size() <= 255 &&
+        data.placement in ['header_banner', 'home_top', 'in_feed', 'sidebar', 'article_inline', 'footer_banner'] &&
+        data.image_url is string && data.image_url.size() <= 2000;
+    }
+
+    function isValidSettings(data) {
+      return (!('site_name' in data) || (data.site_name is string && data.site_name.size() <= 100)) &&
+        (!('tagline' in data) || (data.tagline is string && data.tagline.size() <= 200));
+    }
+
+    function isValidContactMessage(data) {
+      return data.keys().hasAll(['name', 'email', 'message']) &&
+        data.name is string && data.name.size() <= 100 &&
+        data.email is string && data.email.size() <= 150 &&
+        data.message is string && data.message.size() <= 5000;
+    }
+
+    // Match Collections
+    match /articles/{articleId} {
+      allow read: if true;
+      allow create, update: if isValidId(articleId) && (isAdmin() || isValidArticle(incoming()));
+      allow delete: if isValidId(articleId);
+    }
+
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow create, update: if isValidId(categoryId) && (isAdmin() || isValidCategory(incoming()));
+      allow delete: if isValidId(categoryId);
+    }
+
+    match /tags/{tagId} {
+      allow read: if true;
+      allow create, update: if isValidId(tagId) && (isAdmin() || isValidTag(incoming()));
+      allow delete: if isValidId(tagId);
+    }
+
+    match /breaking_news/{breakingNewsId} {
+      allow read: if true;
+      allow create, update: if isValidId(breakingNewsId) && (isAdmin() || isValidBreakingNews(incoming()));
+      allow delete: if isValidId(breakingNewsId);
+    }
+
+    match /advertisements/{adId} {
+      allow read: if true;
+      allow create, update: if isValidId(adId) && (isAdmin() || isValidAdvertisement(incoming()));
+      allow delete: if isValidId(adId);
+    }
+
+    match /settings/{settingId} {
+      allow read: if true;
+      allow create, update: if isValidId(settingId) && (isAdmin() || isValidSettings(incoming()));
+      allow delete: if isValidId(settingId);
+    }
+
+    match /contact_messages/{messageId} {
+      allow create: if isValidId(messageId) && isValidContactMessage(incoming());
+      allow read, update, delete: if isValidId(messageId) && isAdmin();
+    }
+
+    match /users/{userId} {
+      allow read: if true;
+      allow write: if isValidId(userId) && (isAdmin() || incoming().keys().hasAll(['email', 'role_id']));
+    }
+
+    match /admins/{adminId} {
+      allow read: if isSignedIn();
+      allow write: if isValidId(adminId) && isAdmin();
+    }
+
+    match /test/{docId} {
+      allow read, write: if true;
+    }
+  }
+}
