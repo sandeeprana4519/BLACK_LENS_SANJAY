@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { 
   X, Calendar, Clock, MapPin, Eye, Share2, 
   Copy, Check, MessageCircle, Twitter, Facebook,
-  ChevronRight, ArrowLeft, Image as ImageIcon, Volume2
+  ChevronRight, ChevronLeft, ArrowLeft, Image as ImageIcon, Volume2,
+  Layers
 } from 'lucide-react';
 import { Article, Advertisement } from '../types';
 import { getYouTubeEmbedUrl, isYouTubeUrl } from '../utils/video';
@@ -24,6 +25,55 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({
 }) => {
   const [copied, setCopied] = useState(false);
   const [selectedGalleryImg, setSelectedGalleryImg] = useState<string | null>(null);
+  const [currentImageIdx, setCurrentImageIdx] = useState(0);
+  const galleryScrollRef = useRef<HTMLDivElement>(null);
+
+  // Extract up to 5 images for the article (featured image + gallery images)
+  const rawGallery = Array.isArray(article.gallery_images) ? article.gallery_images.filter(Boolean) : [];
+  const allImages: string[] = [];
+  if (article.featured_image) {
+    allImages.push(article.featured_image);
+  }
+  for (const img of rawGallery) {
+    if (!allImages.includes(img)) {
+      allImages.push(img);
+    }
+  }
+  const displayImages = allImages.length > 0 
+    ? allImages.slice(0, 5) 
+    : (article.featured_image ? [article.featured_image] : []);
+
+  const scrollToImage = (index: number) => {
+    if (galleryScrollRef.current) {
+      const container = galleryScrollRef.current;
+      const targetScroll = index * container.clientWidth;
+      container.scrollTo({ left: targetScroll, behavior: 'smooth' });
+      setCurrentImageIdx(index);
+    }
+  };
+
+  const handleNextImage = () => {
+    if (displayImages.length <= 1) return;
+    const nextIdx = (currentImageIdx + 1) % displayImages.length;
+    scrollToImage(nextIdx);
+  };
+
+  const handlePrevImage = () => {
+    if (displayImages.length <= 1) return;
+    const prevIdx = (currentImageIdx - 1 + displayImages.length) % displayImages.length;
+    scrollToImage(prevIdx);
+  };
+
+  const handleGalleryScroll = () => {
+    if (galleryScrollRef.current) {
+      const container = galleryScrollRef.current;
+      const width = container.clientWidth || 1;
+      const newIdx = Math.round(container.scrollLeft / width);
+      if (newIdx !== currentImageIdx && newIdx >= 0 && newIdx < displayImages.length) {
+        setCurrentImageIdx(newIdx);
+      }
+    }
+  };
 
   const articleUrl = typeof window !== 'undefined' ? `${window.location.origin}/news/${article.slug}` : `https://blacklens.com/news/${article.slug}`;
 
@@ -227,24 +277,134 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({
             </div>
           </div>
 
-          {/* Featured Image with Caption & Credit */}
-          <div className="space-y-2">
-            <div className="aspect-[16/9] w-full rounded-md overflow-hidden bg-stone-100 shadow-xs">
-              <img
-                src={article.featured_image}
-                alt={article.title}
-                className="w-full h-full object-cover"
-              />
-            </div>
-            {(article.image_caption || article.image_credit) && (
-              <div className="flex flex-wrap items-center justify-between text-xs text-stone-500 px-1 italic">
-                <span>{article.image_caption || 'तस्वीर: प्रतीकात्मक'}</span>
-                {article.image_credit && (
-                  <span className="font-semibold text-stone-600">फोटो साभार: {article.image_credit}</span>
-                )}
+          {/* Featured Images: Horizontal Scrollable / Swipeable Gallery (1 से 5 तस्वीरें - साइड स्क्रॉलिंग) */}
+          {displayImages.length <= 1 ? (
+            <div className="space-y-2">
+              <div 
+                onClick={() => displayImages[0] && setSelectedGalleryImg(displayImages[0])}
+                className="aspect-[16/9] w-full rounded-md overflow-hidden bg-stone-100 shadow-xs cursor-pointer group"
+              >
+                <img
+                  src={displayImages[0] || article.featured_image}
+                  alt={article.title}
+                  className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-300"
+                />
               </div>
-            )}
-          </div>
+              {(article.image_caption || article.image_credit) && (
+                <div className="flex flex-wrap items-center justify-between text-xs text-stone-500 px-1 italic">
+                  <span>{article.image_caption || 'तस्वीर: प्रतीकात्मक'}</span>
+                  {article.image_credit && (
+                    <span className="font-semibold text-stone-600">फोटो साभार: {article.image_credit}</span>
+                  )}
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="space-y-2.5">
+              {/* Horizontal Scroll / Swipe Container (जैसे कि हाथ से करने पर साइड होती चली जाए) */}
+              <div className="relative group rounded-lg overflow-hidden bg-stone-950 shadow-md">
+                <div
+                  ref={galleryScrollRef}
+                  onScroll={handleGalleryScroll}
+                  className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar select-none"
+                  style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                >
+                  {displayImages.map((imgUrl, idx) => (
+                    <div
+                      key={idx}
+                      onClick={() => setSelectedGalleryImg(imgUrl)}
+                      className="w-full shrink-0 snap-center aspect-[16/9] relative cursor-pointer overflow-hidden bg-stone-900 flex items-center justify-center"
+                    >
+                      <img
+                        src={imgUrl}
+                        alt={`${article.title} - तस्वीर ${idx + 1}`}
+                        className="w-full h-full object-cover select-none"
+                        draggable={false}
+                      />
+                      {/* Current image watermark */}
+                      <span className="absolute bottom-3 right-3 bg-stone-950/85 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-1 rounded border border-stone-700 shadow-md pointer-events-none">
+                        तस्वीर {idx + 1} / {displayImages.length}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Left Arrow Button */}
+                <button
+                  type="button"
+                  onClick={handlePrevImage}
+                  className="absolute left-2.5 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-stone-950/80 hover:bg-red-700 text-white flex items-center justify-center shadow-lg transition-all cursor-pointer z-10 opacity-90 hover:opacity-100"
+                  aria-label="पिछली तस्वीर देखें"
+                  title="पिछली तस्वीर"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+
+                {/* Right Arrow Button */}
+                <button
+                  type="button"
+                  onClick={handleNextImage}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-stone-950/80 hover:bg-red-700 text-white flex items-center justify-center shadow-lg transition-all cursor-pointer z-10 opacity-90 hover:opacity-100"
+                  aria-label="अगली तस्वीर देखें"
+                  title="अगली तस्वीर"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+
+                {/* Top Overlay Badge: Multiple Images & Swipe Hint */}
+                <div className="absolute top-3 left-3 bg-stone-950/80 backdrop-blur-xs text-white text-[11px] font-bold px-3 py-1 rounded-full flex items-center gap-1.5 shadow-md border border-stone-700 select-none pointer-events-none">
+                  <Layers className="w-3.5 h-3.5 text-amber-400" />
+                  <span>{displayImages.length} तस्वीरें · साइड में स्वाइप करें</span>
+                </div>
+
+                {/* Bottom Dots Indicator */}
+                <div className="absolute bottom-2.5 inset-x-0 flex items-center justify-center gap-1.5 pointer-events-none">
+                  {displayImages.map((_, idx) => (
+                    <span
+                      key={idx}
+                      className={`h-1.5 rounded-full transition-all duration-300 ${
+                        currentImageIdx === idx 
+                          ? 'w-6 bg-red-600 shadow-sm' 
+                          : 'w-1.5 bg-white/70'
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* Bottom Thumbnail Strip for Fast Navigation */}
+              <div className="flex items-center gap-2 overflow-x-auto py-1 no-scrollbar">
+                {displayImages.map((imgUrl, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => scrollToImage(idx)}
+                    className={`relative w-16 sm:w-20 aspect-[16/10] rounded overflow-hidden shrink-0 border-2 transition-all cursor-pointer ${
+                      currentImageIdx === idx 
+                        ? 'border-red-600 scale-105 shadow-sm ring-1 ring-red-400' 
+                        : 'border-stone-300 opacity-60 hover:opacity-100'
+                    }`}
+                    title={`तस्वीर ${idx + 1}`}
+                  >
+                    <img src={imgUrl} alt="" className="w-full h-full object-cover" />
+                    <span className="absolute bottom-0 right-0 bg-black/80 text-white text-[9px] px-1 font-bold">
+                      {idx + 1}
+                    </span>
+                  </button>
+                ))}
+              </div>
+
+              {/* Caption and Credit */}
+              {(article.image_caption || article.image_credit) && (
+                <div className="flex flex-wrap items-center justify-between text-xs text-stone-500 px-1 italic">
+                  <span>{article.image_caption || 'तस्वीर: प्रतीकात्मक'}</span>
+                  {article.image_credit && (
+                    <span className="font-semibold text-stone-600">फोटो साभार: {article.image_credit}</span>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Article Excerpt / Highlight Box */}
           <div className="bg-amber-50/70 border-l-4 border-amber-600 p-4 rounded-r text-stone-800 text-sm sm:text-base font-semibold leading-relaxed">
@@ -279,31 +439,6 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({
                     आपका ब्राउज़र वीडियो टैग का समर्थन नहीं करता है।
                   </video>
                 )}
-              </div>
-            </div>
-          )}
-
-          {/* Image Gallery (Up to 10 images) */}
-          {article.gallery_images && article.gallery_images.length > 0 && (
-            <div className="my-6 border-t border-stone-200 pt-5">
-              <h3 className="text-sm font-bold text-stone-900 mb-3 flex items-center gap-1.5">
-                <ImageIcon className="w-4 h-4 text-red-700" />
-                <span>फोटो गैलरी ({article.gallery_images.length} तस्वीरें)</span>
-              </h3>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
-                {article.gallery_images.map((imgUrl, idx) => (
-                  <div
-                    key={idx}
-                    onClick={() => setSelectedGalleryImg(imgUrl)}
-                    className="aspect-square rounded overflow-hidden cursor-pointer group bg-stone-100"
-                  >
-                    <img 
-                      src={imgUrl} 
-                      alt={`Gallery ${idx + 1}`} 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                    />
-                  </div>
-                ))}
               </div>
             </div>
           )}

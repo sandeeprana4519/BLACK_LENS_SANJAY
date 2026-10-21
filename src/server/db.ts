@@ -612,6 +612,11 @@ let localStore: LocalStore = {
       featured_image: 'https://images.unsplash.com/photo-1584824486509-112e4181ff6b?w=1000&auto=format&fit=crop&q=80',
       image_caption: 'दिल्ली एनसीआर में धुंध और प्रदूषण पर पानी का छिड़काव करती एंटी-स्मॉग गन',
       image_credit: 'पीटीआई / फ़ाइल फोटो',
+      gallery_images: [
+        'https://images.unsplash.com/photo-1584824486509-112e4181ff6b?w=1000&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=1000&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1534088568595-a066f410bcda?w=1000&auto=format&fit=crop&q=80'
+      ],
       is_breaking: true,
       is_featured: true,
       is_trending: true,

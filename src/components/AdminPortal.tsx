@@ -8,7 +8,7 @@ import {
   Upload, Video, Image as ImageIcon, Link as LinkIcon, Film, Play, X, Loader2,
   Search, Filter, ChevronLeft, ChevronRight, AlertCircle, ArrowUpRight, RotateCcw,
   CheckSquare, MessageSquare, History, Globe, Users, UserCheck, UserX, ShieldAlert,
-  LayoutDashboard, UserCog, KeyRound, Mail, PhoneCall
+  LayoutDashboard, UserCog, KeyRound, Mail, PhoneCall, Layers, Sparkles
 } from 'lucide-react';
 import { Article, Category, Tag, BreakingNewsItem, Advertisement, User as UserType, ArticleStatus, SiteSettings, ContactMessage } from '../types';
 import { getYouTubeEmbedUrl, isYouTubeUrl } from '../utils/video';
@@ -390,44 +390,131 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   const [videoUploadLoading, setVideoUploadLoading] = useState(false);
   const [imageInputMode, setImageInputMode] = useState<'upload' | 'url'>('upload');
   const [videoInputMode, setVideoInputMode] = useState<'url' | 'upload'>('url');
+  const [multiUrlInput, setMultiUrlInput] = useState('');
 
-  // Handle uploading image from PC
-  const handleImageFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  // Handle uploading multiple images from PC/Device (1 to 5 images)
+  const handleMultipleImagesUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+
+    const currentImages = (Array.isArray(formData.gallery_images) && formData.gallery_images.length > 0)
+      ? [...formData.gallery_images]
+      : (formData.featured_image ? [formData.featured_image] : []);
+
+    const remainingSlots = 5 - currentImages.length;
+    if (remainingSlots <= 0) {
+      showAlert('एक खबर में अधिकतम 5 तस्वीरें ही लगाई जा सकती हैं।', 'error');
+      if (imageInputRef.current) imageInputRef.current.value = '';
+      return;
+    }
+
+    const filesToUpload = files.slice(0, remainingSlots);
+    if (files.length > remainingSlots) {
+      showAlert(`अधिकतम 5 तस्वीरों की सीमा है। पहली ${remainingSlots} तस्वीरें चुनी गई हैं।`, 'info');
+    }
 
     setImageUploadLoading(true);
-    setFormMsg({ text: '', type: '' });
-    const reader = new FileReader();
-    reader.onload = async () => {
-      try {
-        const res = await fetch('/api/admin/upload', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({
-            data: reader.result,
-            name: file.name,
-            type: file.type
-          })
+    setFormMsg({ text: `${filesToUpload.length} तस्वीरें अपलोड हो रही हैं...`, type: 'info' });
+
+    try {
+      const uploadedUrls: string[] = [];
+      for (const file of filesToUpload) {
+        const url = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = async () => {
+            try {
+              const res = await fetch('/api/admin/upload', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                  data: reader.result,
+                  name: file.name,
+                  type: file.type
+                })
+              });
+              const json = await res.json();
+              if (json.success && json.url) {
+                resolve(json.url);
+              } else {
+                reject(new Error(json.message || 'अपलोड विफल रहा।'));
+              }
+            } catch (err) {
+              reject(err);
+            }
+          };
+          reader.onerror = () => reject(new Error('फ़ाइल पढ़ने में त्रुटि हुई।'));
+          reader.readAsDataURL(file);
         });
-        const json = await res.json();
-        if (json.success && json.url) {
-          setFormData(prev => ({ ...prev, featured_image: json.url }));
-          setFormMsg({ text: 'मुख्य तस्वीर सफलतापूर्वक अपलोड हो गई!', type: 'success' });
-        } else {
-          setFormMsg({ text: json.message || 'तस्वीर अपलोड विफल रही।', type: 'error' });
-        }
-      } catch (err: any) {
-        setFormMsg({ text: err.message || 'तस्वीर अपलोड में त्रुटि हुई।', type: 'error' });
-      } finally {
-        setImageUploadLoading(false);
-        if (imageInputRef.current) imageInputRef.current.value = '';
+        uploadedUrls.push(url);
       }
-    };
-    reader.readAsDataURL(file);
+
+      const combined = [...currentImages, ...uploadedUrls].slice(0, 5);
+      setFormData(prev => ({
+        ...prev,
+        featured_image: combined[0] || prev.featured_image,
+        gallery_images: combined
+      }));
+      setFormMsg({ text: `✓ ${uploadedUrls.length} नई तस्वीरें सफलतापूर्वक अपलोड हो गईं! (कुल: ${combined.length}/5)`, type: 'success' });
+    } catch (err: any) {
+      setFormMsg({ text: err.message || 'तस्वीरें अपलोड करने में त्रुटि हुई।', type: 'error' });
+    } finally {
+      setImageUploadLoading(false);
+      if (imageInputRef.current) imageInputRef.current.value = '';
+    }
+  };
+
+  const handleAddImageUrl = () => {
+    if (!multiUrlInput.trim()) return;
+    const currentImages = (Array.isArray(formData.gallery_images) && formData.gallery_images.length > 0)
+      ? [...formData.gallery_images]
+      : (formData.featured_image ? [formData.featured_image] : []);
+
+    if (currentImages.length >= 5) {
+      showAlert('एक खबर में अधिकतम 5 तस्वीरें ही लगाई जा सकती हैं।', 'error');
+      return;
+    }
+
+    const newImages = [...currentImages, multiUrlInput.trim()].slice(0, 5);
+    setFormData(prev => ({
+      ...prev,
+      featured_image: newImages[0],
+      gallery_images: newImages
+    }));
+    setMultiUrlInput('');
+    setFormMsg({ text: `✓ नई तस्वीर जोड़ी गई (कुल: ${newImages.length}/5)`, type: 'success' });
+  };
+
+  const handleRemoveImage = (indexToRemove: number) => {
+    const currentImages = (Array.isArray(formData.gallery_images) && formData.gallery_images.length > 0)
+      ? [...formData.gallery_images]
+      : (formData.featured_image ? [formData.featured_image] : []);
+
+    const updated = currentImages.filter((_, idx) => idx !== indexToRemove);
+    setFormData(prev => ({
+      ...prev,
+      featured_image: updated[0] || '',
+      gallery_images: updated
+    }));
+  };
+
+  const handleSetPrimaryImage = (indexToPrimary: number) => {
+    const currentImages = (Array.isArray(formData.gallery_images) && formData.gallery_images.length > 0)
+      ? [...formData.gallery_images]
+      : (formData.featured_image ? [formData.featured_image] : []);
+
+    const target = currentImages[indexToPrimary];
+    if (!target) return;
+    const remaining = currentImages.filter((_, idx) => idx !== indexToPrimary);
+    const updated = [target, ...remaining];
+    setFormData(prev => ({
+      ...prev,
+      featured_image: target,
+      gallery_images: updated
+    }));
+    setFormMsg({ text: '✓ मुख्य (कवर) तस्वीर बदल दी गई है!', type: 'success' });
   };
 
   // Handle uploading video from PC
@@ -980,10 +1067,14 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
       category_id: art.category_id || 1,
       author_id: isReporter ? (currentUser?.id || 1) : (art.author_id || currentUser?.id || 1),
       location: art.location || currentUser?.assigned_region || 'गाजियाबाद',
-      featured_image: art.featured_image || 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=1000&auto=format&fit=crop&q=80',
+      featured_image: (Array.isArray(art.gallery_images) && art.gallery_images.length > 0) 
+        ? art.gallery_images[0] 
+        : (art.featured_image || 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=1000&auto=format&fit=crop&q=80'),
       image_caption: art.image_caption || '',
       image_credit: art.image_credit || currentUser?.name || 'ब्लैक लेंस ब्यूरो',
-      gallery_images: art.gallery_images || [],
+      gallery_images: (Array.isArray(art.gallery_images) && art.gallery_images.length > 0)
+        ? art.gallery_images.slice(0, 5)
+        : (art.featured_image ? [art.featured_image] : ['https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=1000&auto=format&fit=crop&q=80']),
       video_url: art.video_url || '',
       is_video_news: !!art.is_video_news,
       is_breaking: !!art.is_breaking,
@@ -1000,6 +1091,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
 
   const startNewArticle = () => {
     setEditingArticle(null);
+    const defaultCover = 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=1000&auto=format&fit=crop&q=80';
     setFormData({
       title: '',
       slug: '',
@@ -1009,10 +1101,10 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
       category_id: categoryList[0]?.id || 1,
       author_id: currentUser?.id || 1,
       location: currentUser?.assigned_region || 'गाजियाबाद',
-      featured_image: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=1000&auto=format&fit=crop&q=80',
+      featured_image: defaultCover,
       image_caption: '',
       image_credit: currentUser?.name || 'ब्लैक लेंस ब्यूरो',
-      gallery_images: [],
+      gallery_images: [defaultCover],
       video_url: '',
       is_video_news: false,
       is_breaking: false,
@@ -1057,9 +1149,17 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
       .map(t => t.trim())
       .filter(Boolean);
 
+    const imagesList = (Array.isArray(formData.gallery_images) && formData.gallery_images.length > 0)
+      ? formData.gallery_images
+      : (formData.featured_image ? [formData.featured_image] : []);
+
+    const primaryImage = imagesList[0] || formData.featured_image || 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=1000&auto=format&fit=crop&q=80';
+
     // Enforce author_id is automatically associated with current reporter's user ID
     const payload = {
       ...formData,
+      featured_image: primaryImage,
+      gallery_images: imagesList.slice(0, 5),
       id: editingArticle?.id,
       author_id: isReporter ? currentUser?.id : formData.author_id,
       status: finalStatus,
@@ -4047,13 +4147,19 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 />
               </div>
 
-              {/* Featured Image with PC Upload & Web URL Option */}
-              <div className="border border-stone-200 rounded-lg p-3 bg-stone-50 space-y-2.5">
+              {/* Multiple Images Gallery for Article (1 से 5 तस्वीरें - हॉरिजॉन्टल स्क्रॉलिंग सपोर्ट) */}
+              <div className="border border-stone-200 rounded-lg p-3.5 bg-stone-50 space-y-3">
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <label className="text-xs font-bold text-stone-800 flex items-center gap-1.5">
-                    <ImageIcon className="w-3.5 h-3.5 text-red-600" />
-                    <span>मुख्य तस्वीर (Featured Image)</span>
-                  </label>
+                  <div className="flex items-center gap-2">
+                    <label className="text-xs font-bold text-stone-900 flex items-center gap-1.5">
+                      <ImageIcon className="w-4 h-4 text-red-600" />
+                      <span>खबर की तस्वीरें (मल्टीपल इमेज सपोर्ट - अधिकतम 5 तस्वीरें)</span>
+                    </label>
+                    <span className="bg-red-700 text-white text-[10px] font-bold px-2 py-0.5 rounded-full font-mono">
+                      {((formData.gallery_images && formData.gallery_images.length > 0) ? formData.gallery_images.length : (formData.featured_image ? 1 : 0))} / 5
+                    </span>
+                  </div>
+
                   <div className="flex items-center gap-1 text-[11px] bg-white p-0.5 rounded border border-stone-200">
                     <button
                       type="button"
@@ -4062,7 +4168,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                         imageInputMode === 'upload' ? 'bg-red-700 text-white font-bold' : 'text-stone-600 hover:text-stone-900'
                       }`}
                     >
-                      💻 PC / फोन से चुनें
+                      💻 PC / फोन से चुनें (मल्टीपल)
                     </button>
                     <button
                       type="button"
@@ -4071,49 +4177,161 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                         imageInputMode === 'url' ? 'bg-red-700 text-white font-bold' : 'text-stone-600 hover:text-stone-900'
                       }`}
                     >
-                      🔗 वेब इमेज URL
+                      🔗 वेब इमेज URL से जोड़ें
                     </button>
                   </div>
                 </div>
 
+                {/* Upload or URL input area */}
                 {imageInputMode === 'upload' ? (
                   <div>
                     <input
                       type="file"
                       ref={imageInputRef}
-                      onChange={handleImageFileUpload}
+                      onChange={handleMultipleImagesUpload}
                       accept="image/*"
+                      multiple
                       className="hidden"
                     />
                     <div 
-                      onClick={() => imageInputRef.current?.click()}
-                      className="border-2 border-dashed border-stone-300 hover:border-red-500 bg-white rounded-lg p-3 text-center cursor-pointer transition-colors"
+                      onClick={() => {
+                        const count = (formData.gallery_images && formData.gallery_images.length > 0)
+                          ? formData.gallery_images.length 
+                          : (formData.featured_image ? 1 : 0);
+                        if (count >= 5) {
+                          alert('अधिकतम 5 तस्वीरें पूरी हो चुकी हैं। नई तस्वीर जोड़ने के लिए पहले किसी तस्वीर को हटाएं।');
+                          return;
+                        }
+                        imageInputRef.current?.click();
+                      }}
+                      className="border-2 border-dashed border-stone-300 hover:border-red-500 bg-white rounded-lg p-3.5 text-center cursor-pointer transition-colors"
                     >
                       {imageUploadLoading ? (
-                        <div className="flex items-center justify-center gap-2 text-xs text-red-700 py-2">
+                        <div className="flex items-center justify-center gap-2 text-xs text-red-700 py-2 font-bold">
                           <Loader2 className="w-4 h-4 animate-spin" />
-                          <span>तस्वीर अपलोड हो रही है...</span>
+                          <span>तस्वीरें अपलोड हो रही हैं... कृपया प्रतीक्षा करें</span>
                         </div>
                       ) : (
                         <div className="flex flex-col items-center justify-center gap-1 text-stone-500 py-1">
-                          <Upload className="w-6 h-6 text-stone-400" />
-                          <span className="text-xs font-medium text-stone-700">कंप्यूटर अथवा मोबाइल से फोटो चुनें</span>
-                          <span className="text-[10px] text-stone-400">JPG, PNG, WEBP प्रारूप समर्थित</span>
+                          <Upload className="w-6 h-6 text-red-600" />
+                          <span className="text-xs font-bold text-stone-800">
+                            कंप्यूटर अथवा मोबाइल से 1 से 5 तस्वीरें चुनें (एक साथ कई तस्वीरें चुन सकते हैं)
+                          </span>
+                          <span className="text-[10px] text-stone-400">
+                            JPG, PNG, WEBP प्रारूप समर्थित · एक बार में या अलग-अलग जोड़ें (अधिकतम 5 तस्वीरें)
+                          </span>
                         </div>
                       )}
                     </div>
                   </div>
                 ) : (
-                  <div>
+                  <div className="flex items-center gap-2">
                     <input
-                      type="url"
-                      value={formData.featured_image}
-                      onChange={(e) => setFormData({ ...formData, featured_image: e.target.value })}
-                      placeholder="https://images.unsplash.com/..."
-                      className="w-full text-xs p-2 border border-stone-300 rounded focus:border-red-600 focus:outline-none bg-white font-mono"
+                      type="text"
+                      value={multiUrlInput}
+                      onChange={(e) => setMultiUrlInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          handleAddImageUrl();
+                        }
+                      }}
+                      placeholder="https://images.unsplash.com/... (वेब इमेज का लिंक डालें)"
+                      className="flex-1 text-xs p-2 border border-stone-300 rounded focus:border-red-600 focus:outline-none bg-white font-mono"
                     />
+                    <button
+                      type="button"
+                      onClick={handleAddImageUrl}
+                      className="bg-stone-900 hover:bg-red-700 text-white text-xs font-bold px-3 py-2 rounded transition-colors cursor-pointer shrink-0"
+                    >
+                      + तस्वीर जोड़ें
+                    </button>
                   </div>
                 )}
+
+                {/* Multiple Images Preview Strip & Controls */}
+                {(() => {
+                  const currentImages = (Array.isArray(formData.gallery_images) && formData.gallery_images.length > 0)
+                    ? formData.gallery_images
+                    : (formData.featured_image ? [formData.featured_image] : []);
+
+                  if (currentImages.length === 0) return null;
+
+                  return (
+                    <div className="space-y-2 pt-1">
+                      <div className="flex items-center justify-between text-xs text-stone-600">
+                        <span className="font-bold text-stone-800 flex items-center gap-1">
+                          <span>जोड़ी गई तस्वीरें:</span>
+                          <span className="text-red-700 font-mono font-bold">({currentImages.length}/5)</span>
+                        </span>
+                        <span className="text-[10px] text-stone-500">
+                          (पहली तस्वीर मुख्य कवर होगी · खबर में ये साइड-स्क्रॉलिंग में दिखेंगी)
+                        </span>
+                      </div>
+
+                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5">
+                        {currentImages.map((imgUrl, idx) => (
+                          <div 
+                            key={idx} 
+                            className={`relative rounded-md border-2 overflow-hidden bg-white shadow-2xs group flex flex-col justify-between ${
+                              idx === 0 ? 'border-red-600 ring-2 ring-red-100' : 'border-stone-200'
+                            }`}
+                          >
+                            <div className="aspect-[16/10] w-full overflow-hidden bg-stone-100 relative">
+                              <img 
+                                src={imgUrl} 
+                                alt={`Article img ${idx + 1}`} 
+                                className="w-full h-full object-cover"
+                              />
+                              <span className={`absolute top-1 left-1 text-[9px] font-bold px-1.5 py-0.5 rounded shadow-xs ${
+                                idx === 0 
+                                  ? 'bg-red-700 text-white font-sans' 
+                                  : 'bg-stone-900/80 text-white font-mono'
+                              }`}>
+                                {idx === 0 ? '⭐ मुख्य कवर' : `फोटो ${idx + 1}`}
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => handleRemoveImage(idx)}
+                                className="absolute top-1 right-1 bg-red-700 text-white p-1 rounded-full opacity-80 hover:opacity-100 hover:scale-110 transition-all cursor-pointer shadow-xs"
+                                title="हटाएं"
+                              >
+                                <X className="w-3 h-3" />
+                              </button>
+                            </div>
+
+                            <div className="p-1.5 bg-stone-50 border-t border-stone-200 flex items-center justify-between text-[10px]">
+                              {idx === 0 ? (
+                                <span className="text-emerald-700 font-bold flex items-center gap-0.5">
+                                  ✓ मुख्य तस्वीर
+                                </span>
+                              ) : (
+                                <button
+                                  type="button"
+                                  onClick={() => handleSetPrimaryImage(idx)}
+                                  className="text-stone-700 hover:text-red-700 font-semibold cursor-pointer underline flex items-center gap-0.5"
+                                >
+                                  मुख्य बनाएं
+                                </button>
+                              )}
+                              <span className="text-stone-400 font-mono text-[9px]">#{idx + 1}</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Info Notice about Scrolling Effect */}
+                      <div className="bg-amber-50 border border-amber-200 rounded p-2 text-[11px] text-amber-900 flex items-center gap-1.5">
+                        <span className="font-bold">📱 मोबाइल व वेब डिस्प्ले:</span>
+                        <span>
+                          {currentImages.length > 1
+                            ? `आपने ${currentImages.length} तस्वीरें लगाई हैं। खबर खोलते ही ये तस्वीरें साइड-स्क्रॉलिंग (हाथ से स्वाइप) में दिखेंगी!`
+                            : 'आप चाहें तो 4 और तस्वीरें जोड़ सकते हैं (कुल अधिकतम 5), जो खबर में साइड-स्क्रॉल होंगी।'}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })()}
 
                 {/* Caption and Credit */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
@@ -4138,21 +4356,6 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                     />
                   </div>
                 </div>
-
-                {/* Image Preview */}
-                {formData.featured_image && (
-                  <div className="mt-2 flex items-center gap-3 p-2 bg-white rounded border border-stone-200">
-                    <img 
-                      src={formData.featured_image} 
-                      alt="Preview" 
-                      className="w-16 h-12 object-cover rounded bg-stone-100"
-                    />
-                    <div className="flex-1 min-w-0 text-xs">
-                      <span className="text-emerald-700 font-bold block">✓ सक्रिय मुख्य तस्वीर</span>
-                      <span className="text-[10px] text-stone-400 truncate block font-mono">{formData.featured_image}</span>
-                    </div>
-                  </div>
-                )}
               </div>
 
               {/* Excerpt / Summary */}
