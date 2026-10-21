@@ -155,6 +155,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   const [regLoading, setRegLoading] = useState(false);
   const [regError, setRegError] = useState('');
   const [regSuccessMessage, setRegSuccessMessage] = useState('');
+  const [regAvatar, setRegAvatar] = useState('');
+  const [regAvatarLoading, setRegAvatarLoading] = useState(false);
 
   // Editor Role Detection (Role 4 = Editor)
   const isEditor = !!currentUser && (
@@ -187,6 +189,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   const [profileName, setProfileName] = useState(currentUser?.name || '');
   const [profileEmail, setProfileEmail] = useState(currentUser?.email || '');
   const [profilePhone, setProfilePhone] = useState(currentUser?.phone || '');
+  const [profileAvatar, setProfileAvatar] = useState(currentUser?.avatar_url || '');
+  const [profileAvatarLoading, setProfileAvatarLoading] = useState(false);
   const [profileCurrentPassword, setProfileCurrentPassword] = useState('');
   const [profileNewPassword, setProfileNewPassword] = useState('');
   const [profileConfirmPassword, setProfileConfirmPassword] = useState('');
@@ -688,6 +692,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
       setProfileName(currentUser.name || '');
       setProfileEmail(currentUser.email || '');
       setProfilePhone(currentUser.phone || '');
+      setProfileAvatar(currentUser.avatar_url || '');
     }
   }, [currentUser]);
 
@@ -753,6 +758,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
           name: profileName.trim(),
           email: profileEmail.trim(),
           phone: profilePhone.trim(),
+          avatar_url: profileAvatar || '',
           current_password: profileCurrentPassword || undefined,
           new_password: profileNewPassword || undefined,
           confirm_password: profileConfirmPassword || undefined
@@ -760,7 +766,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
       });
       const data = await res.json();
       if (data.success) {
-        setProfileMsg({ text: '✓ आपकी प्रोफ़ाइल सेटिंग्स (नाम, ईमेल, मोबाइल व पासवर्ड) सफलतापूर्वक सुरक्षित हो गईं!', type: 'success' });
+        setProfileMsg({ text: '✓ आपकी प्रोफ़ाइल सेटिंग्स (फोटो, नाम, ईमेल, मोबाइल व पासवर्ड) सफलतापूर्वक सुरक्षित हो गईं!', type: 'success' });
         showAlert('✓ आपकी प्रोफ़ाइल सेटिंग्स सफलतापूर्वक अपडेट हो गईं!');
         setProfileCurrentPassword('');
         setProfileNewPassword('');
@@ -768,6 +774,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
         if (data.user) {
           setCurrentUser(data.user);
           localStorage.setItem('tez_nazar_user', JSON.stringify(data.user));
+          setProfileAvatar(data.user.avatar_url || '');
         }
         if (data.token) {
           setToken(data.token);
@@ -824,6 +831,71 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
     showAlert('आप सफलतापूर्वक लॉगआउट हो गए हैं।', 'info');
   };
 
+  // Profile & Registration Avatar Upload Handlers (Directly from PC/Mobile Device)
+  const handleProfileAvatarSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      setProfileMsg({ text: 'फ़ोटो का आकार 5 MB से कम होना चाहिए।', type: 'error' });
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = async () => {
+      const base64Data = reader.result as string;
+      setProfileAvatarLoading(true);
+      try {
+        const res = await fetch('/api/auth/upload-avatar', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ data: base64Data, name: file.name })
+        });
+        const json = await res.json();
+        if (json.success && json.url) {
+          setProfileAvatar(json.url);
+        } else {
+          setProfileAvatar(base64Data);
+        }
+      } catch {
+        setProfileAvatar(base64Data);
+      } finally {
+        setProfileAvatarLoading(false);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleRegAvatarSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      setRegError('फ़ोटो का आकार 5 MB से कम होना चाहिए।');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = async () => {
+      const base64Data = reader.result as string;
+      setRegAvatarLoading(true);
+      try {
+        const res = await fetch('/api/auth/upload-avatar', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ data: base64Data, name: file.name })
+        });
+        const json = await res.json();
+        if (json.success && json.url) {
+          setRegAvatar(json.url);
+        } else {
+          setRegAvatar(base64Data);
+        }
+      } catch {
+        setRegAvatar(base64Data);
+      } finally {
+        setRegAvatarLoading(false);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
   // -------------------------------------------------------------
   // MODULE 7: REPORTER & EDITOR REGISTRATION HANDLER
   // -------------------------------------------------------------
@@ -875,7 +947,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
           password: regPassword,
           confirm_password: regConfirmPassword,
           requested_role: regRequestedRole,
-          terms_accepted: regTermsAccepted
+          terms_accepted: regTermsAccepted,
+          avatar_url: regAvatar || ''
         })
       });
       const data = await res.json();
@@ -886,6 +959,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
         setRegPhone('');
         setRegPassword('');
         setRegConfirmPassword('');
+        setRegAvatar('');
         setRegTermsAccepted(false);
       } else {
         setRegError(data.message || 'पंजीकरण विफल रहा।');
@@ -1162,6 +1236,9 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
       gallery_images: imagesList.slice(0, 5),
       id: editingArticle?.id,
       author_id: isReporter ? currentUser?.id : formData.author_id,
+      author_avatar: (isReporter || !formData.author_id || formData.author_id === currentUser?.id)
+        ? (currentUser?.avatar_url || '')
+        : (usersList.find(u => u.id === formData.author_id)?.avatar_url || currentUser?.avatar_url || ''),
       status: finalStatus,
       tags: parsedTags
     };
@@ -2360,6 +2437,52 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       </div>
                     </div>
 
+                    {/* Profile Photo Upload Option (from PC/Mobile) */}
+                    <div className="p-3 bg-stone-50 border border-stone-200 rounded-md">
+                      <label className="block text-xs font-semibold text-stone-700 mb-1.5">
+                        प्रोफ़ाइल फोटो (Profile Photo) — ऐच्छिक
+                      </label>
+                      <div className="flex items-center gap-3">
+                        {regAvatar ? (
+                          <div className="relative shrink-0">
+                            <img
+                              src={regAvatar}
+                              alt="अवतार"
+                              className="w-12 h-12 rounded-full object-cover border-2 border-red-600 shadow-2xs"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => setRegAvatar('')}
+                              className="absolute -top-1 -right-1 bg-red-600 hover:bg-red-700 text-white rounded-full w-4 h-4 flex items-center justify-center text-[10px] cursor-pointer"
+                              title="फोटो हटाएं"
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="w-12 h-12 rounded-full bg-stone-200 text-stone-600 flex items-center justify-center text-xs font-bold shrink-0">
+                            फोटो
+                          </div>
+                        )}
+                        <div className="flex-1 min-w-0">
+                          <label className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-stone-100 text-stone-800 text-xs font-semibold rounded border border-stone-300 cursor-pointer transition-colors shadow-2xs">
+                            <Upload className="w-3.5 h-3.5 text-red-600" />
+                            <span>{regAvatarLoading ? 'अपलोड हो रहा है...' : 'कंप्यूटर / फोन से फोटो चुनें'}</span>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              disabled={regAvatarLoading}
+                              onChange={handleRegAvatarSelect}
+                              className="hidden"
+                            />
+                          </label>
+                          <p className="text-[10px] text-stone-500 mt-1">
+                            आप सीधे अपने मोबाइल या कंप्यूटर से फोटो अपलोड कर सकते हैं।
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
                     {/* Terms Acceptance Checkbox */}
                     <div className="pt-2">
                       <label className="flex items-start gap-2 cursor-pointer text-xs text-stone-700 select-none">
@@ -2432,9 +2555,17 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
       {/* Top CMS Header */}
       <header className="bg-stone-900 text-white h-14 px-4 flex items-center justify-between shrink-0 border-b border-stone-800">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded bg-red-700 flex items-center justify-center font-bold text-white text-xs">
-            BL
-          </div>
+          {currentUser.avatar_url ? (
+            <img
+              src={currentUser.avatar_url}
+              alt={currentUser.name}
+              className="w-8 h-8 rounded-full object-cover border border-red-500 shadow-2xs shrink-0"
+            />
+          ) : (
+            <div className="w-8 h-8 rounded bg-red-700 flex items-center justify-center font-bold text-white text-xs shrink-0">
+              {currentUser.name ? currentUser.name.slice(0, 2).toUpperCase() : 'BL'}
+            </div>
+          )}
           <div>
             <span className="font-bold text-sm tracking-wide flex items-center gap-2">
               <span>{isReporter ? 'ब्लैक लेंस — रिपोर्टर पोर्टल' : isEditor ? 'ब्लैक लेंस — एडिटर पोर्टल' : 'ब्लैक लेंस CMS'}</span>
@@ -5509,6 +5640,55 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
               {/* Profile Settings Form: Exactly 3 Editable Fields */}
               <form onSubmit={handleUpdateProfile} className="bg-white p-6 rounded-lg border border-stone-200 shadow-2xs space-y-5">
                 
+                {/* 0. Profile Photo / Avatar */}
+                <div className="p-4 bg-stone-50 border border-stone-200 rounded-lg">
+                  <label className="block text-xs font-bold text-stone-800 mb-2">
+                    प्रोफ़ाइल फोटो (Reporter Profile Photo / Avatar)
+                  </label>
+                  <div className="flex flex-wrap items-center gap-4">
+                    <div className="relative">
+                      {profileAvatar ? (
+                        <img 
+                          src={profileAvatar} 
+                          alt="प्रोफ़ाइल फोटो" 
+                          className="w-16 h-16 rounded-full object-cover border-2 border-red-600 shadow-sm"
+                        />
+                      ) : (
+                        <div className="w-16 h-16 rounded-full bg-red-700 text-white flex items-center justify-center font-bold text-lg shadow-sm">
+                          {profileName ? profileName.slice(0, 2).toUpperCase() : 'BL'}
+                        </div>
+                      )}
+                    </div>
+                    <div className="space-y-1.5">
+                      <div className="flex items-center gap-2">
+                        <label className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-stone-100 text-stone-800 text-xs font-semibold rounded border border-stone-300 cursor-pointer transition-colors shadow-2xs">
+                          <Upload className="w-3.5 h-3.5 text-red-600" />
+                          <span>{profileAvatarLoading ? 'अपलोड हो रहा है...' : 'कंप्यूटर / फोन से फोटो चुनें'}</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            disabled={profileAvatarLoading}
+                            onChange={handleProfileAvatarSelect}
+                            className="hidden"
+                          />
+                        </label>
+                        {profileAvatar && (
+                          <button
+                            type="button"
+                            onClick={() => setProfileAvatar('')}
+                            className="px-2.5 py-1.5 text-xs text-red-700 hover:text-red-900 hover:bg-red-50 rounded border border-red-200 transition-colors cursor-pointer"
+                          >
+                            फोटो हटाएं
+                          </button>
+                        )}
+                      </div>
+                      <p className="text-[11px] text-stone-500">
+                        यह फोटो आपके द्वारा प्रस्तुत किए गए समाचारों में आपके नाम के साथ बायलाइन में दिखेगी।
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
                 {/* 1. Full Name */}
                 <div>
                   <label className="block text-xs font-bold text-stone-800 mb-1">
@@ -5711,6 +5891,55 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
               {/* Profile Settings Form: Name, Email, Mobile Number, Password */}
               <form onSubmit={handleUpdateProfile} className="bg-white p-6 rounded-lg border border-stone-200 shadow-2xs space-y-5">
                 
+                {/* 0. Profile Photo / Avatar */}
+                <div className="p-4 bg-stone-50 border border-stone-200 rounded-lg">
+                  <label className="block text-xs font-bold text-stone-800 mb-2">
+                    प्रोफ़ाइल फोटो (Editor Profile Photo / Avatar)
+                  </label>
+                  <div className="flex flex-wrap items-center gap-4">
+                    <div className="relative">
+                      {profileAvatar ? (
+                        <img 
+                          src={profileAvatar} 
+                          alt="प्रोफ़ाइल फोटो" 
+                          className="w-16 h-16 rounded-full object-cover border-2 border-red-600 shadow-sm"
+                        />
+                      ) : (
+                        <div className="w-16 h-16 rounded-full bg-red-700 text-white flex items-center justify-center font-bold text-lg shadow-sm">
+                          {profileName ? profileName.slice(0, 2).toUpperCase() : 'BL'}
+                        </div>
+                      )}
+                    </div>
+                    <div className="space-y-1.5">
+                      <div className="flex items-center gap-2">
+                        <label className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-stone-100 text-stone-800 text-xs font-semibold rounded border border-stone-300 cursor-pointer transition-colors shadow-2xs">
+                          <Upload className="w-3.5 h-3.5 text-red-600" />
+                          <span>{profileAvatarLoading ? 'अपलोड हो रहा है...' : 'कंप्यूटर / फोन से फोटो चुनें'}</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            disabled={profileAvatarLoading}
+                            onChange={handleProfileAvatarSelect}
+                            className="hidden"
+                          />
+                        </label>
+                        {profileAvatar && (
+                          <button
+                            type="button"
+                            onClick={() => setProfileAvatar('')}
+                            className="px-2.5 py-1.5 text-xs text-red-700 hover:text-red-900 hover:bg-red-50 rounded border border-red-200 transition-colors cursor-pointer"
+                          >
+                            फोटो हटाएं
+                          </button>
+                        )}
+                      </div>
+                      <p className="text-[11px] text-stone-500">
+                        यह फोटो आपके द्वारा संपादित व प्रकाशित खबरों में आपके नाम के साथ दिखेगी।
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
                 {/* 1. Full Name */}
                 <div>
                   <label className="block text-xs font-bold text-stone-800 mb-1">
@@ -5937,6 +6166,56 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   )}
 
                   <form onSubmit={handleUpdateProfile} className="bg-white p-6 rounded-lg border border-stone-200 shadow-2xs space-y-5">
+                    
+                    {/* 0. Profile Photo / Avatar */}
+                    <div className="p-4 bg-stone-50 border border-stone-200 rounded-lg">
+                      <label className="block text-xs font-bold text-stone-800 mb-2">
+                        व्यवस्थापक प्रोफ़ाइल फोटो (Admin Profile Photo / Avatar)
+                      </label>
+                      <div className="flex flex-wrap items-center gap-4">
+                        <div className="relative">
+                          {profileAvatar ? (
+                            <img 
+                              src={profileAvatar} 
+                              alt="व्यवस्थापक फोटो" 
+                              className="w-16 h-16 rounded-full object-cover border-2 border-red-600 shadow-sm"
+                            />
+                          ) : (
+                            <div className="w-16 h-16 rounded-full bg-red-700 text-white flex items-center justify-center font-bold text-lg shadow-sm">
+                              {profileName ? profileName.slice(0, 2).toUpperCase() : 'BL'}
+                            </div>
+                          )}
+                        </div>
+                        <div className="space-y-1.5">
+                          <div className="flex items-center gap-2">
+                            <label className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-stone-100 text-stone-800 text-xs font-semibold rounded border border-stone-300 cursor-pointer transition-colors shadow-2xs">
+                              <Upload className="w-3.5 h-3.5 text-red-600" />
+                              <span>{profileAvatarLoading ? 'अपलोड हो रहा है...' : 'कंप्यूटर / फोन से फोटो चुनें'}</span>
+                              <input
+                                type="file"
+                                accept="image/*"
+                                disabled={profileAvatarLoading}
+                                onChange={handleProfileAvatarSelect}
+                                className="hidden"
+                              />
+                            </label>
+                            {profileAvatar && (
+                              <button
+                                type="button"
+                                onClick={() => setProfileAvatar('')}
+                                className="px-2.5 py-1.5 text-xs text-red-700 hover:text-red-900 hover:bg-red-50 rounded border border-red-200 transition-colors cursor-pointer"
+                              >
+                                फोटो हटाएं
+                              </button>
+                            )}
+                          </div>
+                          <p className="text-[11px] text-stone-500">
+                            यह फोटो आपके द्वारा प्रकाशित की गई खबरों में लेखक/संपादक बायलाइन में दिखेगी।
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
                     {/* 1. Full Name */}
                     <div>
                       <label className="block text-xs font-bold text-stone-800 mb-1">
@@ -6683,13 +6962,24 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                           <tr key={u.id} className="hover:bg-stone-50/60 transition-colors">
                             {/* Name & Bio */}
                             <td className="p-3">
-                              <div className="font-bold text-stone-900">{u.name}</div>
-                              <div className="text-[11px] text-stone-500 truncate max-w-xs">{u.bio || 'पत्रकारिता डेस्क'}</div>
-                              {u.assigned_region && (
-                                <span className="inline-block mt-0.5 text-[10px] bg-stone-100 text-stone-600 px-1.5 py-0.2 rounded border border-stone-200">
-                                  {u.assigned_region}
-                                </span>
-                              )}
+                              <div className="flex items-center gap-2.5">
+                                {u.avatar_url ? (
+                                  <img src={u.avatar_url} alt={u.name} className="w-8 h-8 rounded-full object-cover border border-stone-300 shrink-0" />
+                                ) : (
+                                  <div className="w-8 h-8 rounded-full bg-stone-200 text-stone-700 flex items-center justify-center font-bold text-xs shrink-0">
+                                    {u.name ? u.name.slice(0, 1) : 'U'}
+                                  </div>
+                                )}
+                                <div className="min-w-0">
+                                  <div className="font-bold text-stone-900">{u.name}</div>
+                                  <div className="text-[11px] text-stone-500 truncate max-w-xs">{u.bio || 'पत्रकारिता डेस्क'}</div>
+                                  {u.assigned_region && (
+                                    <span className="inline-block mt-0.5 text-[10px] bg-stone-100 text-stone-600 px-1.5 py-0.2 rounded border border-stone-200">
+                                      {u.assigned_region}
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
                             </td>
 
                             {/* Contact Info */}
@@ -7291,7 +7581,12 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   </span>
                 </div>
                 <div className="text-xs text-stone-500 flex items-center gap-3">
-                  <span>संवाददाता: <strong>{previewArticle.author_name}</strong></span>
+                  <span className="flex items-center gap-1.5">
+                    {previewArticle.author_avatar ? (
+                      <img src={previewArticle.author_avatar} alt="" className="w-5 h-5 rounded-full object-cover border border-red-500" />
+                    ) : null}
+                    <span>संवाददाता: <strong className="text-stone-800">{previewArticle.author_name}</strong></span>
+                  </span>
                   <span>·</span>
                   <span>दृश्य: <strong>{previewArticle.view_count || 0}</strong></span>
                 </div>
@@ -7550,7 +7845,12 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
               </div>
 
               <div className="flex items-center gap-3 text-stone-600 bg-stone-50 p-2.5 rounded border border-stone-200">
-                <span>संवाददाता: <strong className="text-stone-900">{reviewModal.article.author_name}</strong></span>
+                <span className="flex items-center gap-1.5">
+                  {reviewModal.article.author_avatar ? (
+                    <img src={reviewModal.article.author_avatar} alt="" className="w-5 h-5 rounded-full object-cover border border-red-500" />
+                  ) : null}
+                  <span>संवाददाता: <strong className="text-stone-900">{reviewModal.article.author_name}</strong></span>
+                </span>
                 <span>·</span>
                 <span>श्रेणी: <strong>{reviewModal.article.category_name}</strong></span>
                 <span>·</span>

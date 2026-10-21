@@ -252,9 +252,17 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({
           {/* Author Byline & Timestamps */}
           <div className="flex flex-wrap items-center justify-between gap-3 py-3 border-y border-stone-200 text-xs sm:text-sm text-stone-600 bg-stone-50 px-3.5 rounded">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-red-700 text-white flex items-center justify-center font-bold text-sm shadow-xs font-sans">
-                BL
-              </div>
+              {article.author_avatar ? (
+                <img
+                  src={article.author_avatar}
+                  alt={article.author_name || 'लेखक'}
+                  className="w-10 h-10 rounded-full object-cover border-2 border-red-600 shadow-xs shrink-0"
+                />
+              ) : (
+                <div className="w-10 h-10 rounded-full bg-red-700 text-white flex items-center justify-center font-bold text-sm shadow-xs font-sans shrink-0">
+                  {article.author_name ? article.author_name.slice(0, 2).toUpperCase() : 'BL'}
+                </div>
+              )}
               <div>
                 <span className="block font-bold text-stone-900">{article.author_name || 'BLACK LENS विशेष डेस्क'}</span>
                 <span className="text-[11px] text-stone-500 flex items-center gap-1">

@@ -365,7 +365,12 @@ export function App() {
                     </div>
 
                     <div className="p-3 pt-0 flex items-center justify-between text-[11px] text-stone-500 border-t border-stone-100 mx-3.5 mb-2">
-                      <span className="truncate max-w-[120px]">{art.author_name}</span>
+                      <span className="flex items-center gap-1.5 truncate max-w-[150px]">
+                        {art.author_avatar ? (
+                          <img src={art.author_avatar} alt="" className="w-4 h-4 rounded-full object-cover shrink-0 border border-stone-300" />
+                        ) : null}
+                        <span className="truncate">{art.author_name}</span>
+                      </span>
                       <span>{art.view_count || 120} दृश्य</span>
                     </div>
                   </article>

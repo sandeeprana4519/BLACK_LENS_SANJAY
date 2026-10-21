@@ -10,7 +10,8 @@
       "role_name": "Super Admin",
       "bio": "मुख्य संपादक एवं डिजिटल पत्रकारिता विशेषज्ञ",
       "assigned_region": "समस्त भारत / गाजियाबाद",
-      "is_active": true
+      "is_active": true,
+      "avatar_url": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80"
     },
     {
       "id": 1792313535692,
@@ -30,7 +31,8 @@
       "approved_by_name": "संदीप राणा (प्रधान संपादक)",
       "approved_at": "2026-10-18T08:54:27.743Z",
       "approval_notes": "प्रमाणपत्र व आवेदन सत्यापन उपरांत अनुमोदित",
-      "updated_at": "2026-10-18T08:54:27.743Z"
+      "updated_at": "2026-10-18T08:54:27.743Z",
+      "avatar_url": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80"
     },
     {
       "id": 1792404630607,
@@ -50,7 +52,8 @@
       "approved_by_name": "संदीप राणा (प्रधान संपादक)",
       "approved_at": "2026-10-19T10:10:30.767Z",
       "approval_notes": "सत्यापित किया गया।",
-      "updated_at": "2026-10-19T10:10:30.767Z"
+      "updated_at": "2026-10-19T10:10:30.767Z",
+      "avatar_url": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80"
     },
     {
       "id": 2,
@@ -63,7 +66,8 @@
       "bio": "राजनीतिक एवं अपराध डेस्क प्रमुख",
       "assigned_region": "उत्तर प्रदेश एवं दिल्ली एनसीआर",
       "is_active": true,
-      "updated_at": "2026-10-18T10:23:43.335Z"
+      "updated_at": "2026-10-18T10:23:43.335Z",
+      "avatar_url": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80"
     },
     {
       "id": 3,
@@ -76,7 +80,8 @@
       "bio": "गाजियाबाद एवं स्थानीय निकाय संवाददाता",
       "assigned_region": "गाजियाबाद शहर एवं ट्रांस हिंडन",
       "is_active": true,
-      "updated_at": "2026-10-18T09:17:52.051Z"
+      "updated_at": "2026-10-18T09:17:52.051Z",
+      "avatar_url": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80"
     },
     {
       "id": 4,
@@ -87,7 +92,8 @@
       "role_name": "Supporting Admin",
       "bio": "सहायक व्यवस्थापक",
       "assigned_region": "दिल्ली एनसीआर",
-      "is_active": true
+      "is_active": true,
+      "avatar_url": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80"
     },
     {
       "id": 5,
@@ -98,7 +104,8 @@
       "role_name": "Advertising Manager",
       "bio": "ब्रांड एवं विज्ञापन प्रमुख",
       "assigned_region": "कॉर्पोरेट",
-      "is_active": true
+      "is_active": true,
+      "avatar_url": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80"
     }
   ],
   "categories": [

@@ -195,10 +195,62 @@ app.post('/api/contact', async (req: Request, res: Response) => {
 // AUTHENTICATION & REGISTRATION ROUTES (MODULE 7 & MODULE 9)
 // -------------------------------------------------------------
 
+// Public Avatar Upload Endpoint for Registration and Profile Photo Upload
+app.post('/api/auth/upload-avatar', async (req: Request, res: Response) => {
+  try {
+    const { data, name } = req.body;
+    if (!data) {
+      return res.status(400).json({ success: false, message: 'कोई फ़ोटो डेटा प्राप्त नहीं हुआ।' });
+    }
+
+    const match = data.match(/^data:([a-zA-Z0-9_\-\+\/]+);base64,(.+)$/);
+    if (!match) {
+      return res.status(400).json({ success: false, message: 'अमान्य फ़ोटो फ़ाइल प्रारूप।' });
+    }
+
+    const mime = match[1].toLowerCase();
+    const base64Data = match[2];
+    const buffer = Buffer.from(base64Data, 'base64');
+
+    const allowedImageMimes = [
+      'image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'
+    ];
+    if (!allowedImageMimes.includes(mime)) {
+      return res.status(400).json({ success: false, message: 'केवल JPG, PNG, WebP या GIF फ़ोटो समर्थित हैं।' });
+    }
+
+    if (buffer.length > 5 * 1024 * 1024) {
+      return res.status(400).json({ success: false, message: 'फ़ोटो का आकार 5 MB से कम होना चाहिए।' });
+    }
+
+    let ext = '.jpg';
+    if (mime.includes('png')) ext = '.png';
+    else if (mime.includes('webp')) ext = '.webp';
+    else if (mime.includes('gif')) ext = '.gif';
+
+    const cleanBaseName = (name || 'avatar')
+      .replace(ext, '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .slice(0, 30);
+
+    const filename = `avatar-${Date.now()}-${cleanBaseName || 'photo'}${ext}`;
+    const targetPath = path.join(uploadsDir, filename);
+    fs.writeFileSync(targetPath, buffer);
+
+    return res.json({
+      success: true,
+      url: `/uploads/${filename}`
+    });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, message: err.message || 'फ़ोटो अपलोड में तकनीकी त्रुटि।' });
+  }
+});
+
 // Reporter & Editor Public Registration
 app.post('/api/auth/register', async (req: Request, res: Response) => {
   try {
-    const { name, email, phone, password, confirm_password, requested_role, terms_accepted } = req.body;
+    const { name, email, phone, password, confirm_password, requested_role, terms_accepted, avatar_url } = req.body;
 
     // 1. Field presence validations
     if (!name || !name.trim()) {
@@ -267,6 +319,7 @@ app.post('/api/auth/register', async (req: Request, res: Response) => {
       email: email.trim().toLowerCase(),
       phone: phone.trim(),
       password_hash,
+      avatar_url: avatar_url ? String(avatar_url).trim() : '',
       requested_role: normalizedRole,
       role_id: assignedRoleId,
       role_name: roleDisplayName,
@@ -283,6 +336,7 @@ app.post('/api/auth/register', async (req: Request, res: Response) => {
         id: newUser.id,
         name: newUser.name,
         email: newUser.email,
+        avatar_url: newUser.avatar_url,
         requested_role: newUser.requested_role,
         approval_status: newUser.approval_status
       }
@@ -374,10 +428,10 @@ app.get('/api/auth/me', authenticateToken, async (req: any, res: Response) => {
 });
 
 // Update Profile (Reporter Profile Settings / Any User Profile)
-// Supports editable fields: Full Name, Email Address, Mobile/Phone, and Password with validation and bcrypt hashing
+// Supports editable fields: Full Name, Email Address, Mobile/Phone, Avatar Photo, and Password with validation and bcrypt hashing
 app.put(['/api/reporter/profile', '/api/editor/profile', '/api/auth/profile'], authenticateToken, async (req: any, res: Response) => {
   try {
-    const { name, email, phone, current_password, new_password, confirm_password } = req.body;
+    const { name, email, phone, current_password, new_password, confirm_password, avatar_url } = req.body;
 
     // 1. Full name validation
     if (!name || !name.trim()) {
@@ -439,12 +493,13 @@ app.put(['/api/reporter/profile', '/api/editor/profile', '/api/auth/profile'], a
       password_hash = await bcrypt.hash(new_password, 10);
     }
 
-    // Update only allowed fields (name, email, phone, password)
+    // Update only allowed fields (name, email, phone, avatar_url, password)
     // Server ignores and rejects any tampering with role_id, approval_status, etc.
     const updated = await db.updateUserProfile(req.user.id, {
       name: name.trim(),
       email: targetEmail,
       phone: phone !== undefined ? phone.trim() : undefined,
+      avatar_url: avatar_url !== undefined ? avatar_url : undefined,
       password_hash
     });
 
@@ -455,7 +510,8 @@ app.put(['/api/reporter/profile', '/api/editor/profile', '/api/auth/profile'], a
         email: updated.email,
         name: updated.name,
         role_id: updated.role_id,
-        role_name: updated.role_name
+        role_name: updated.role_name,
+        avatar_url: updated.avatar_url
       },
       JWT_SECRET,
       { expiresIn: '7d' }

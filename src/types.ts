@@ -29,6 +29,7 @@ export interface Article {
   category_id: number;
   author_id: number;
   author_name?: string;
+  author_avatar?: string;
   category_name?: string;
   category_slug?: string;
   location?: string;
@@ -139,6 +140,7 @@ export interface User {
   name: string;
   email: string;
   phone?: string;
+  avatar_url?: string;
   role_id: number;
   role_name?: string;
   requested_role?: 'reporter' | 'editor' | string;

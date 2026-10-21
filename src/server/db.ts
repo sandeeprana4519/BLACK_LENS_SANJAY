@@ -83,6 +83,7 @@ export interface Article {
   category_id: number;
   author_id: number;
   author_name?: string;
+  author_avatar?: string;
   category_name?: string;
   category_slug?: string;
   location?: string;
@@ -144,6 +145,7 @@ export interface User {
   email: string;
   password_hash: string;
   phone?: string;
+  avatar_url?: string;
   role_id: number;
   role_name?: string;
   requested_role?: 'reporter' | 'editor' | string;
@@ -299,6 +301,7 @@ let localStore: LocalStore = {
       email: 'admin@teznazar.com',
       password_hash: '$2a$10$vI8aWBnW3fID.ZQ4/zo1G.q1lRps.9cGLcZEiGDMVr5yUP1kuOYeq', // admin123
       phone: '+91 98765 43210',
+      avatar_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80',
       role_id: 1,
       role_name: 'Super Admin',
       bio: 'मुख्य संपादक एवं डिजिटल पत्रकारिता विशेषज्ञ',
@@ -312,6 +315,7 @@ let localStore: LocalStore = {
       email: 'editor@teznazar.com',
       password_hash: '$2a$10$vI8aWBnW3fID.ZQ4/zo1G.q1lRps.9cGLcZEiGDMVr5yUP1kuOYeq', // editor123
       phone: '+91 98111 22334',
+      avatar_url: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80',
       role_id: 4,
       role_name: 'Editor',
       bio: 'राजनीतिक एवं अपराध डेस्क प्रमुख',
@@ -325,6 +329,7 @@ let localStore: LocalStore = {
       email: 'reporter@teznazar.com',
       password_hash: '$2a$10$vI8aWBnW3fID.ZQ4/zo1G.q1lRps.9cGLcZEiGDMVr5yUP1kuOYeq', // reporter123
       phone: '+91 98222 33445',
+      avatar_url: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80',
       role_id: 5,
       role_name: 'Reporter',
       bio: 'गाजियाबाद एवं स्थानीय निकाय संवाददाता',
@@ -337,6 +342,7 @@ let localStore: LocalStore = {
       name: 'विकास वर्मा (संपादक)',
       email: 'subadmin@teznazar.com',
       password_hash: '$2a$10$vI8aWBnW3fID.ZQ4/zo1G.q1lRps.9cGLcZEiGDMVr5yUP1kuOYeq',
+      avatar_url: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&auto=format&fit=crop&q=80',
       role_id: 4,
       role_name: 'Editor',
       bio: 'संपादक (सहायक व्यवस्थापक से स्थानांतरित खाता)',
@@ -349,6 +355,7 @@ let localStore: LocalStore = {
       name: 'रोहित सिंघल (विज्ञापन प्रबंधक)',
       email: 'ads@teznazar.com',
       password_hash: '$2a$10$vI8aWBnW3fID.ZQ4/zo1G.q1lRps.9cGLcZEiGDMVr5yUP1kuOYeq',
+      avatar_url: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&auto=format&fit=crop&q=80',
       role_id: 4,
       role_name: 'Editor',
       bio: 'ब्रांड एवं विज्ञापन डेस्क',
@@ -362,6 +369,7 @@ let localStore: LocalStore = {
       email: 'deepak.reporter@example.com',
       password_hash: '$2a$10$vI8aWBnW3fID.ZQ4/zo1G.q1lRps.9cGLcZEiGDMVr5yUP1kuOYeq',
       phone: '+91 98991 12233',
+      avatar_url: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&auto=format&fit=crop&q=80',
       role_id: 5,
       role_name: 'Reporter (Pending)',
       requested_role: 'reporter',
@@ -784,6 +792,26 @@ try {
     const raw = fs.readFileSync(FALLBACK_DATA_FILE, 'utf-8');
     const parsed = JSON.parse(raw);
     if (parsed && Array.isArray(parsed.news_articles)) {
+      const seedMap = new Map<number, User>(localStore.users.map(u => [u.id, u]));
+      if (Array.isArray(parsed.users)) {
+        parsed.users = parsed.users.map((pu: User) => {
+          const seed = seedMap.get(pu.id);
+          if (seed && !pu.avatar_url && seed.avatar_url) {
+            pu.avatar_url = seed.avatar_url;
+          }
+          if (!pu.avatar_url) {
+            // Assign default journalist avatars based on role
+            if (pu.role_id === 1 || pu.role_id === 2) {
+              pu.avatar_url = 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80';
+            } else if (pu.role_id === 4) {
+              pu.avatar_url = 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80';
+            } else {
+              pu.avatar_url = 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80';
+            }
+          }
+          return pu;
+        });
+      }
       localStore = { ...localStore, ...parsed };
     }
   }
@@ -948,6 +976,17 @@ export const db = {
           a.author_name = u.name;
         }
       }
+      if (!a.author_avatar) {
+        if (a.author_id) {
+          const u = localStore.users.find(usr => usr.id === a.author_id);
+          if (u && u.avatar_url) {
+            a.author_avatar = u.avatar_url;
+          }
+        }
+        if (!a.author_avatar) {
+          a.author_avatar = 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80';
+        }
+      }
       return a;
     });
 
@@ -1033,6 +1072,15 @@ export const db = {
           const art = docSnap.data() as Article;
           if (art.slug === slugOrId || String(art.id) === String(slugOrId)) {
             art.view_count = (art.view_count || 0) + 1;
+            if (!art.author_avatar) {
+              if (art.author_id) {
+                const u = localStore.users.find(usr => usr.id === art.author_id);
+                if (u && u.avatar_url) art.author_avatar = u.avatar_url;
+              }
+              if (!art.author_avatar) {
+                art.author_avatar = 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80';
+              }
+            }
             // Async increment
             setDoc(doc(firestoreDb, 'articles', String(art.id)), art).catch(() => {});
             return art;
@@ -1046,6 +1094,15 @@ export const db = {
     const found = localStore.news_articles.find(a => a.slug === slugOrId || String(a.id) === String(slugOrId));
     if (found) {
       found.view_count = (found.view_count || 0) + 1;
+      if (!found.author_avatar) {
+        if (found.author_id) {
+          const u = localStore.users.find(usr => usr.id === found.author_id);
+          if (u && u.avatar_url) found.author_avatar = u.avatar_url;
+        }
+        if (!found.author_avatar) {
+          found.author_avatar = 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80';
+        }
+      }
       saveFallbackStore();
       return found;
     }
@@ -1359,6 +1416,7 @@ export const db = {
     requested_role: 'reporter' | 'editor' | string;
     role_id: number;
     role_name: string;
+    avatar_url?: string;
     approval_status?: 'pending' | 'approved' | 'rejected';
     is_active?: boolean;
     bio?: string;
@@ -1370,6 +1428,7 @@ export const db = {
       email: userData.email.toLowerCase(),
       phone: userData.phone,
       password_hash: userData.password_hash,
+      avatar_url: userData.avatar_url || '',
       requested_role: userData.requested_role,
       role_id: userData.role_id || (userData.requested_role === 'editor' ? 4 : 5),
       role_name: userData.role_name || (userData.requested_role === 'editor' ? 'Editor (Pending)' : 'Reporter (Pending)'),
@@ -1592,7 +1651,7 @@ export const db = {
     return true;
   },
 
-  async updateUserProfile(userId: number, data: { name?: string; email?: string; phone?: string; password_hash?: string }) {
+  async updateUserProfile(userId: number, data: { name?: string; email?: string; phone?: string; password_hash?: string; avatar_url?: string }) {
     const user = localStore.users.find(u => u.id === userId);
     if (!user) {
       throw new Error('उपयोगकर्ता नहीं मिला।');
@@ -1610,6 +1669,9 @@ export const db = {
     }
     if (data.phone !== undefined) {
       user.phone = data.phone.trim();
+    }
+    if (data.avatar_url !== undefined) {
+      user.avatar_url = data.avatar_url.trim();
     }
     if (data.password_hash) {
       user.password_hash = data.password_hash;
@@ -1670,6 +1732,7 @@ export const db = {
     const assignedAuthorId = isReporterRole ? userId : (art.author_id ? parseInt(String(art.author_id), 10) : userId);
     const authorUser = isReporterRole ? user : (localStore.users.find(u => u.id === assignedAuthorId) || user);
     const author_name = authorUser?.name || user?.name || art.author_name || 'ब्लैक लेंस डेस्क';
+    const author_avatar = authorUser?.avatar_url || user?.avatar_url || art.author_avatar || '';
 
     // Tags processing: can be array or comma-separated string
     let parsedTags: string[] = [];
@@ -1729,6 +1792,7 @@ export const db = {
           category_slug,
           author_id: assignedAuthorId,
           author_name,
+          author_avatar: author_avatar || existing.author_avatar || '',
           tags: parsedTags.length > 0 ? parsedTags : (existing.tags || []),
           id: existing.id,
           status: newStatus,
@@ -1767,6 +1831,7 @@ export const db = {
         category_slug,
         author_id: assignedAuthorId,
         author_name,
+        author_avatar: author_avatar || '',
         location: art.location || 'गाजियाबाद',
         featured_image: art.featured_image || 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=1000&auto=format&fit=crop&q=80',
         image_caption: art.image_caption || '',
