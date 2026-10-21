@@ -5,6 +5,7 @@ import { Article, Advertisement, SiteSettings } from '../types';
 interface HeroSectionProps {
   articles: Article[];
   sidebarAd?: Advertisement;
+  liveDeskAd?: Advertisement;
   settings?: SiteSettings | Record<string, any>;
   onOpenArticle: (article: Article) => void;
   onSelectCategory: (slug: string) => void;
@@ -13,6 +14,7 @@ interface HeroSectionProps {
 export const HeroSection: React.FC<HeroSectionProps> = ({
   articles,
   sidebarAd,
+  liveDeskAd,
   settings,
   onOpenArticle,
   onSelectCategory
@@ -158,17 +160,101 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               <span className="text-xs font-semibold text-red-700">पल-पल की खबर</span>
             </div>
 
-            {/* List of articles */}
+            {/* List of articles with Live Desk Ad format */}
             <div className="divide-y divide-stone-100">
-              {latestFeed.map((item, index) => (
+              {latestFeed.slice(0, 2).map((item, index) => (
                 <div
                   key={item.id}
                   onClick={() => onOpenArticle(item)}
-                  className="py-3 group cursor-pointer first:pt-1 last:pb-1"
+                  className="py-3 group cursor-pointer first:pt-1"
                 >
                   <div className="flex items-start gap-3">
                     <span className="text-lg font-black text-stone-300 font-mono w-4 shrink-0 group-hover:text-red-700 transition-colors">
                       {index + 1}
+                    </span>
+
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 text-[11px] text-stone-500 mb-1">
+                        <span className="text-red-700 font-bold">{item.category_name}</span>
+                        <span>·</span>
+                        <span>{formatRelativeTime(item.published_at || item.created_at)}</span>
+                      </div>
+
+                      <h3 className="text-sm font-bold text-stone-900 group-hover:text-red-700 transition-colors line-clamp-2 leading-snug">
+                        {item.title}
+                      </h3>
+                    </div>
+
+                    {item.featured_image && (
+                      <div className="w-16 h-14 rounded overflow-hidden shrink-0 bg-stone-100">
+                        <img 
+                          src={item.featured_image} 
+                          alt="" 
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform" 
+                          loading="lazy"
+                        />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+
+              {/* Dedicated Live Desk Advertisement Format */}
+              {liveDeskAd && (
+                <div
+                  onClick={() => {
+                    if (liveDeskAd.destination_url && liveDeskAd.destination_url !== '#') {
+                      fetch(`/api/advertisements/${liveDeskAd.id}/click`, { method: 'POST' }).catch(() => {});
+                      window.open(liveDeskAd.destination_url, '_blank');
+                    }
+                  }}
+                  className="my-2.5 p-3 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-300 rounded-md cursor-pointer hover:border-amber-500 hover:shadow-xs transition-all group"
+                >
+                  <div className="flex items-center justify-between text-[10px] text-amber-900 font-bold mb-1.5">
+                    <span className="flex items-center gap-1 bg-amber-200/90 text-amber-950 px-2 py-0.5 rounded uppercase tracking-wider font-sans">
+                      <span>⭐ प्रायोजित विज्ञापन</span>
+                    </span>
+                    <span className="text-stone-600 truncate max-w-[140px]">{liveDeskAd.advertiser_name || 'लाइव डेस्क स्पॉन्सर'}</span>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    {liveDeskAd.image_url && (
+                      <div className="w-20 h-16 rounded overflow-hidden shrink-0 bg-stone-100 border border-amber-200">
+                        <img
+                          src={liveDeskAd.image_url}
+                          alt={liveDeskAd.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                          loading="lazy"
+                        />
+                      </div>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-xs sm:text-[13px] font-bold text-stone-900 group-hover:text-amber-800 transition-colors line-clamp-2 leading-snug">
+                        {liveDeskAd.title}
+                      </h4>
+                      {liveDeskAd.description && (
+                        <p className="text-[11px] text-stone-600 line-clamp-1 mt-0.5">
+                          {liveDeskAd.description}
+                        </p>
+                      )}
+                      <span className="inline-flex items-center gap-1 text-[10px] font-bold text-amber-700 group-hover:text-amber-900 mt-1">
+                        <span>क्लिक कर देखें</span>
+                        <ArrowUpRight className="w-3 h-3" />
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {latestFeed.slice(2).map((item, index) => (
+                <div
+                  key={item.id}
+                  onClick={() => onOpenArticle(item)}
+                  className="py-3 group cursor-pointer last:pb-1"
+                >
+                  <div className="flex items-start gap-3">
+                    <span className="text-lg font-black text-stone-300 font-mono w-4 shrink-0 group-hover:text-red-700 transition-colors">
+                      {index + 3}
                     </span>
 
                     <div className="flex-1 min-w-0">

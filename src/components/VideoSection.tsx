@@ -3,16 +3,17 @@ import {
   Play, Pause, X, Radio, Clock, Eye, 
   ChevronLeft, ChevronRight, ArrowRight, Video, Sparkles, MapPin 
 } from 'lucide-react';
-import { Article } from '../types';
+import { Article, Advertisement } from '../types';
 import { getYouTubeEmbedUrl, isYouTubeUrl } from '../utils/video';
 import { CategoryPopupModal } from './CategoryPopupModal';
 
 interface VideoSectionProps {
   articles: Article[];
+  videoAd?: Advertisement;
   onOpenArticle: (article: Article) => void;
 }
 
-export const VideoSection: React.FC<VideoSectionProps> = ({ articles, onOpenArticle }) => {
+export const VideoSection: React.FC<VideoSectionProps> = ({ articles, videoAd, onOpenArticle }) => {
   const [activeVideo, setActiveVideo] = useState<Article | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
@@ -64,6 +65,75 @@ export const VideoSection: React.FC<VideoSectionProps> = ({ articles, onOpenArti
         setIsHovered(false);
       }, 3000);
     }
+  };
+
+  const renderVideoAdCard = (key: string) => {
+    if (!videoAd) return null;
+    return (
+      <div
+        key={key}
+        onClick={() => {
+          if (videoAd.destination_url && videoAd.destination_url !== '#') {
+            fetch(`/api/advertisements/${videoAd.id}/click`, { method: 'POST' }).catch(() => {});
+            window.open(videoAd.destination_url, '_blank');
+          }
+        }}
+        className="w-56 sm:w-64 shrink-0 bg-stone-900 hover:bg-stone-850 rounded-md border-2 border-amber-500 hover:border-amber-400 transition-all shadow-md cursor-pointer flex flex-col justify-between overflow-hidden group/videocard relative"
+      >
+        <div>
+          <div className="relative aspect-[16/10] overflow-hidden bg-black">
+            {videoAd.image_url ? (
+              <img
+                src={videoAd.image_url}
+                alt={videoAd.title}
+                className="w-full h-full object-cover group-hover/videocard:scale-105 transition-transform duration-300 opacity-90"
+                loading="lazy"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-amber-300 font-bold text-xs p-3 text-center bg-stone-950">
+                {videoAd.title}
+              </div>
+            )}
+
+            <div className="absolute inset-0 bg-black/25 flex items-center justify-center">
+              <div className="w-9 h-9 rounded-full bg-amber-500 text-stone-950 flex items-center justify-center shadow-lg group-hover/videocard:scale-110 transition-all font-black text-xs">
+                AD
+              </div>
+            </div>
+
+            <span className="absolute bottom-1.5 left-1.5 bg-amber-500 text-stone-950 px-1.5 py-0.5 rounded font-black text-[9px] uppercase tracking-wider flex items-center gap-1">
+              <Sparkles className="w-2.5 h-2.5 fill-current" />
+              <span>प्रायोजित वीडियो</span>
+            </span>
+          </div>
+
+          <div className="p-2.5">
+            <div className="flex items-center justify-between text-[10px] text-amber-400 mb-1">
+              <span className="font-bold uppercase tracking-wider truncate max-w-[120px]">
+                {videoAd.advertiser_name || 'स्पॉन्सर'}
+              </span>
+              <span className="text-[9px] bg-stone-800 text-amber-300 px-1.5 py-0.2 rounded font-mono font-bold">
+                SPONSORED
+              </span>
+            </div>
+
+            <h3 className="text-xs sm:text-[13px] font-bold text-stone-100 group-hover/videocard:text-amber-300 transition-colors line-clamp-2 leading-snug">
+              {videoAd.title}
+            </h3>
+          </div>
+        </div>
+
+        <div className="px-2.5 py-1.5 bg-stone-950/80 border-t border-stone-800 flex items-center justify-between text-[10px] text-amber-300 font-bold">
+          <span className="truncate max-w-[120px] text-stone-400">
+            {videoAd.advertiser_name ? `विज्ञापनदाता: ${videoAd.advertiser_name}` : 'विज्ञापन'}
+          </span>
+          <span className="flex items-center gap-1 text-amber-400">
+            <span>क्लिक करें</span>
+            <ArrowRight className="w-3 h-3" />
+          </span>
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -147,71 +217,74 @@ export const VideoSection: React.FC<VideoSectionProps> = ({ articles, onOpenArti
             onTouchEnd={() => setIsHovered(false)}
           >
             <div className={`animate-ticker flex items-stretch gap-3 ${(isPaused || isHovered) ? 'ticker-paused' : ''}`}>
+              {videoAd && renderVideoAdCard('vid-ad-start')}
               {loopVideoArticles.map((video, idx) => (
-                <div
-                  key={`${video.id || 'video'}-${idx}`}
-                  onClick={() => {
-                    if (video.video_url) {
-                      setActiveVideo(video);
-                    } else {
-                      onOpenArticle(video);
-                    }
-                  }}
-                  className="w-56 sm:w-64 shrink-0 bg-stone-900 hover:bg-stone-850 rounded-md border border-stone-800 hover:border-red-600 transition-all shadow-md cursor-pointer flex flex-col justify-between overflow-hidden group/videocard"
-                >
-                  <div>
-                    {/* Compact Video Thumbnail */}
-                    <div className="relative aspect-[16/10] overflow-hidden bg-black">
-                      <img
-                        src={video.featured_image || 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=600&auto=format&fit=crop&q=80'}
-                        alt={video.title}
-                        className="w-full h-full object-cover group-hover/videocard:scale-105 transition-transform duration-300 opacity-90"
-                        loading="lazy"
-                      />
+                <React.Fragment key={`${video.id || 'video'}-${idx}`}>
+                  <div
+                    onClick={() => {
+                      if (video.video_url) {
+                        setActiveVideo(video);
+                      } else {
+                        onOpenArticle(video);
+                      }
+                    }}
+                    className="w-56 sm:w-64 shrink-0 bg-stone-900 hover:bg-stone-850 rounded-md border border-stone-800 hover:border-red-600 transition-all shadow-md cursor-pointer flex flex-col justify-between overflow-hidden group/videocard"
+                  >
+                    <div>
+                      {/* Compact Video Thumbnail */}
+                      <div className="relative aspect-[16/10] overflow-hidden bg-black">
+                        <img
+                          src={video.featured_image || 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=600&auto=format&fit=crop&q=80'}
+                          alt={video.title}
+                          className="w-full h-full object-cover group-hover/videocard:scale-105 transition-transform duration-300 opacity-90"
+                          loading="lazy"
+                        />
 
-                      {/* Play Icon */}
-                      <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-                        <div className="w-9 h-9 rounded-full bg-red-700 text-white flex items-center justify-center shadow-lg group-hover/videocard:scale-115 group-hover/videocard:bg-red-600 transition-all">
-                          <Play className="w-4 h-4 fill-current ml-0.5" />
+                        {/* Play Icon */}
+                        <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+                          <div className="w-9 h-9 rounded-full bg-red-700 text-white flex items-center justify-center shadow-lg group-hover/videocard:scale-115 group-hover/videocard:bg-red-600 transition-all">
+                            <Play className="w-4 h-4 fill-current ml-0.5" />
+                          </div>
                         </div>
+
+                        {/* Video Bulletin Tag */}
+                        <span className="absolute bottom-1.5 left-1.5 bg-black/80 backdrop-blur-xs text-[9px] text-stone-200 px-1.5 py-0.5 rounded font-mono flex items-center gap-1">
+                          <Video className="w-2.5 h-2.5 text-red-400" />
+                          <span>{video.location || 'वीडियो'}</span>
+                        </span>
+
                       </div>
 
-                      {/* Video Bulletin Tag */}
-                      <span className="absolute bottom-1.5 left-1.5 bg-black/80 backdrop-blur-xs text-[9px] text-stone-200 px-1.5 py-0.5 rounded font-mono flex items-center gap-1">
-                        <Video className="w-2.5 h-2.5 text-red-400" />
-                        <span>{video.location || 'वीडियो'}</span>
+                      {/* Content */}
+                      <div className="p-2.5">
+                        <div className="flex items-center justify-between text-[10px] text-stone-400 mb-1">
+                          <span className="font-bold text-red-400 uppercase tracking-tight truncate max-w-[110px]">
+                            {video.category_name || 'ग्राउंड रिपोर्ट'}
+                          </span>
+                          <span className="text-[10px] text-stone-500 shrink-0">
+                            {formatRelativeTime(video.published_at || video.created_at)}
+                          </span>
+                        </div>
+
+                        <h3 className="text-xs sm:text-[13px] font-bold text-stone-100 group-hover/videocard:text-red-400 transition-colors line-clamp-2 leading-snug">
+                          {video.title}
+                        </h3>
+                      </div>
+                    </div>
+
+                    {/* Card Bottom Meta */}
+                    <div className="px-2.5 py-1.5 bg-stone-950/80 border-t border-stone-800 flex items-center justify-between text-[10px] text-stone-400">
+                      <span className="truncate max-w-[100px] text-stone-400 font-medium">
+                        {video.author_name || 'विशेष संवाददाता'}
                       </span>
-
-                    </div>
-
-                    {/* Content */}
-                    <div className="p-2.5">
-                      <div className="flex items-center justify-between text-[10px] text-stone-400 mb-1">
-                        <span className="font-bold text-red-400 uppercase tracking-tight truncate max-w-[110px]">
-                          {video.category_name || 'ग्राउंड रिपोर्ट'}
-                        </span>
-                        <span className="text-[10px] text-stone-500 shrink-0">
-                          {formatRelativeTime(video.published_at || video.created_at)}
-                        </span>
-                      </div>
-
-                      <h3 className="text-xs sm:text-[13px] font-bold text-stone-100 group-hover/videocard:text-red-400 transition-colors line-clamp-2 leading-snug">
-                        {video.title}
-                      </h3>
+                      <span className="flex items-center gap-1 text-stone-400">
+                        <Eye className="w-3 h-3 text-red-500" />
+                        {video.view_count || 1200}
+                      </span>
                     </div>
                   </div>
-
-                  {/* Card Bottom Meta */}
-                  <div className="px-2.5 py-1.5 bg-stone-950/80 border-t border-stone-800 flex items-center justify-between text-[10px] text-stone-400">
-                    <span className="truncate max-w-[100px] text-stone-400 font-medium">
-                      {video.author_name || 'विशेष संवाददाता'}
-                    </span>
-                    <span className="flex items-center gap-1 text-stone-400">
-                      <Eye className="w-3 h-3 text-red-500" />
-                      {video.view_count || 1200}
-                    </span>
-                  </div>
-                </div>
+                  {videoAd && (idx === 3 || idx === 7) && renderVideoAdCard(`vid-ad-mid-${idx}`)}
+                </React.Fragment>
               ))}
             </div>
           </div>

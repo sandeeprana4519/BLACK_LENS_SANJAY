@@ -127,7 +127,34 @@ export function App() {
   useEffect(() => {
     testConnection();
     loadPortalData();
+
+    // Check URL pathname for /news/:slug on initial page load
+    const path = window.location.pathname;
+    if (path.startsWith('/news/')) {
+      const slug = decodeURIComponent(path.replace('/news/', ''));
+      if (slug) {
+        fetch(`/api/news/${slug}`)
+          .then(res => res.json())
+          .then(data => {
+            if (data.success && data.data) {
+              setActiveArticle(data.data);
+            }
+          })
+          .catch(() => {});
+      }
+    }
   }, []);
+
+  // Sync browser URL whenever an article modal is opened or closed
+  useEffect(() => {
+    if (activeArticle) {
+      window.history.replaceState(null, '', `/news/${activeArticle.slug}`);
+    } else {
+      if (window.location.pathname.startsWith('/news/')) {
+        window.history.replaceState(null, '', '/');
+      }
+    }
+  }, [activeArticle]);
 
   useEffect(() => {
     fetchNews();
@@ -167,6 +194,13 @@ export function App() {
   const articleAd = advertisements.find(a => a.placement === 'article_inline') || inFeedAd;
   const categoryPageAd = advertisements.find(a => a.placement === 'category_page') || inFeedAd;
   const footerAd = advertisements.find(a => a.placement === 'footer_banner');
+
+  // Specific Ad Placements requested by user:
+  const breakingNewsAd = advertisements.find(a => a.placement === 'breaking_news');
+  const liveDeskAd = advertisements.find(a => a.placement === 'live_desk');
+  const khelAd = advertisements.find(a => a.placement === 'category_khel');
+  const upAd = advertisements.find(a => a.placement === 'category_up');
+  const videoAd = advertisements.find(a => a.placement === 'video_section');
 
   // Filtered lists for all categories with category_id and category_slug robustness
   const ghaziabadNews = articles.filter(a => a.category_slug === 'ghaziabad' || a.category_id === 1 || a.location?.includes('गाजियाबाद'));
@@ -218,7 +252,10 @@ export function App() {
       {/* 2. DYNAMIC SCROLLING BREAKING NEWS TICKER */}
       <BreakingTicker
         articles={allPublishedArticles.length > 0 ? allPublishedArticles : articles}
+        tickerItems={breakingNews}
+        breakingAd={breakingNewsAd}
         onOpenArticle={(art) => setActiveArticle(art)}
+        onSelectTicker={handleBreakingSelect}
       />
 
       {/* 3. MAIN PAGE CONTENT */}
@@ -365,6 +402,7 @@ export function App() {
             <HeroSection
               articles={articles}
               sidebarAd={sidebarAd}
+              liveDeskAd={liveDeskAd}
               settings={siteSettings}
               onOpenArticle={(art) => setActiveArticle(art)}
               onSelectCategory={(slug) => setSelectedCategory(slug)}
@@ -418,6 +456,7 @@ export function App() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6">
               <VideoSection
                 articles={articles}
+                videoAd={videoAd}
                 onOpenArticle={(art) => setActiveArticle(art)}
               />
             </div>
@@ -461,6 +500,7 @@ export function App() {
                 title="खेल जगत (Sports Arena)"
                 categorySlug="sports"
                 articles={sportsNews.length > 0 ? sportsNews : articles.slice(5, 15)}
+                advertisement={khelAd}
                 onOpenArticle={(art) => setActiveArticle(art)}
                 onViewCategory={(slug) => setSelectedCategory(slug)}
               />
@@ -472,6 +512,7 @@ export function App() {
                 title="उत्तर प्रदेश"
                 categorySlug="uttar-pradesh"
                 articles={upNews.length > 0 ? upNews : articles.slice(6, 16)}
+                advertisement={upAd}
                 onOpenArticle={(art) => setActiveArticle(art)}
                 onViewCategory={(slug) => setSelectedCategory(slug)}
               />

@@ -5,13 +5,14 @@ import {
   Compass, Radio, Landmark, ShieldAlert, Sun, Trophy, 
   Globe, Rocket, Flame, Layers
 } from 'lucide-react';
-import { Article } from '../types';
+import { Article, Advertisement } from '../types';
 import { CategoryPopupModal } from './CategoryPopupModal';
 
 interface CategoryBlockProps {
   title: string;
   categorySlug: string;
   articles: Article[];
+  advertisement?: Advertisement;
   onOpenArticle: (article: Article) => void;
   onViewCategory?: (slug: string) => void;
   onPlayVideo?: (article: Article) => void;
@@ -24,6 +25,7 @@ export const CategoryBlock: React.FC<CategoryBlockProps> = ({
   title,
   categorySlug,
   articles,
+  advertisement,
   onOpenArticle,
   onViewCategory,
   onPlayVideo,
@@ -179,6 +181,68 @@ export const CategoryBlock: React.FC<CategoryBlockProps> = ({
 
   const details = getCategoryDetails();
 
+  const renderCategoryAdCard = (key: string) => {
+    if (!advertisement) return null;
+    return (
+      <div
+        key={key}
+        onClick={() => {
+          if (advertisement.destination_url && advertisement.destination_url !== '#') {
+            fetch(`/api/advertisements/${advertisement.id}/click`, { method: 'POST' }).catch(() => {});
+            window.open(advertisement.destination_url, '_blank');
+          }
+        }}
+        className="w-56 sm:w-64 shrink-0 bg-amber-50/80 hover:bg-amber-50 rounded-md border-2 border-amber-400 hover:border-amber-600 transition-all shadow-2xs hover:shadow-md cursor-pointer flex flex-col justify-between overflow-hidden group/adcard"
+      >
+        <div>
+          <div className="relative aspect-[16/10] overflow-hidden bg-stone-900">
+            {advertisement.image_url ? (
+              <img
+                src={advertisement.image_url}
+                alt={advertisement.title}
+                className="w-full h-full object-cover group-hover/adcard:scale-105 transition-transform duration-300"
+                loading="lazy"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-amber-600 font-bold text-xs p-3 text-center bg-amber-100">
+                {advertisement.title}
+              </div>
+            )}
+            <span className="absolute bottom-1.5 left-1.5 bg-amber-500 text-stone-950 text-[9px] font-black px-2 py-0.5 rounded shadow-xs uppercase tracking-wider flex items-center gap-1">
+              <Sparkles className="w-2.5 h-2.5 fill-current" />
+              <span>प्रायोजित विज्ञापन</span>
+            </span>
+          </div>
+
+          <div className="p-2.5">
+            <div className="flex items-center justify-between text-[10px] text-amber-900 font-semibold mb-1">
+              <span className="font-bold text-amber-700 uppercase tracking-tight truncate max-w-[120px]">
+                {advertisement.advertiser_name ? `स्पॉन्सर: ${advertisement.advertiser_name}` : 'विज्ञापन आर्टिकल'}
+              </span>
+              <span className="text-[9px] bg-amber-200/90 text-amber-950 px-1.5 py-0.2 rounded font-mono font-bold">
+                AD
+              </span>
+            </div>
+
+            <h3 className="text-xs sm:text-[13px] font-bold text-stone-900 group-hover/adcard:text-amber-800 transition-colors line-clamp-2 leading-snug">
+              {advertisement.title}
+            </h3>
+          </div>
+        </div>
+
+        <div className="px-2.5 py-1.5 bg-amber-100/60 border-t border-amber-200/80 flex items-center justify-between text-[10px] text-amber-900 font-bold">
+          <span className="truncate max-w-[120px] text-amber-800">
+            {advertisement.advertiser_name || 'विशेष प्रायोजक'}
+          </span>
+          <span className="flex items-center gap-1 text-amber-950">
+            <span>क्लिक करें</span>
+            <ArrowRight className="w-3 h-3 text-amber-700" />
+          </span>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
       <div className="bg-white rounded-lg border border-stone-200/90 p-3.5 sm:p-4 shadow-2xs transition-all select-none">
@@ -264,77 +328,80 @@ export const CategoryBlock: React.FC<CategoryBlockProps> = ({
           onTouchEnd={() => setIsHovered(false)}
         >
           <div className={`animate-ticker flex items-stretch gap-3 ${(isPaused || isHovered) ? 'ticker-paused' : ''}`}>
+            {advertisement && renderCategoryAdCard('cat-ad-start')}
             {loopArticles.map((art, idx) => {
               const isVideo = !!(art.is_video_news || art.video_url);
               return (
-                <div
-                  key={`${art.id || 'article'}-${idx}`}
-                  onClick={() => {
-                    if (isVideo && onPlayVideo && art.video_url) {
-                      onPlayVideo(art);
-                    } else {
-                      onOpenArticle(art);
-                    }
-                  }}
-                  className="w-56 sm:w-64 shrink-0 bg-stone-50 hover:bg-white rounded-md border border-stone-200/90 hover:border-red-600 transition-all shadow-2xs hover:shadow-md cursor-pointer flex flex-col justify-between overflow-hidden group/card"
-                >
-                  <div>
-                    {/* Compact Image */}
-                    <div className="relative aspect-[16/10] overflow-hidden bg-stone-900">
-                      <img
-                        src={art.featured_image || 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=600&auto=format&fit=crop&q=80'}
-                        alt={art.title}
-                        className="w-full h-full object-cover group-hover/card:scale-105 transition-transform duration-300"
-                        loading="lazy"
-                      />
+                <React.Fragment key={`${art.id || 'article'}-${idx}`}>
+                  <div
+                    onClick={() => {
+                      if (isVideo && onPlayVideo && art.video_url) {
+                        onPlayVideo(art);
+                      } else {
+                        onOpenArticle(art);
+                      }
+                    }}
+                    className="w-56 sm:w-64 shrink-0 bg-stone-50 hover:bg-white rounded-md border border-stone-200/90 hover:border-red-600 transition-all shadow-2xs hover:shadow-md cursor-pointer flex flex-col justify-between overflow-hidden group/card"
+                  >
+                    <div>
+                      {/* Compact Image */}
+                      <div className="relative aspect-[16/10] overflow-hidden bg-stone-900">
+                        <img
+                          src={art.featured_image || 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=600&auto=format&fit=crop&q=80'}
+                          alt={art.title}
+                          className="w-full h-full object-cover group-hover/card:scale-105 transition-transform duration-300"
+                          loading="lazy"
+                        />
 
-                      {/* Location Badge */}
-                      {art.location && (
-                        <span className="absolute bottom-1.5 left-1.5 bg-black/75 backdrop-blur-xs text-white text-[9px] font-medium px-1.5 py-0.5 rounded flex items-center gap-0.5">
-                          <MapPin className="w-2.5 h-2.5 text-cyan-400" />
-                          <span className="truncate max-w-[100px]">{art.location}</span>
-                        </span>
-                      )}
+                        {/* Location Badge */}
+                        {art.location && (
+                          <span className="absolute bottom-1.5 left-1.5 bg-black/75 backdrop-blur-xs text-white text-[9px] font-medium px-1.5 py-0.5 rounded flex items-center gap-0.5">
+                            <MapPin className="w-2.5 h-2.5 text-cyan-400" />
+                            <span className="truncate max-w-[100px]">{art.location}</span>
+                          </span>
+                        )}
 
-                      {/* Video Indicator */}
-                      {isVideo && (
-                        <div className="absolute inset-0 bg-black/25 flex items-center justify-center">
-                          <div className="w-8 h-8 rounded-full bg-red-700 text-white flex items-center justify-center shadow-md group-hover/card:scale-110 group-hover/card:bg-red-600 transition-all">
-                            <Play className="w-3.5 h-3.5 fill-current ml-0.5" />
+                        {/* Video Indicator */}
+                        {isVideo && (
+                          <div className="absolute inset-0 bg-black/25 flex items-center justify-center">
+                            <div className="w-8 h-8 rounded-full bg-red-700 text-white flex items-center justify-center shadow-md group-hover/card:scale-110 group-hover/card:bg-red-600 transition-all">
+                              <Play className="w-3.5 h-3.5 fill-current ml-0.5" />
+                            </div>
                           </div>
-                        </div>
-                      )}
+                        )}
 
-                    </div>
-
-                    {/* Card Content */}
-                    <div className="p-2.5">
-                      <div className="flex items-center justify-between text-[10px] text-stone-500 mb-1">
-                        <span className="font-bold text-red-700 uppercase tracking-tight truncate max-w-[110px]">
-                          {art.category_name || title}
-                        </span>
-                        <span className="text-[10px] text-stone-400 shrink-0">
-                          {formatRelativeTime(art.published_at || art.created_at)}
-                        </span>
                       </div>
 
-                      <h3 className="text-xs sm:text-[13px] font-bold text-stone-900 group-hover/card:text-red-700 transition-colors line-clamp-2 leading-snug">
-                        {art.title}
-                      </h3>
+                      {/* Card Content */}
+                      <div className="p-2.5">
+                        <div className="flex items-center justify-between text-[10px] text-stone-500 mb-1">
+                          <span className="font-bold text-red-700 uppercase tracking-tight truncate max-w-[110px]">
+                            {art.category_name || title}
+                          </span>
+                          <span className="text-[10px] text-stone-400 shrink-0">
+                            {formatRelativeTime(art.published_at || art.created_at)}
+                          </span>
+                        </div>
+
+                        <h3 className="text-xs sm:text-[13px] font-bold text-stone-900 group-hover/card:text-red-700 transition-colors line-clamp-2 leading-snug">
+                          {art.title}
+                        </h3>
+                      </div>
+                    </div>
+
+                    {/* Card Bottom Meta */}
+                    <div className="px-2.5 py-1.5 bg-stone-100/70 border-t border-stone-200/60 flex items-center justify-between text-[10px] text-stone-500">
+                      <span className="truncate max-w-[100px] text-stone-600 font-medium">
+                        {art.author_name || 'विशेष संवाददाता'}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Eye className="w-3 h-3 text-stone-400" />
+                        {art.view_count || 120}
+                      </span>
                     </div>
                   </div>
-
-                  {/* Card Bottom Meta */}
-                  <div className="px-2.5 py-1.5 bg-stone-100/70 border-t border-stone-200/60 flex items-center justify-between text-[10px] text-stone-500">
-                    <span className="truncate max-w-[100px] text-stone-600 font-medium">
-                      {art.author_name || 'विशेष संवाददाता'}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Eye className="w-3 h-3 text-stone-400" />
-                      {art.view_count || 120}
-                    </span>
-                  </div>
-                </div>
+                  {advertisement && (idx === 3 || idx === 7) && renderCategoryAdCard(`cat-ad-mid-${idx}`)}
+                </React.Fragment>
               );
             })}
           </div>

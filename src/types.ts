@@ -106,7 +106,20 @@ export interface BreakingNewsItem {
 export interface Advertisement {
   id: number;
   title: string;
-  placement: 'header_banner' | 'home_top' | 'in_feed' | 'sidebar' | 'article_inline' | 'category_page' | 'footer_banner' | string;
+  placement: 
+    | 'breaking_news'
+    | 'live_desk'
+    | 'category_khel'
+    | 'category_up'
+    | 'video_section'
+    | 'header_banner' 
+    | 'home_top' 
+    | 'in_feed' 
+    | 'sidebar' 
+    | 'article_inline' 
+    | 'category_page' 
+    | 'footer_banner' 
+    | string;
   image_url: string;
   destination_url: string;
   advertiser_name?: string;

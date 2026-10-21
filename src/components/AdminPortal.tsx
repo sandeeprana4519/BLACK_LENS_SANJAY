@@ -15,13 +15,102 @@ import { getYouTubeEmbedUrl, isYouTubeUrl } from '../utils/video';
 
 // Advertisement Placements & Dimensions Reference
 export const AD_PLACEMENTS = [
-  { id: 'header_banner', name: 'हेडर / लीडरबोर्ड बैनर (Header / Leaderboard)', dims: '728 × 90 px', aspect: '8:1', desc: 'शीर्ष नेविगेशन बार के तुरंत नीचे डेस्कटॉप पर प्रमुखता से प्रदर्शित होता है।' },
-  { id: 'home_top', name: 'होमपेज टॉप / लार्ज डेस्कटॉप बैनर (Large Desktop Banner)', dims: '970 × 250 px', aspect: '4:1', desc: 'होमपेज के मुख्य हीरो लीड स्टोरीज के ठीक ऊपर संपूर्ण चौड़ाई में।' },
-  { id: 'sidebar', name: 'साइडबार विज्ञापन (Sidebar Rectangle / Square)', dims: '300 × 250 px / 300 × 300 px', aspect: '1.2:1 / 1:1', desc: 'समाचार पेजों व होमपेज के साइडबार विजेट सेक्शन में।' },
-  { id: 'in_feed', name: 'इन-फीड बैनर (In-Feed / Category Page Banner)', dims: '728 × 90 px / 970 × 250 px', aspect: '8:1', desc: 'होमपेज पर विभिन्न श्रेणियों एवं वीडियो सेक्शन के बीच में।' },
-  { id: 'article_inline', name: 'आर्टिकल इनलाइन (In-Article Banner)', dims: '728 × 90 px / 300 × 250 px', aspect: 'रेस्पॉन्सिव', desc: 'समाचार के विस्तृत विवरण के ठीक मध्य अथवा नीचे।' },
-  { id: 'category_page', name: 'कैटेगरी पेज बैनर (Category Page Header)', dims: '728 × 90 px', aspect: '8:1', desc: 'विशिष्ट श्रेणी व टैग आर्काइव पेजों के शीर्ष पर।' },
-  { id: 'footer_banner', name: 'फुटर बैनर (Footer Banner)', dims: '728 × 90 px / 970 × 250 px', aspect: '8:1', desc: 'मुख्य फुटर के ठीक ऊपर संपूर्ण चौड़ाई में।' }
+  { 
+    id: 'breaking_news', 
+    name: '🔴 ब्रेकिंग न्यूज़ विज्ञापन (Breaking News Ticker & Scroll Strip)', 
+    locationLabel: 'ये विज्ञापन ब्रेकिंग न्यूज के अंदर दिखेगा',
+    dims: '400 × 250 px', 
+    aspect: '16:10', 
+    desc: 'होमपेज पर ब्रेकिंग न्यूज़ टिकर और स्क्रॉलिंग कार्ड्स के बीच विज्ञापन पोस्ट/कार्ड के रूप में दिखेगा।' 
+  },
+  { 
+    id: 'live_desk', 
+    name: '⚡ ताज़ा अपडेट लाइव डेस्क विज्ञापन (Live Updates Desk Feed)', 
+    locationLabel: 'ये विज्ञापन ताज़ा अपडेट लाइव डेस्क के अंदर दिखेगा',
+    dims: '320 × 200 px या 300 × 250 px', 
+    aspect: '16:9 या 1.2:1', 
+    desc: 'होमपेज के मुख्य हीरो सेक्शन में "ताज़ा अपडेट्स (Live Desk)" की खबरों के बीच विशेष विज्ञापन फॉर्मेट के रूप में दिखेगा।' 
+  },
+  { 
+    id: 'category_khel', 
+    name: '🏆 खेल जगत कैटेगरी विज्ञापन (Sports Section Ad Article)', 
+    locationLabel: 'ये विज्ञापन खेल कैटेगरी के अंदर दिखेगा',
+    dims: '400 × 250 px', 
+    aspect: '16:10', 
+    desc: 'होमपेज के खेल जगत ब्लॉक में समाचार कार्ड / विज्ञापन आर्टिकल के रूप में दिखेगा।' 
+  },
+  { 
+    id: 'category_up', 
+    name: '🏛️ उत्तर प्रदेश कैटेगरी विज्ञापन (UP News Section Ad Article)', 
+    locationLabel: 'ये विज्ञापन उत्तर प्रदेश कैटेगरी के अंदर दिखेगा',
+    dims: '400 × 250 px', 
+    aspect: '16:10', 
+    desc: 'होमपेज के उत्तर प्रदेश ब्लॉक में समाचार कार्ड / विज्ञापन आर्टिकल के रूप में दिखेगा।' 
+  },
+  { 
+    id: 'video_section', 
+    name: '🎬 वीडियो समाचार विज्ञापन (Video Section Ad Post)', 
+    locationLabel: 'ये विज्ञापन वीडियो समाचार के अंदर दिखेगा',
+    dims: '640 × 360 px', 
+    aspect: '16:9', 
+    desc: 'होमपेज के वीडियो समाचार सेक्शन में वीडियो कार्ड्स के साथ प्रायोजित वीडियो / बैनर विज्ञापन के रूप में दिखेगा।' 
+  },
+  { 
+    id: 'header_banner', 
+    name: '📌 मुख्य हेडर बैनर (Header / Top Leaderboard)', 
+    locationLabel: 'ये विज्ञापन हेडर पर दिखेगा',
+    dims: '728 × 90 px', 
+    aspect: '8:1', 
+    desc: 'शीर्ष नेविगेशन बार के तुरंत नीचे डेस्कटॉप पर प्रमुखता से प्रदर्शित होता है।' 
+  },
+  { 
+    id: 'home_top', 
+    name: '🏠 होमपेज टॉप लार्ज बैनर (Large Desktop Banner)', 
+    locationLabel: 'ये विज्ञापन होमपेज के टॉप पर दिखेगा',
+    dims: '970 × 250 px', 
+    aspect: '4:1', 
+    desc: 'होमपेज के मुख्य हीरो लीड स्टोरीज के ठीक ऊपर संपूर्ण चौड़ाई में दिखेगा।' 
+  },
+  { 
+    id: 'sidebar', 
+    name: '📋 साइडबार विज्ञापन (Sidebar Widget)', 
+    locationLabel: 'ये विज्ञापन साइडबार में दिखेगा',
+    dims: '300 × 250 px', 
+    aspect: '1.2:1', 
+    desc: 'समाचार पेजों व होमपेज के साइडबार विजेट सेक्शन में दिखेगा।' 
+  },
+  { 
+    id: 'in_feed', 
+    name: '📰 इन-फीड बैनर (In-Feed / Between Categories)', 
+    locationLabel: 'ये विज्ञापन श्रेणियों के बीच में दिखेगा',
+    dims: '728 × 90 px / 970 × 250 px', 
+    aspect: '8:1', 
+    desc: 'होमपेज पर विभिन्न श्रेणियों एवं वीडियो सेक्शन के बीच में दिखेगा।' 
+  },
+  { 
+    id: 'article_inline', 
+    name: '📄 आर्टिकल इनलाइन (In-Article Banner)', 
+    locationLabel: 'ये विज्ञापन समाचार आर्टिकल के अंदर दिखेगा',
+    dims: '728 × 90 px / 300 × 250 px', 
+    aspect: 'रेस्पॉन्सिव', 
+    desc: 'समाचार के विस्तृत विवरण के ठीक मध्य अथवा नीचे दिखेगा।' 
+  },
+  { 
+    id: 'category_page', 
+    name: '📑 कैटेगरी पेज बैनर (Category Page Header)', 
+    locationLabel: 'ये विज्ञापन कैटेगरी पेज के शीर्ष पर दिखेगा',
+    dims: '728 × 90 px', 
+    aspect: '8:1', 
+    desc: 'विशिष्ट श्रेणी व टैग आर्काइव पेजों के शीर्ष पर दिखेगा।' 
+  },
+  { 
+    id: 'footer_banner', 
+    name: '🔻 फुटर बैनर (Footer Banner)', 
+    locationLabel: 'ये विज्ञापन फुटर के ऊपर दिखेगा',
+    dims: '728 × 90 px / 970 × 250 px', 
+    aspect: '8:1', 
+    desc: 'मुख्य फुटर के ठीक ऊपर संपूर्ण चौड़ाई में दिखेगा।' 
+  }
 ];
 
 interface AdminPortalProps {
@@ -1549,6 +1638,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
         },
         body: JSON.stringify({
           ...adModal.ad,
+          destination_url: adModal.ad.destination_url?.trim() || '#',
           display_order: Number(adModal.ad.display_order) || 1,
           is_active: adModal.ad.status ? adModal.ad.status === 'active' : (adModal.ad.is_active !== false)
         })
@@ -4797,8 +4887,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                               </div>
 
                               <div className="flex flex-wrap items-center gap-3 text-[11px] text-stone-500">
-                                <span className="text-red-700 font-semibold bg-red-50 px-1.5 py-0.2 rounded border border-red-100">
-                                  {placementInfo.name} ({placementInfo.dims})
+                                <span className="text-red-700 font-semibold bg-red-50 px-2 py-0.5 rounded border border-red-200">
+                                  {placementInfo.name} — ({placementInfo.dims}) {(placementInfo as any).locationLabel ? `· ${(placementInfo as any).locationLabel}` : ''}
                                 </span>
                                 <span>·</span>
                                 <a 
@@ -7827,92 +7917,143 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                     विज्ञापन का स्थान (Advertisement Placement) *
                   </label>
                   <select
-                    value={adModal.ad.placement || 'header_banner'}
+                    value={adModal.ad.placement || 'breaking_news'}
                     onChange={(e) => setAdModal(prev => ({
                       ...prev,
                       ad: { ...prev.ad, placement: e.target.value }
                     }))}
-                    className="w-full p-2.5 border border-stone-300 rounded bg-white text-xs font-bold"
+                    className="w-full p-2.5 border border-stone-300 rounded bg-white text-xs font-bold text-stone-900"
                   >
                     {AD_PLACEMENTS.map(p => (
-                      <option key={p.id} value={p.id}>{p.name}</option>
+                      <option key={p.id} value={p.id}>
+                        {(p as any).locationLabel || p.name} — [साइज़: {p.dims}]
+                      </option>
                     ))}
                   </select>
 
                   {/* Reactive Dimension Guidance Box */}
-                  <div className="p-3 bg-amber-50 border border-amber-200 rounded text-amber-900 flex items-start gap-3">
-                    <ImageIcon className="w-5 h-5 text-amber-700 shrink-0 mt-0.5" />
-                    <div className="space-y-0.5 text-xs">
-                      <div className="flex items-center gap-2">
-                        <strong className="font-bold">अनुशंसित छवि आयाम (Recommended Dimensions):</strong>
-                        <span className="bg-amber-200/80 text-amber-950 font-mono font-bold px-1.5 py-0.5 rounded text-[11px]">
-                          {selectedPlacement.dims}
+                  <div className="p-3 bg-amber-50 border border-amber-200 rounded text-amber-950 space-y-1.5">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="font-bold text-xs flex items-center gap-1.5 text-amber-900">
+                        <ImageIcon className="w-4 h-4 text-amber-700" />
+                        <span>स्थान:</span>
+                        <span className="bg-amber-200/90 text-amber-950 font-bold px-2 py-0.5 rounded text-xs">
+                          {(selectedPlacement as any).locationLabel || selectedPlacement.name}
                         </span>
-                        <span className="text-[10px] text-amber-800">
-                          (अनुपात: {selectedPlacement.aspect})
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-amber-800">{selectedPlacement.desc}</p>
+                      </span>
+                      <span className="text-stone-300">|</span>
+                      <span className="font-bold text-xs text-amber-900">अनुशंसित छवि साइज़:</span>
+                      <span className="bg-red-700 text-white font-mono font-bold px-2 py-0.5 rounded text-xs">
+                        {selectedPlacement.dims}
+                      </span>
+                      <span className="text-[11px] text-amber-800 font-semibold">
+                        (अनुपात: {selectedPlacement.aspect})
+                      </span>
                     </div>
+                    <p className="text-[11px] text-amber-800">{selectedPlacement.desc}</p>
                   </div>
                 </div>
 
                 {/* 3. Image Upload & URL */}
                 <div className="space-y-2">
-                  <label className="block text-xs font-semibold text-stone-700">
-                    विज्ञापन छवि / बैनर (Image Upload & Preview) *
-                  </label>
+                  <div className="flex items-center justify-between">
+                    <label className="block text-xs font-semibold text-stone-700">
+                      विज्ञापन छवि / बैनर (Image Upload & Preview) *
+                    </label>
+                    <span className="text-[11px] font-bold text-red-700 bg-red-50 border border-red-200 px-2 py-0.5 rounded">
+                      आवश्यक साइज़: {selectedPlacement.dims}
+                    </span>
+                  </div>
 
                   <div className="flex flex-col sm:flex-row items-start gap-4">
                     {/* Live Preview Box */}
-                    <div className="w-44 h-24 rounded border border-stone-300 bg-stone-100 flex items-center justify-center overflow-hidden shrink-0 relative group">
+                    <div className="w-44 h-28 rounded border-2 border-stone-300 bg-stone-100 flex items-center justify-center overflow-hidden shrink-0 relative group">
                       {adModal.ad.image_url ? (
-                        <img
-                          src={adModal.ad.image_url}
-                          alt="Ad Preview"
-                          className="w-full h-full object-contain p-1"
-                        />
+                        <div className="w-full h-full relative">
+                          <img
+                            src={adModal.ad.image_url}
+                            alt="Ad Preview"
+                            className="w-full h-full object-contain p-1 bg-white"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setAdModal(prev => ({
+                              ...prev,
+                              ad: { ...prev.ad, image_url: '' }
+                            }))}
+                            className="absolute top-1 right-1 bg-red-700 text-white rounded-full p-1 opacity-80 hover:opacity-100"
+                            title="छवि हटाएं"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </div>
                       ) : (
                         <div className="text-center text-stone-400 text-[10px] p-2">
                           <ImageIcon className="w-6 h-6 mx-auto mb-1 opacity-50" />
                           <span>पूर्वावलोकन यहां दिखेगा</span>
+                          <span className="block text-[9px] text-amber-700 font-bold mt-1">{selectedPlacement.dims}</span>
                         </div>
                       )}
                     </div>
 
-                    {/* File Picker & Alternative URL */}
-                    <div className="flex-1 space-y-2 w-full">
-                      <div className="flex items-center gap-2">
-                        <input
-                          type="file"
-                          ref={adImageFileRef}
-                          accept="image/png,image/jpeg,image/webp,image/gif"
-                          onChange={handleAdFileUpload}
-                          className="hidden"
-                        />
-                        <button
-                          type="button"
-                          disabled={adImageLoading}
-                          onClick={() => adImageFileRef.current?.click()}
-                          className="flex items-center gap-1.5 bg-stone-900 hover:bg-stone-800 text-white px-3.5 py-2 rounded font-semibold text-xs transition-colors cursor-pointer disabled:opacity-50"
-                        >
-                          <Upload className="w-3.5 h-3.5" />
-                          <span>{adImageLoading ? 'अपलोड हो रहा है...' : 'डिवाइस से बैनर चुनें (Upload from PC)'}</span>
-                        </button>
-                        <span className="text-[10px] text-stone-500">JPG, PNG, WebP, GIF (अधिकतम 5 MB)</span>
+                    {/* File Picker & URL Options */}
+                    <div className="flex-1 space-y-2.5 w-full">
+                      <div className="p-3 bg-stone-50 border border-stone-200 rounded space-y-2.5">
+                        {/* Dynamic Size Indicator right above button */}
+                        <div className="flex items-center gap-2 flex-wrap bg-amber-50 border border-amber-200 p-2 rounded text-xs text-amber-950 font-medium">
+                          <span className="font-bold text-amber-900 flex items-center gap-1">
+                            <ImageIcon className="w-3.5 h-3.5 text-amber-700" />
+                            <span>इस विज्ञापन के लिए छवि आकार (Dimensions):</span>
+                          </span>
+                          <span className="bg-red-700 text-white font-mono font-bold px-2 py-0.5 rounded text-xs">
+                            {selectedPlacement.dims}
+                          </span>
+                          <span className="text-[11px] text-amber-800">
+                            (अनुपात: {selectedPlacement.aspect})
+                          </span>
+                        </div>
+
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <input
+                            type="file"
+                            ref={adImageFileRef}
+                            accept="image/png,image/jpeg,image/webp,image/gif"
+                            onChange={handleAdFileUpload}
+                            className="hidden"
+                          />
+                          <button
+                            type="button"
+                            disabled={adImageLoading}
+                            onClick={() => adImageFileRef.current?.click()}
+                            className="flex items-center gap-1.5 bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded font-bold text-xs transition-colors cursor-pointer disabled:opacity-50 shadow-xs"
+                          >
+                            <Upload className="w-3.5 h-3.5" />
+                            <span>{adImageLoading ? 'अपलोड हो रहा है...' : 'कंप्यूटर / मोबाइल से छवि चुनें (Upload from PC)'}</span>
+                          </button>
+                          <span className="text-[10px] text-stone-500 font-medium">JPG, PNG, WebP (अधिकतम 5 MB)</span>
+                        </div>
+
+                        {adModal.ad.image_url && (
+                          <div className="flex items-center gap-1.5 text-xs text-emerald-800 bg-emerald-50 border border-emerald-300 px-3 py-2 rounded font-semibold">
+                            <Check className="w-4 h-4 text-emerald-600 shrink-0" />
+                            <span>✓ विज्ञापन छवि सफलतापूर्वक अपलोड हो चुकी है (URL डालना अनिवार्य नहीं है)।</span>
+                          </div>
+                        )}
                       </div>
 
                       <div className="space-y-1">
-                        <span className="text-[10px] text-stone-500 block">अथवा ऑनलाइन छवि URL दर्ज करें:</span>
+                        <span className="text-[10px] text-stone-500 block">
+                          अथवा यदि आप ऑनलाइन छवि URL दर्ज करना चाहें (वैकल्पिक):
+                        </span>
                         <input
-                          type="url"
+                          type="text"
                           value={adModal.ad.image_url || ''}
                           onChange={(e) => setAdModal(prev => ({
                             ...prev,
                             ad: { ...prev.ad, image_url: e.target.value }
                           }))}
-                          placeholder="https://images.unsplash.com/..."
-                          className="w-full p-2 border border-stone-300 rounded font-mono text-[11px]"
+                          placeholder="उदा. https://example.com/banner.jpg (ऊपर से फ़ाइल अपलोड करने पर इसे खाली छोड़ें)"
+                          className="w-full p-2 border border-stone-300 rounded font-mono text-[11px] focus:border-red-600 focus:outline-none"
                         />
                       </div>
                     </div>
@@ -7921,22 +8062,22 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
 
                 {/* 4. Destination / Target URL */}
                 <div>
-                  <label className="block text-xs font-semibold text-stone-700 mb-1">
-                    गंतव्य लिंक / वेबसाइट URL (Destination Click URL) *
+                  <label className="block text-xs font-semibold text-stone-700 mb-1 flex items-center justify-between">
+                    <span>गंतव्य लिंक / वेबसाइट URL (Destination Click URL)</span>
+                    <span className="text-emerald-700 text-[10px] font-bold">वैकल्पिक (Optional)</span>
                   </label>
                   <input
-                    type="url"
-                    required
+                    type="text"
                     value={adModal.ad.destination_url || ''}
                     onChange={(e) => setAdModal(prev => ({
                       ...prev,
                       ad: { ...prev.ad, destination_url: e.target.value }
                     }))}
-                    placeholder="https://example.com/special-offer"
-                    className="w-full p-2.5 border border-stone-300 rounded font-mono text-[11px]"
+                    placeholder="https://example.com/special-offer (यदि कोई लिंक नहीं है तो खाली छोड़ सकते हैं)"
+                    className="w-full p-2.5 border border-stone-300 rounded font-mono text-[11px] focus:border-red-600 focus:outline-none"
                   />
                   <span className="text-[10px] text-stone-500 mt-0.5 block">
-                    जब पाठक विज्ञापन पर क्लिक करेगा, तो यह वेब पेज नई विंडो में खुलेगा।
+                    (वैकल्पिक) जब पाठक विज्ञापन पर क्लिक करेगा, तो यह वेब पेज नई विंडो में खुलेगा। यदि कोई लिंक नहीं है तो खाली छोड़ दें।
                   </span>
                 </div>
 

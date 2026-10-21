@@ -1,10 +1,11 @@
 import React, { useState, useRef } from 'react';
-import { Play, Pause, ChevronLeft, ChevronRight, Clock, MapPin, Flame } from 'lucide-react';
-import { Article, BreakingNewsItem } from '../types';
+import { Play, Pause, ChevronLeft, ChevronRight, Clock, MapPin, Flame, ExternalLink, Sparkles } from 'lucide-react';
+import { Article, BreakingNewsItem, Advertisement } from '../types';
 
 interface BreakingTickerProps {
   articles: Article[];
   tickerItems?: BreakingNewsItem[];
+  breakingAd?: Advertisement;
   onOpenArticle: (article: Article) => void;
   onSelectTicker?: (title: string, articleId?: number | null) => void;
 }
@@ -12,6 +13,7 @@ interface BreakingTickerProps {
 export const BreakingTicker: React.FC<BreakingTickerProps> = ({
   articles,
   tickerItems = [],
+  breakingAd,
   onOpenArticle,
   onSelectTicker
 }) => {
@@ -58,8 +60,65 @@ export const BreakingTicker: React.FC<BreakingTickerProps> = ({
     );
   }
 
-  // To create a continuous, seamless horizontal scroll loop, duplicate list for animation
-  const loopList = [...sortedArticles, ...sortedArticles];
+  // Helper to render sponsored advertisement card inside breaking news strip
+  const renderBreakingAdCard = (key: string) => {
+    if (!breakingAd) return null;
+    return (
+      <div
+        key={key}
+        onClick={() => {
+          if (breakingAd.destination_url && breakingAd.destination_url !== '#') {
+            fetch(`/api/advertisements/${breakingAd.id}/click`, { method: 'POST' }).catch(() => {});
+            window.open(breakingAd.destination_url, '_blank');
+          }
+        }}
+        className="w-56 sm:w-64 shrink-0 bg-stone-900 border-2 border-amber-500 hover:border-amber-400 rounded-md overflow-hidden cursor-pointer group transition-all flex flex-col justify-between shadow-md hover:shadow-xl relative"
+      >
+        <div className="aspect-[16/10] w-full overflow-hidden bg-stone-950 relative">
+          {breakingAd.image_url ? (
+            <img
+              src={breakingAd.image_url}
+              alt={breakingAd.title}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              loading="lazy"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-amber-300 font-bold text-xs p-3 text-center bg-stone-900">
+              {breakingAd.title}
+            </div>
+          )}
+          <span className="absolute top-1.5 left-1.5 bg-amber-500 text-stone-950 text-[10px] font-black px-2 py-0.5 rounded shadow-md uppercase tracking-wider flex items-center gap-1">
+            <Sparkles className="w-2.5 h-2.5 fill-current" />
+            <span>प्रायोजित विज्ञापन</span>
+          </span>
+          {breakingAd.advertiser_name && (
+            <span className="absolute bottom-1.5 right-1.5 bg-black/80 text-amber-200 text-[9px] px-1.5 py-0.5 rounded font-medium">
+              {breakingAd.advertiser_name}
+            </span>
+          )}
+        </div>
+
+        <div className="p-2.5 flex-1 flex flex-col justify-between bg-stone-900">
+          <div>
+            <span className="text-[10px] text-amber-400 font-bold uppercase tracking-wider block mb-1">
+              {breakingAd.advertiser_name ? `विज्ञापनदाता: ${breakingAd.advertiser_name}` : 'विशेष विज्ञापन'}
+            </span>
+            <h3 className="headline-font text-xs sm:text-sm font-bold text-amber-100 group-hover:text-amber-300 transition-colors line-clamp-2 leading-snug">
+              {breakingAd.title}
+            </h3>
+          </div>
+
+          <div className="flex items-center justify-between text-[10px] text-stone-400 mt-2 pt-1.5 border-t border-stone-800">
+            <span className="text-amber-400 font-bold flex items-center gap-1">
+              <span>क्लिक कर देखें</span>
+              <ExternalLink className="w-2.5 h-2.5" />
+            </span>
+            <span className="text-stone-400 text-[9px] bg-stone-800 px-1.5 py-0.5 rounded font-mono">ADVERTISEMENT</span>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div 
@@ -67,7 +126,7 @@ export const BreakingTicker: React.FC<BreakingTickerProps> = ({
       aria-label="Breaking News Ticker"
     >
       {/* 0. Live Breaking Ticker Ribbon (From Breaking News Items) */}
-      {activeTickers.length > 0 && (
+      {(activeTickers.length > 0 || breakingAd) && (
         <div className="bg-red-800 text-white text-xs px-4 py-1.5 flex items-center overflow-hidden border-b border-red-900 shadow-inner">
           <div className="flex items-center gap-1.5 shrink-0 pr-3 font-black text-amber-300 uppercase tracking-wide border-r border-red-700 mr-3">
             <Flame className="w-3.5 h-3.5 text-amber-300 animate-pulse" />
@@ -75,6 +134,20 @@ export const BreakingTicker: React.FC<BreakingTickerProps> = ({
           </div>
           <div className="flex-1 overflow-hidden whitespace-nowrap">
             <div className={`animate-ticker-slow flex items-center gap-8 text-[11px] font-semibold ${isPaused ? 'ticker-paused' : ''}`}>
+              {breakingAd && (
+                <a
+                  href={breakingAd.destination_url || '#'}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() => {
+                    fetch(`/api/advertisements/${breakingAd.id}/click`, { method: 'POST' }).catch(() => {});
+                  }}
+                  className="bg-amber-400 hover:bg-amber-300 text-stone-950 font-black px-2.5 py-0.5 rounded flex items-center gap-1 shadow-xs transition-colors shrink-0"
+                >
+                  <Sparkles className="w-3 h-3 text-stone-950" />
+                  <span>[प्रायोजित]: {breakingAd.title}</span>
+                </a>
+              )}
               {[...activeTickers, ...activeTickers].map((item, idx) => (
                 <button
                   key={`${item.id}-${idx}`}
@@ -151,45 +224,94 @@ export const BreakingTicker: React.FC<BreakingTickerProps> = ({
         onTouchEnd={() => setIsPaused(false)}
       >
         <div className={`animate-ticker-slow flex items-stretch gap-3 ${isPaused ? 'ticker-paused' : ''}`}>
-          {loopList.map((article, index) => (
-            <article
-              key={`${article.id}-${index}`}
-              onClick={() => onOpenArticle(article)}
-              className="w-56 sm:w-64 shrink-0 bg-stone-900/90 border border-stone-800 hover:border-red-600 rounded-md overflow-hidden cursor-pointer group transition-all flex flex-col justify-between shadow-xs hover:shadow-md"
-            >
-              {/* Actual News Image */}
-              <div className="aspect-[16/10] w-full overflow-hidden bg-black relative">
-                <img
-                  src={article.featured_image}
-                  alt={article.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  loading="lazy"
-                />
-                {article.category_name && (
-                  <span className="absolute bottom-1.5 left-1.5 bg-red-700/90 text-white text-[10px] font-bold px-1.5 py-0.5 rounded shadow-xs">
-                    {article.category_name}
-                  </span>
-                )}
-              </div>
-
-              {/* News Headline directly below image */}
-              <div className="p-2.5 flex-1 flex flex-col justify-between bg-stone-900">
-                <h3 className="headline-font text-xs sm:text-sm font-bold text-stone-100 group-hover:text-red-400 transition-colors line-clamp-2 leading-snug">
-                  {article.title}
-                </h3>
-
-                <div className="flex items-center justify-between text-[10px] text-stone-400 mt-2 pt-1.5 border-t border-stone-800">
-                  <span className="flex items-center gap-0.5 truncate max-w-[120px]">
-                    <MapPin className="w-2.5 h-2.5 text-cyan-400 shrink-0" />
-                    <span>{article.location || 'गाजियाबाद'}</span>
-                  </span>
-                  <span className="flex items-center gap-0.5 shrink-0 text-stone-400">
-                    <Clock className="w-2.5 h-2.5" />
-                    <span>{formatRelativeTime(article.published_at || article.created_at)}</span>
-                  </span>
+          {/* First loop half */}
+          {breakingAd && renderBreakingAdCard('breaking-ad-start')}
+          {sortedArticles.map((article, index) => (
+            <React.Fragment key={`first-${article.id}-${index}`}>
+              <article
+                onClick={() => onOpenArticle(article)}
+                className="w-56 sm:w-64 shrink-0 bg-stone-900/90 border border-stone-800 hover:border-red-600 rounded-md overflow-hidden cursor-pointer group transition-all flex flex-col justify-between shadow-xs hover:shadow-md"
+              >
+                {/* Actual News Image */}
+                <div className="aspect-[16/10] w-full overflow-hidden bg-black relative">
+                  <img
+                    src={article.featured_image}
+                    alt={article.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    loading="lazy"
+                  />
+                  {article.category_name && (
+                    <span className="absolute bottom-1.5 left-1.5 bg-red-700/90 text-white text-[10px] font-bold px-1.5 py-0.5 rounded shadow-xs">
+                      {article.category_name}
+                    </span>
+                  )}
                 </div>
-              </div>
-            </article>
+
+                {/* News Headline directly below image */}
+                <div className="p-2.5 flex-1 flex flex-col justify-between bg-stone-900">
+                  <h3 className="headline-font text-xs sm:text-sm font-bold text-stone-100 group-hover:text-red-400 transition-colors line-clamp-2 leading-snug">
+                    {article.title}
+                  </h3>
+
+                  <div className="flex items-center justify-between text-[10px] text-stone-400 mt-2 pt-1.5 border-t border-stone-800">
+                    <span className="flex items-center gap-0.5 truncate max-w-[120px]">
+                      <MapPin className="w-2.5 h-2.5 text-cyan-400 shrink-0" />
+                      <span>{article.location || 'गाजियाबाद'}</span>
+                    </span>
+                    <span className="flex items-center gap-0.5 shrink-0 text-stone-400">
+                      <Clock className="w-2.5 h-2.5" />
+                      <span>{formatRelativeTime(article.published_at || article.created_at)}</span>
+                    </span>
+                  </div>
+                </div>
+              </article>
+              {breakingAd && index === 2 && renderBreakingAdCard('breaking-ad-mid-1')}
+            </React.Fragment>
+          ))}
+
+          {/* Second loop half for continuous scrolling animation */}
+          {breakingAd && renderBreakingAdCard('breaking-ad-loop')}
+          {sortedArticles.map((article, index) => (
+            <React.Fragment key={`second-${article.id}-${index}`}>
+              <article
+                onClick={() => onOpenArticle(article)}
+                className="w-56 sm:w-64 shrink-0 bg-stone-900/90 border border-stone-800 hover:border-red-600 rounded-md overflow-hidden cursor-pointer group transition-all flex flex-col justify-between shadow-xs hover:shadow-md"
+              >
+                {/* Actual News Image */}
+                <div className="aspect-[16/10] w-full overflow-hidden bg-black relative">
+                  <img
+                    src={article.featured_image}
+                    alt={article.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    loading="lazy"
+                  />
+                  {article.category_name && (
+                    <span className="absolute bottom-1.5 left-1.5 bg-red-700/90 text-white text-[10px] font-bold px-1.5 py-0.5 rounded shadow-xs">
+                      {article.category_name}
+                    </span>
+                  )}
+                </div>
+
+                {/* News Headline directly below image */}
+                <div className="p-2.5 flex-1 flex flex-col justify-between bg-stone-900">
+                  <h3 className="headline-font text-xs sm:text-sm font-bold text-stone-100 group-hover:text-red-400 transition-colors line-clamp-2 leading-snug">
+                    {article.title}
+                  </h3>
+
+                  <div className="flex items-center justify-between text-[10px] text-stone-400 mt-2 pt-1.5 border-t border-stone-800">
+                    <span className="flex items-center gap-0.5 truncate max-w-[120px]">
+                      <MapPin className="w-2.5 h-2.5 text-cyan-400 shrink-0" />
+                      <span>{article.location || 'गाजियाबाद'}</span>
+                    </span>
+                    <span className="flex items-center gap-0.5 shrink-0 text-stone-400">
+                      <Clock className="w-2.5 h-2.5" />
+                      <span>{formatRelativeTime(article.published_at || article.created_at)}</span>
+                    </span>
+                  </div>
+                </div>
+              </article>
+              {breakingAd && index === 2 && renderBreakingAdCard('breaking-ad-mid-2')}
+            </React.Fragment>
           ))}
         </div>
       </div>

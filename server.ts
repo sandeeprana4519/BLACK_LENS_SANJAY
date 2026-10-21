@@ -1217,13 +1217,94 @@ async function startServer() {
   }, 60000);
 
   const isProduction = process.env.NODE_ENV === 'production';
+  let vite: any = null;
 
   if (!isProduction) {
     const { createServer: createViteServer } = await import('vite');
-    const vite = await createViteServer({
+    vite = await createViteServer({
       server: { middlewareMode: true },
       appType: 'spa'
     });
+  }
+
+  // -------------------------------------------------------------
+  // DYNAMIC OPENGRAPH SOCIAL SHARING HANDLER (WhatsApp / Facebook / X / SEO)
+  // When a link is shared on WhatsApp, WhatsApp's bot fetches this URL
+  // and parses the OpenGraph tags (title, description, and article image)
+  // -------------------------------------------------------------
+  app.get(['/news/:slug', '/news/:slug/'], async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const rawSlug = req.params.slug;
+      if (!rawSlug) return next();
+      const slug = decodeURIComponent(rawSlug).trim();
+      const article = await db.getArticleBySlug(slug);
+      if (!article) {
+        return next();
+      }
+
+      const host = req.get('host') || `localhost:${PORT}`;
+      const protocol = req.protocol === 'https' || req.get('x-forwarded-proto') === 'https' ? 'https' : 'http';
+      const baseUrl = `${protocol}://${host}`;
+
+      let imageUrl = article.featured_image || `${baseUrl}/logo.svg`;
+      if (imageUrl.startsWith('/')) {
+        imageUrl = `${baseUrl}${imageUrl}`;
+      }
+      const articleUrl = `${baseUrl}/news/${encodeURIComponent(slug)}`;
+      const pageTitle = `${article.title} - ताज़ा हिंदी समाचार`;
+      const cleanExcerpt = (article.excerpt || article.content || '').replace(/<[^>]*>?/gm, '').slice(0, 200).trim();
+
+      const indexPath = isProduction 
+        ? path.join(__dirname, 'dist', 'index.html') 
+        : path.join(__dirname, 'index.html');
+
+      if (fs.existsSync(indexPath)) {
+        let html = fs.readFileSync(indexPath, 'utf-8');
+
+        // Replace page title & meta description
+        html = html.replace(/<title>.*?<\/title>/i, `<title>${pageTitle}</title>`);
+        html = html.replace(/<meta name="description" content=".*?" \/>/i, `<meta name="description" content="${cleanExcerpt.replace(/"/g, '&quot;')}" />`);
+
+        // Strip static template OG/Twitter tags
+        html = html.replace(/<meta property="og:.*?" \/>\n?/gi, '');
+        html = html.replace(/<meta name="twitter:.*?" \/>\n?/gi, '');
+
+        const ogTags = `
+    <!-- Dynamic Social Share Cards for WhatsApp, Facebook, X, LinkedIn -->
+    <meta property="og:title" content="${article.title.replace(/"/g, '&quot;')}" />
+    <meta property="og:description" content="${cleanExcerpt.replace(/"/g, '&quot;')}" />
+    <meta property="og:image" content="${imageUrl}" />
+    <meta property="og:image:url" content="${imageUrl}" />
+    <meta property="og:image:secure_url" content="${imageUrl}" />
+    <meta property="og:image:alt" content="${article.title.replace(/"/g, '&quot;')}" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content="${articleUrl}" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="ताज़ा हिंदी समाचार" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="${article.title.replace(/"/g, '&quot;')}" />
+    <meta name="twitter:description" content="${cleanExcerpt.replace(/"/g, '&quot;')}" />
+    <meta name="twitter:image" content="${imageUrl}" />
+    <link rel="canonical" href="${articleUrl}" />
+        `;
+
+        html = html.replace('<head>', `<head>\n${ogTags}`);
+
+        if (!isProduction && vite) {
+          html = await vite.transformIndexHtml(req.originalUrl, html);
+        }
+
+        return res.status(200).type('html').send(html);
+      }
+    } catch (e) {
+      console.error('[OpenGraph SSR Error]:', e);
+    }
+    next();
+  });
+
+  if (!isProduction && vite) {
     app.use(vite.middlewares);
   } else {
     app.use(express.static(path.join(__dirname, 'dist')));
