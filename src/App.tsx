@@ -9,6 +9,7 @@ import { Footer } from './components/Footer';
 import { ContactModal } from './components/ContactModal';
 import { LegalPages } from './components/LegalPages';
 import { AdminPortal } from './components/AdminPortal';
+import { BlackLensChatWidget } from './components/BlackLensChatWidget';
 import { Article, Category, Tag, BreakingNewsItem, Advertisement, SiteSettings } from './types';
 import { ArrowLeft, Search, Filter, AlertCircle, RefreshCw } from 'lucide-react';
 import { testConnection } from './firebase';
@@ -644,6 +645,14 @@ export function App() {
           }}
         />
       )}
+
+      {/* 5. BLACKLENS VOICE & AI CUSTOMER SUPPORT AGENT */}
+      <BlackLensChatWidget
+        onOpenArticle={(art) => setActiveArticle(art)}
+        onOpenContact={() => handleOpenContact('general')}
+        onOpenRegister={handleOpenRegister}
+        isCMSOpen={adminOpen}
+      />
 
     </div>
   );

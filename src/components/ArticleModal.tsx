@@ -3,10 +3,11 @@ import {
   X, Calendar, Clock, MapPin, Eye, Share2, 
   Copy, Check, MessageCircle, Twitter, Facebook,
   ChevronRight, ChevronLeft, ArrowLeft, Image as ImageIcon, Volume2,
-  Layers
+  Layers, UserCheck
 } from 'lucide-react';
 import { Article, Advertisement } from '../types';
 import { getYouTubeEmbedUrl, isYouTubeUrl } from '../utils/video';
+import { AuthorProfileModal } from './AuthorProfileModal';
 
 interface ArticleModalProps {
   article: Article;
@@ -26,6 +27,7 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({
   const [copied, setCopied] = useState(false);
   const [selectedGalleryImg, setSelectedGalleryImg] = useState<string | null>(null);
   const [currentImageIdx, setCurrentImageIdx] = useState(0);
+  const [showAuthorProfile, setShowAuthorProfile] = useState(false);
   const galleryScrollRef = useRef<HTMLDivElement>(null);
 
   // Extract up to 5 images for the article (featured image + gallery images)
@@ -251,26 +253,45 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({
 
           {/* Author Byline & Timestamps */}
           <div className="flex flex-wrap items-center justify-between gap-3 py-3 border-y border-stone-200 text-xs sm:text-sm text-stone-600 bg-stone-50 px-3.5 rounded">
-            <div className="flex items-center gap-3">
-              {article.author_avatar ? (
-                <img
-                  src={article.author_avatar}
-                  alt={article.author_name || 'लेखक'}
-                  className="w-10 h-10 rounded-full object-cover border-2 border-red-600 shadow-xs shrink-0"
-                />
-              ) : (
-                <div className="w-10 h-10 rounded-full bg-red-700 text-white flex items-center justify-center font-bold text-sm shadow-xs font-sans shrink-0">
-                  {article.author_name ? article.author_name.slice(0, 2).toUpperCase() : 'BL'}
-                </div>
-              )}
+            {/* Clickable Author Byline (Opens Journalist Profile Modal) */}
+            <button
+              type="button"
+              onClick={() => setShowAuthorProfile(true)}
+              className="flex items-center gap-3 text-left group cursor-pointer p-1 -m-1 rounded-lg hover:bg-white hover:shadow-xs border border-transparent hover:border-stone-200 transition-all focus:outline-none"
+              title="संवाददाता / संपादक की प्रोफ़ाइल एवं विवरण देखने के लिए क्लिक करें"
+            >
+              <div className="relative shrink-0">
+                {article.author_avatar ? (
+                  <img
+                    src={article.author_avatar}
+                    alt={article.author_name || 'लेखक'}
+                    className="w-10 h-10 rounded-full object-cover border-2 border-red-600 shadow-xs shrink-0 group-hover:scale-105 transition-transform"
+                  />
+                ) : (
+                  <div className="w-10 h-10 rounded-full bg-red-700 text-white flex items-center justify-center font-bold text-sm shadow-xs font-sans shrink-0 group-hover:scale-105 transition-transform">
+                    {article.author_name ? article.author_name.slice(0, 2).toUpperCase() : 'BL'}
+                  </div>
+                )}
+                <span 
+                  className="absolute -bottom-1 -right-1 bg-red-600 group-hover:bg-red-700 text-white p-0.5 rounded-full border-2 border-white shadow-xs transition-colors"
+                  title="प्रोफ़ाइल देखें"
+                >
+                  <UserCheck className="w-2.5 h-2.5" />
+                </span>
+              </div>
               <div>
-                <span className="block font-bold text-stone-900">{article.author_name || 'BLACK LENS विशेष डेस्क'}</span>
-                <span className="text-[11px] text-stone-500 flex items-center gap-1">
+                <span className="block font-bold text-stone-900 group-hover:text-red-700 transition-colors flex items-center gap-1.5">
+                  <span>{article.author_name || 'BLACK LENS विशेष डेस्क'}</span>
+                  <span className="text-[10px] font-medium px-1.5 py-0.2 bg-red-50 text-red-700 rounded border border-red-200 group-hover:bg-red-600 group-hover:text-white transition-colors">
+                    प्रोफ़ाइल देखें ↗
+                  </span>
+                </span>
+                <span className="text-[11px] text-stone-500 flex items-center gap-1 mt-0.5">
                   <MapPin className="w-3 h-3 text-red-600" />
                   {article.location || 'गाजियाबाद / नई दिल्ली'}
                 </span>
               </div>
-            </div>
+            </button>
 
             <div className="flex items-center gap-3 text-stone-500 text-xs">
               <span className="flex items-center gap-1">
@@ -469,6 +490,47 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({
             </div>
           )}
 
+          {/* Author Byline / About Reporter Signature Card (Clickable) */}
+          <div 
+            onClick={() => setShowAuthorProfile(true)}
+            className="flex items-center justify-between p-3.5 bg-stone-50 hover:bg-red-50/40 rounded-xl border border-stone-200 hover:border-red-300 transition-all cursor-pointer my-6 group shadow-2xs"
+            title="संवाददाता की पूरी प्रोफ़ाइल व विवरण देखने के लिए क्लिक करें"
+          >
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="relative shrink-0">
+                {article.author_avatar ? (
+                  <img
+                    src={article.author_avatar}
+                    alt={article.author_name || 'संवाददाता'}
+                    className="w-12 h-12 rounded-full object-cover border-2 border-red-600 shadow-xs group-hover:scale-105 transition-transform"
+                  />
+                ) : (
+                  <div className="w-12 h-12 rounded-full bg-red-700 text-white flex items-center justify-center font-bold text-sm shadow-xs shrink-0 group-hover:scale-105 transition-transform">
+                    {article.author_name ? article.author_name.slice(0, 2).toUpperCase() : 'BL'}
+                  </div>
+                )}
+                <span className="absolute -bottom-1 -right-1 bg-emerald-600 text-white p-0.5 rounded-full border-2 border-white shadow-2xs">
+                  <UserCheck className="w-2.5 h-2.5" />
+                </span>
+              </div>
+              <div className="min-w-0">
+                <span className="text-[10px] font-bold text-red-700 uppercase tracking-wider block">
+                  संपादक / संवाददाता
+                </span>
+                <h4 className="text-sm font-bold text-stone-900 group-hover:text-red-700 transition-colors truncate">
+                  {article.author_name || 'ब्लैक लेंस विशेष डेस्क'}
+                </h4>
+                <p className="text-[11px] text-stone-500 truncate">
+                  कार्यक्षेत्र: {article.location || 'गाजियाबाद / दिल्ली एनसीआर'}
+                </p>
+              </div>
+            </div>
+            <div className="shrink-0 flex items-center gap-1.5 text-xs font-bold text-red-700 bg-white group-hover:bg-red-700 group-hover:text-white px-3 py-1.5 rounded-lg border border-red-200 transition-all shadow-2xs">
+              <span>प्रोफ़ाइल व खबरें</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+            </div>
+          </div>
+
           {/* Social Share Box */}
           <div className="bg-stone-50 border border-stone-200 rounded p-4 my-6">
             <h4 className="text-xs font-bold text-stone-600 uppercase tracking-wider mb-2">
@@ -557,6 +619,21 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({
         </div>
 
       </div>
+
+      {/* Author / Reporter Profile Modal Popup */}
+      {showAuthorProfile && (
+        <AuthorProfileModal
+          authorId={article.author_id}
+          authorName={article.author_name}
+          authorAvatar={article.author_avatar}
+          authorLocation={article.location}
+          onClose={() => setShowAuthorProfile(false)}
+          onSelectArticle={(selectedStory) => {
+            onOpenArticle(selectedStory);
+            setShowAuthorProfile(false);
+          }}
+        />
+      )}
     </div>
   );
 };
