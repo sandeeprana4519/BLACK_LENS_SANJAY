@@ -63,6 +63,7 @@ export function BlackLensChatWidget({
   const [currentlySpeakingId, setCurrentlySpeakingId] = useState<string | null>(null);
   const [speechError, setSpeechError] = useState<string | null>(null);
 
+  const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
   const recognitionRef = useRef<any>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const synthRef = useRef<SpeechSynthesis | null>(null);
@@ -104,59 +105,27 @@ export function BlackLensChatWidget({
     }
   }, [messages]);
 
-  // Setup SpeechSynthesis
+  // Setup SpeechSynthesis & Voice list
   useEffect(() => {
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       synthRef.current = window.speechSynthesis;
+      const loadVoices = () => {
+        try {
+          const v = window.speechSynthesis.getVoices();
+          if (Array.isArray(v) && v.length > 0) {
+            setAvailableVoices(v);
+          }
+        } catch (e) {}
+      };
+      loadVoices();
+      window.speechSynthesis.onvoiceschanged = loadVoices;
     }
     return () => {
       if (synthRef.current) {
-        synthRef.current.cancel();
+        try { synthRef.current.cancel(); } catch (e) {}
       }
     };
   }, []);
-
-  // Setup Web Speech API for voice recognition
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-      if (SpeechRecognition) {
-        const recognition = new SpeechRecognition();
-        recognition.continuous = false;
-        recognition.interimResults = true;
-        recognition.lang = speechLanguage;
-
-        recognition.onstart = () => {
-          setIsListening(true);
-          setSpeechError(null);
-        };
-
-        recognition.onresult = (event: any) => {
-          let currentTranscript = '';
-          for (let i = event.resultIndex; i < event.results.length; ++i) {
-            currentTranscript += event.results[i][0].transcript;
-          }
-          setInputMessage(currentTranscript);
-        };
-
-        recognition.onerror = (event: any) => {
-          console.warn('[Speech Recognition error]:', event.error);
-          setIsListening(false);
-          if (event.error === 'not-allowed') {
-            setSpeechError('माइक्रोफ़ोन अनुमति अस्वीकृत है। कृपया ब्राउज़र सेटिंग्स में माइक्रोफ़ोन की अनुमति दें।');
-          } else if (event.error === 'no-speech') {
-            setSpeechError('कोई आवाज़ सुनाई नहीं दी। कृपया पुनः प्रयास करें।');
-          }
-        };
-
-        recognition.onend = () => {
-          setIsListening(false);
-        };
-
-        recognitionRef.current = recognition;
-      }
-    }
-  }, [speechLanguage]);
 
   // Auto-scroll to bottom of chat
   useEffect(() => {
@@ -165,29 +134,11 @@ export function BlackLensChatWidget({
     }
   }, [messages, isOpen, isMinimized, isLoading]);
 
-  const toggleListening = () => {
-    if (!recognitionRef.current) {
-      setSpeechError('आपके ब्राउज़र में वॉइस इनपुट समर्थित नहीं है। (Web Speech API is not supported in this browser).');
-      return;
-    }
-
-    if (isListening) {
-      recognitionRef.current.stop();
-      setIsListening(false);
-    } else {
-      setSpeechError(null);
-      try {
-        recognitionRef.current.lang = speechLanguage;
-        recognitionRef.current.start();
-      } catch (err: any) {
-        console.warn('Recognition start error:', err);
-      }
-    }
-  };
-
   const stopSpeaking = () => {
     if (synthRef.current) {
-      synthRef.current.cancel();
+      try {
+        synthRef.current.cancel();
+      } catch (e) {}
       setCurrentlySpeakingId(null);
     }
   };
@@ -202,39 +153,186 @@ export function BlackLensChatWidget({
 
     stopSpeaking();
 
-    // Clean markdown asterisks and URLs for natural speaking
+    // Clean markdown, links, hashtags, emojis for natural speech
     const cleanSpeechText = text
-      .replace(/[*_#`~]/g, '')
+      .replace(/[*_#`~>]/g, '')
       .replace(/https?:\/\/\S+/g, '')
+      .replace(/[📰🏛️🏙️ℹ️📞✍️🙏❤️✨•]/g, '')
+      .replace(/\s+/g, ' ')
       .trim();
 
     if (!cleanSpeechText) return;
 
-    const utterance = new SpeechSynthesisUtterance(cleanSpeechText);
-    const isHindi = /[\u0900-\u097F]/.test(cleanSpeechText);
-    utterance.lang = isHindi ? 'hi-IN' : 'en-IN';
-    utterance.rate = 0.95;
+    try {
+      // Unfreeze synthesis queue if paused (common Chromium issue)
+      if (synthRef.current.paused) {
+        synthRef.current.resume();
+      }
 
-    // Pick an appropriate voice if available
-    const voices = synthRef.current.getVoices?.() || [];
-    const targetVoice = voices.find(v => isHindi ? v.lang.includes('hi') : v.lang.includes('en'));
-    if (targetVoice) {
-      utterance.voice = targetVoice;
+      const utterance = new SpeechSynthesisUtterance(cleanSpeechText);
+      const isHindi = /[\u0900-\u097F]/.test(cleanSpeechText);
+
+      // Select matching voice
+      const voicesList = availableVoices.length > 0 ? availableVoices : (synthRef.current.getVoices?.() || []);
+      let targetVoice: SpeechSynthesisVoice | undefined;
+
+      if (isHindi) {
+        targetVoice = voicesList.find(v => 
+          v.lang.toLowerCase().startsWith('hi') || 
+          v.lang.toLowerCase().includes('hi-in') ||
+          v.name.toLowerCase().includes('hindi')
+        );
+        // Fallback to Indian English or first available voice if Hindi is not installed
+        if (!targetVoice) {
+          targetVoice = voicesList.find(v => 
+            v.lang.toLowerCase().includes('en-in') || 
+            v.name.toLowerCase().includes('india')
+          );
+        }
+      } else {
+        targetVoice = voicesList.find(v => 
+          v.lang.toLowerCase().includes('en-in') || 
+          v.lang.toLowerCase().startsWith('en')
+        );
+      }
+
+      if (targetVoice) {
+        utterance.voice = targetVoice;
+        utterance.lang = targetVoice.lang;
+      } else {
+        utterance.lang = isHindi ? 'hi-IN' : 'en-IN';
+      }
+
+      utterance.rate = 0.95;
+      utterance.pitch = 1.0;
+
+      utterance.onstart = () => {
+        setCurrentlySpeakingId(messageId);
+      };
+
+      utterance.onend = () => {
+        setCurrentlySpeakingId(null);
+      };
+
+      utterance.onerror = (e: any) => {
+        console.warn('[SpeechSynthesis Error]:', e?.error || e);
+        setCurrentlySpeakingId(null);
+        // If error was language-unavailable, retry with default voice
+        if (e?.error === 'language-unavailable' || e?.error === 'voice-unavailable') {
+          try {
+            const fallback = new SpeechSynthesisUtterance(cleanSpeechText);
+            fallback.rate = 0.95;
+            synthRef.current?.speak(fallback);
+          } catch (retryErr) {}
+        }
+      };
+
+      synthRef.current.speak(utterance);
+    } catch (err: any) {
+      console.warn('SpeechSynthesis speak failed:', err);
+      setCurrentlySpeakingId(null);
+    }
+  };
+
+  const toggleListening = async () => {
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      setSpeechError('आपके ब्राउज़र में वॉइस इनपुट समर्थित नहीं है। कृपया टाइप करके प्रश्न पूछें।');
+      return;
     }
 
-    utterance.onstart = () => {
-      setCurrentlySpeakingId(messageId);
-    };
+    if (isListening) {
+      if (recognitionRef.current) {
+        try { recognitionRef.current.stop(); } catch (e) {}
+      }
+      setIsListening(false);
+      return;
+    }
 
-    utterance.onend = () => {
-      setCurrentlySpeakingId(null);
-    };
+    setSpeechError(null);
 
-    utterance.onerror = () => {
-      setCurrentlySpeakingId(null);
-    };
+    // Warm up speech synthesis audio context during user gesture
+    if (synthRef.current) {
+      try {
+        synthRef.current.resume();
+      } catch (e) {}
+    }
 
-    synthRef.current.speak(utterance);
+    // Proactively request mic permission via getUserMedia to trigger browser prompt
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        stream.getTracks().forEach(t => t.stop());
+      } catch (micErr: any) {
+        if (micErr.name === 'NotAllowedError' || micErr.name === 'PermissionDeniedError') {
+          setSpeechError('माइक्रोफ़ोन अनुमति नहीं मिली। कृपया ब्राउज़र पता बार (URL Bar) में लॉक/माइक आइकन पर क्लिक कर "Allow" करें।');
+          return;
+        }
+      }
+    }
+
+    try {
+      if (recognitionRef.current) {
+        try { recognitionRef.current.abort(); } catch (e) {}
+      }
+
+      const recognition = new SpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = true;
+      recognition.maxAlternatives = 1;
+      recognition.lang = speechLanguage;
+
+      recognition.onstart = () => {
+        setIsListening(true);
+        setSpeechError(null);
+      };
+
+      let finalCapturedText = '';
+
+      recognition.onresult = (event: any) => {
+        let interim = '';
+        let final = '';
+        for (let i = 0; i < event.results.length; i++) {
+          if (event.results[i].isFinal) {
+            final += event.results[i][0].transcript;
+          } else {
+            interim += event.results[i][0].transcript;
+          }
+        }
+        const combined = (final || interim).trim();
+        if (combined) {
+          finalCapturedText = combined;
+          setInputMessage(combined);
+        }
+      };
+
+      recognition.onerror = (event: any) => {
+        console.warn('[Speech Recognition Error]:', event.error);
+        setIsListening(false);
+        if (event.error === 'not-allowed') {
+          setSpeechError('माइक्रोफ़ोन अनुमति अस्वीकृत है। कृपया ब्राउज़र सेटिंग्स में माइक्रोफ़ोन की अनुमति दें।');
+        } else if (event.error === 'no-speech') {
+          setSpeechError('कोई आवाज़ सुनाई नहीं दी। कृपया माइक बटन दबाकर दोबारा बोलें।');
+        } else if (event.error === 'network') {
+          setSpeechError('वॉइस नेटवर्क में व्यवधान आया। कृपया टाइप करके पूछें।');
+        }
+      };
+
+      recognition.onend = () => {
+        setIsListening(false);
+        // If clear speech was captured, auto send question for seamless experience!
+        if (finalCapturedText.trim()) {
+          handleSendMessage(finalCapturedText.trim());
+        }
+      };
+
+      recognitionRef.current = recognition;
+      recognition.start();
+    } catch (err: any) {
+      console.warn('Speech recognition start failed:', err);
+      setIsListening(false);
+      setSpeechError('माइक्रोफ़ोन शुरू करने में समस्या। कृपया टाइप करके प्रश्न पूछें।');
+    }
   };
 
   const handleSendMessage = async (textToSend?: string) => {
@@ -244,6 +342,16 @@ export function BlackLensChatWidget({
 
     // Stop ongoing speech
     stopSpeaking();
+
+    // Warm up / prime speech synthesis right on user gesture
+    if (synthRef.current && !isMuted) {
+      try {
+        synthRef.current.resume();
+        const silent = new SpeechSynthesisUtterance(' ');
+        silent.volume = 0.01;
+        synthRef.current.speak(silent);
+      } catch (e) {}
+    }
 
     // Check special client navigation actions
     const qLower = query.toLowerCase();
@@ -474,17 +582,17 @@ export function BlackLensChatWidget({
                         <div className="mt-2 pt-1.5 border-t border-slate-700/50 flex items-center justify-between text-[10px] text-slate-400">
                           <button
                             onClick={() => speakText(msg.content, msg.id)}
-                            className="flex items-center gap-1 hover:text-amber-300 transition-colors"
+                            className="flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-slate-900/80 hover:bg-slate-700/80 text-slate-200 hover:text-amber-300 transition-colors border border-slate-750"
                           >
                             {currentlySpeakingId === msg.id ? (
                               <>
                                 <Square className="w-3 h-3 text-amber-400 fill-amber-400 animate-pulse" />
-                                <span className="text-amber-300 font-medium">बोलना बंद करें</span>
+                                <span className="text-amber-300 font-semibold">बोलना रोकें</span>
                               </>
                             ) : (
                               <>
-                                <Play className="w-3 h-3 text-slate-300" />
-                                <span>आवाज़ में सुनें</span>
+                                <Volume2 className="w-3 h-3 text-red-400" />
+                                <span className="font-medium text-slate-200">आवाज़ में सुनें</span>
                               </>
                             )}
                           </button>

@@ -351,6 +351,7 @@ app.post('/api/ai/chat', async (req: Request, res: Response) => {
       ? publishedArticles.slice(0, 6)
       : [];
 
+    const isGreetingQuery = qLower === 'नमस्ते' || qLower === 'hello' || qLower === 'hi' || qLower === 'hey' || qLower.includes('नमस्ते') || qLower.includes('प्रणाम') || qLower.includes('सुप्रभात') || qLower.includes('namaste');
     const isAboutQuery = qLower.includes('blacklens') || qLower.includes('ब्लैक लेंस') || qLower.includes('about') || qLower.includes('बारे में') || qLower.includes('कौन है') || qLower.includes('पोर्टल');
     const isContactQuery = qLower.includes('contact') || qLower.includes('संपर्क') || qLower.includes('phone') || qLower.includes('email') || qLower.includes('कार्यालय') || qLower.includes('address') || qLower.includes('पता') || qLower.includes('विज्ञापन') || qLower.includes('advertis');
     const isReporterQuery = qLower.includes('reporter') || qLower.includes('रिपोर्टर') || qLower.includes('register') || qLower.includes('पंजीकरण') || qLower.includes('संपादक') || qLower.includes('editor') || qLower.includes('जुड़ें') || qLower.includes('join');
@@ -372,7 +373,7 @@ ACTIVE PUBLISHED NEWS CATEGORIES ON BLACKLENS:
 ${categories.filter(c => c.is_active !== false).map(c => `- ${c.name_hi} (${c.name_en || c.slug})`).join('\n')}
 
 VERIFIED PUBLISHED ARTICLES CURRENTLY IN DATABASE:
-${publishedArticles.slice(0, 15).map(a => `
+${(articlesForContext.length > 0 ? articlesForContext : publishedArticles.slice(0, 6)).map(a => `
 - ID: ${a.id}
   Title: "${a.title}"
   Category: ${a.category_name}
@@ -424,7 +425,7 @@ STRICT KNOWLEDGE & SAFETY POLICY (CRITICAL MANDATE):
         const userPromptWithContext = `${verifiedKnowledgeText}\n\nVisitor Question: "${cleanQuery}"`;
 
         const response = await ai.models.generateContent({
-          model: 'gemini-3.8-flash',
+          model: 'gemini-3.1-flash-lite',
           contents: [
             ...formattedHistory,
             { role: 'user', parts: [{ text: userPromptWithContext }] }
@@ -464,7 +465,12 @@ STRICT KNOWLEDGE & SAFETY POLICY (CRITICAL MANDATE):
     // Deterministic fallback if Gemini is unconfigured or returns empty
     if (!assistantReply) {
       const isHindi = /[\u0900-\u097F]/.test(cleanQuery);
-      if (isAboutQuery) {
+      if (isGreetingQuery) {
+        assistantReply = isHindi
+          ? `नमस्ते! 🙏 मैं ब्लैक लेंस (BlackLens) का आधिकारिक AI सहायक हूँ। मैं आपको पोर्टल पर प्रकाशित ताज़ा समाचार, उत्तर प्रदेश व गाजियाबाद की खबरें, या रिपोर्टर बनने की प्रक्रिया में सहायता कर सकता हूँ। आप क्या जानना चाहते हैं?`
+          : `Hello! 🙏 I am the official BlackLens AI Assistant. How can I assist you today with published news, regional updates, or reporter registration?`;
+        suggestions = isHindi ? ['📰 आज की ताज़ा खबरें', '🏙️ गाजियाबाद समाचार', '✍️ रिपोर्टर कैसे बनें?'] : ['📰 Today\'s Latest News', '🏙️ Ghaziabad News', '✍️ How to Become a Reporter?'];
+      } else if (isAboutQuery) {
         assistantReply = isHindi
           ? `ब्लैक लेंस (BlackLens) एक विश्वसनीय एवं अत्याधुनिक हिंदी डिजिटल न्यूज़ पोर्टल है। हमारा उद्देश्य गाजियाबाद, उत्तर प्रदेश, दिल्ली एनसीआर और देश-विदेश की निष्पक्ष, सटीक और निर्भीक खबरें आप तक तुरंत पहुँचाना है।`
           : `BlackLens is a trusted digital news portal delivering accurate, unbiased, and fearless reporting across Ghaziabad, Uttar Pradesh, Delhi NCR, and nationwide.`;
@@ -503,11 +509,26 @@ STRICT KNOWLEDGE & SAFETY POLICY (CRITICAL MANDATE):
         id: art.id,
         title: art.title,
         slug: art.slug,
-        featured_image: art.featured_image,
-        category_name: art.category_name,
-        location: art.location,
-        published_at: art.published_at || art.created_at,
+        subtitle: art.subtitle || '',
         excerpt: art.excerpt || (art.content || '').replace(/<[^>]+>/g, '').slice(0, 160),
+        content: art.content || art.excerpt || '',
+        category_id: art.category_id,
+        category_name: art.category_name,
+        category_slug: art.category_slug,
+        author_id: art.author_id,
+        author_name: art.author_name,
+        author_avatar: art.author_avatar,
+        location: art.location,
+        featured_image: art.featured_image,
+        image_caption: art.image_caption,
+        image_credit: art.image_credit,
+        gallery_images: art.gallery_images || [],
+        video_url: art.video_url,
+        is_video_news: art.is_video_news,
+        status: art.status || 'published',
+        published_at: art.published_at || art.created_at,
+        created_at: art.created_at,
+        updated_at: art.updated_at,
         view_count: art.view_count || 0
       }));
 
