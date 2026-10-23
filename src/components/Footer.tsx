@@ -279,7 +279,16 @@ export const Footer: React.FC<FooterProps> = ({
             </span>
             <span className="text-stone-600 hidden sm:inline" aria-hidden="true">|</span>
             <span className="text-stone-400 text-xs font-medium">
-              Designed by <span className="text-stone-300 font-semibold hover:text-white transition-colors">Happiiz Business Solutions</span>
+              Designed by{' '}
+              <a
+                href="https://happiiz.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-stone-300 font-semibold hover:text-amber-400 underline underline-offset-2 transition-colors cursor-pointer"
+                title="Happiiz Business Solutions - Website"
+              >
+                Happiiz Business Solutions
+              </a>
             </span>
           </div>
 

@@ -77,7 +77,76 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({
     }
   };
 
-  const articleUrl = typeof window !== 'undefined' ? `${window.location.origin}/news/${article.slug}` : `https://blacklens.com/news/${article.slug}`;
+  const articleUrl = typeof window !== 'undefined' ? `${window.location.origin}/news/${article.slug}` : `https://blacklens.co.in/news/${article.slug}`;
+
+  // Dynamic client-side SEO synchronization for open article
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const previousTitle = document.title;
+    const descMeta = document.querySelector('meta[name="description"]');
+    const previousDesc = descMeta?.getAttribute('content') || '';
+    const canonicalLink = document.querySelector('link[rel="canonical"]');
+    const previousCanonical = canonicalLink?.getAttribute('href') || '';
+
+    const cleanExcerpt = (article.seo_description || article.excerpt || article.content || '').replace(/<[^>]*>?/gm, '').slice(0, 160).trim();
+    const newTitle = `${article.seo_title || article.title} | ब्लैक लेंस`;
+
+    document.title = newTitle;
+    if (descMeta) {
+      descMeta.setAttribute('content', cleanExcerpt);
+    }
+    if (canonicalLink) {
+      canonicalLink.setAttribute('href', articleUrl);
+    }
+
+    // Inject JSON-LD Schema for NewsArticle
+    let scriptTag = document.getElementById('news-article-jsonld') as HTMLScriptElement | null;
+    if (!scriptTag) {
+      scriptTag = document.createElement('script');
+      scriptTag.id = 'news-article-jsonld';
+      scriptTag.type = 'application/ld+json';
+      document.head.appendChild(scriptTag);
+    }
+
+    const schemaData = {
+      "@context": "https://schema.org",
+      "@type": "NewsArticle",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": articleUrl
+      },
+      "headline": article.title,
+      "description": cleanExcerpt,
+      "image": [article.featured_image || `${window.location.origin}/logo.svg`],
+      "datePublished": article.published_at || article.created_at || new Date().toISOString(),
+      "dateModified": article.updated_at || article.published_at || article.created_at || new Date().toISOString(),
+      "articleSection": article.category_name || "समाचार",
+      "inLanguage": "hi-IN",
+      "author": [{
+        "@type": "Person",
+        "name": article.author_name || "ब्लैक लेंस ब्यूरो"
+      }],
+      "publisher": {
+        "@type": "NewsMediaOrganization",
+        "name": "ब्लैक लेंस (Black Lens)",
+        "url": window.location.origin,
+        "logo": {
+          "@type": "ImageObject",
+          "url": `${window.location.origin}/logo.svg`
+        }
+      }
+    };
+    scriptTag.textContent = JSON.stringify(schemaData);
+
+    return () => {
+      document.title = previousTitle;
+      if (descMeta) descMeta.setAttribute('content', previousDesc);
+      if (canonicalLink) canonicalLink.setAttribute('href', previousCanonical);
+      const injected = document.getElementById('news-article-jsonld');
+      if (injected) injected.remove();
+    };
+  }, [article, articleUrl]);
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(articleUrl);

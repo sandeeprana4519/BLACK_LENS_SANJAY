@@ -129,7 +129,7 @@ export function App() {
     testConnection();
     loadPortalData();
 
-    // Check URL pathname for /news/:slug on initial page load
+    // Check URL pathname for /news/:slug or /category/:slug on initial page load
     const path = window.location.pathname;
     if (path.startsWith('/news/')) {
       const slug = decodeURIComponent(path.replace('/news/', ''));
@@ -143,6 +143,11 @@ export function App() {
           })
           .catch(() => {});
       }
+    } else if (path.startsWith('/category/')) {
+      const catSlug = decodeURIComponent(path.replace('/category/', ''));
+      if (catSlug) {
+        setSelectedCategory(catSlug);
+      }
     }
   }, []);
 
@@ -152,10 +157,42 @@ export function App() {
       window.history.replaceState(null, '', `/news/${activeArticle.slug}`);
     } else {
       if (window.location.pathname.startsWith('/news/')) {
-        window.history.replaceState(null, '', '/');
+        window.history.replaceState(null, '', selectedCategory ? `/category/${selectedCategory}` : '/');
       }
     }
-  }, [activeArticle]);
+  }, [activeArticle, selectedCategory]);
+
+  // Sync document title and canonical URL for category filters
+  useEffect(() => {
+    if (activeArticle) return; // ArticleModal handles article SEO
+    const descMeta = document.querySelector('meta[name="description"]');
+    const canonical = document.querySelector('link[rel="canonical"]');
+
+    if (selectedCategory) {
+      const matchedCat = categories.find(c => c.slug === selectedCategory);
+      const catName = matchedCat ? matchedCat.name_hi : selectedCategory;
+      document.title = `${catName} समाचार - ताज़ा एवं निष्पक्ष खबरें | ब्लैक लेंस`;
+      if (descMeta) {
+        descMeta.setAttribute('content', `${catName} की ताज़ा और ब्रेकिंग खबरें। पढ़ें ब्लैक लेंस (Black Lens) डिजिटल न्यूज़ पोर्टल पर।`);
+      }
+      if (canonical) {
+        canonical.setAttribute('href', `${window.location.origin}/category/${selectedCategory}`);
+      }
+    } else if (searchQuery) {
+      document.title = `"${searchQuery}" समाचार खोज परिणाम | ब्लैक लेंस`;
+      if (canonical) {
+        canonical.setAttribute('href', `${window.location.origin}/`);
+      }
+    } else {
+      document.title = `ब्लैक लेंस | Black Lens Hindi News Portal - ताज़ा एवं निष्पक्ष खबरें`;
+      if (descMeta) {
+        descMeta.setAttribute('content', `ब्लैक लेंस (Black Lens) - एक संपूर्ण एवं अत्याधुनिक हिंदी डिजिटल न्यूज़ पोर्टल - गाजियाबाद, दिल्ली एनसीआर और देश-विदेश की ताज़ा एवं निष्पक्ष खबरें।`);
+      }
+      if (canonical) {
+        canonical.setAttribute('href', `${window.location.origin}/`);
+      }
+    }
+  }, [selectedCategory, searchQuery, categories, activeArticle]);
 
   useEffect(() => {
     fetchNews();

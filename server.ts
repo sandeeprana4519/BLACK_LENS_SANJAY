@@ -1550,68 +1550,41 @@ app.post('/api/cron/publish-scheduled', async (req: Request, res: Response) => {
 });
 
 // -------------------------------------------------------------
-// SEO & RSS FEEDS
+// RSS FEED (Syndication & News Aggregators)
 // -------------------------------------------------------------
-
-app.get('/sitemap.xml', async (req: Request, res: Response) => {
+app.get(['/rss.xml', '/feed.xml'], async (req: Request, res: Response) => {
   try {
-    const { data: articles } = await db.getNewsArticles({ status: 'published', limit: 500 });
-    const categories = await db.getCategories();
-    const appUrl = process.env.APP_URL || 'https://teznazar.com';
+    const { data: articles } = await db.getNewsArticles({ status: 'published', limit: 50 });
+    const host = req.get('host') || `localhost:${PORT}`;
+    const protocol = req.protocol === 'https' || req.get('x-forwarded-proto') === 'https' ? 'https' : 'http';
+    const baseUrl = host.includes('localhost') ? 'https://blacklens.co.in' : `${protocol}://${host}`;
 
-    let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
-    xml += `  <url><loc>${appUrl}/</loc><changefreq>always</changefreq><priority>1.0</priority></url>\n`;
-
-    for (const cat of categories) {
-      xml += `  <url><loc>${appUrl}/category/${cat.slug}</loc><changefreq>hourly</changefreq><priority>0.8</priority></url>\n`;
-    }
+    let rss = `<?xml version="1.0" encoding="UTF-8" ?>\n<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">\n<channel>\n`;
+    rss += `  <title>ब्लैक लेंस (Black Lens) - ताज़ा हिंदी समाचार</title>\n`;
+    rss += `  <link>${baseUrl}</link>\n`;
+    rss += `  <description>गाजियाबाद, उत्तर प्रदेश, दिल्ली एनसीआर और देश-विदेश की ताज़ा एवं निष्पक्ष खबरें</description>\n`;
+    rss += `  <language>hi-IN</language>\n`;
+    rss += `  <atom:link href="${baseUrl}/rss.xml" rel="self" type="application/rss+xml" />\n`;
 
     for (const art of articles) {
-      const lastModDate = (art.updated_at || art.published_at || art.created_at || new Date().toISOString()).split('T')[0];
-      xml += `  <url><loc>${appUrl}/news/${art.slug}</loc><lastmod>${lastModDate}</lastmod><changefreq>daily</changefreq><priority>0.9</priority></url>\n`;
-    }
-
-    xml += `</urlset>`;
-    res.header('Content-Type', 'application/xml');
-    res.send(xml);
-  } catch (e: any) {
-    res.status(500).send('Error generating sitemap');
-  }
-});
-
-app.get('/rss.xml', async (req: Request, res: Response) => {
-  try {
-    const { data: articles } = await db.getNewsArticles({ status: 'published', limit: 25 });
-    const appUrl = process.env.APP_URL || 'https://teznazar.com';
-
-    let rss = `<?xml version="1.0" encoding="UTF-8" ?>\n<rss version="2.0">\n<channel>\n`;
-    rss += `  <title>तेज़ नज़र (Tez Nazar) - ताज़ा हिंदी समाचार</title>\n`;
-    rss += `  <link>${appUrl}</link>\n`;
-    rss += `  <description>गाजियाबाद, दिल्ली एनसीआर और देश-विदेश की ताज़ा एवं निष्पक्ष खबरें</description>\n`;
-    rss += `  <language>hi</language>\n`;
-
-    for (const art of articles) {
+      const artUrl = `${baseUrl}/news/${encodeURIComponent(art.slug)}`;
+      const pubDate = new Date(art.published_at || art.created_at || Date.now()).toUTCString();
       rss += `  <item>\n`;
       rss += `    <title><![CDATA[${art.title}]]></title>\n`;
-      rss += `    <link>${appUrl}/news/${art.slug}</link>\n`;
-      rss += `    <description><![CDATA[${art.excerpt}]]></description>\n`;
-      rss += `    <pubDate>${new Date(art.published_at || art.created_at).toUTCString()}</pubDate>\n`;
-      rss += `    <guid>${appUrl}/news/${art.slug}</guid>\n`;
+      rss += `    <link>${artUrl}</link>\n`;
+      rss += `    <description><![CDATA[${art.excerpt || (art.content || '').slice(0, 200)}]]></description>\n`;
+      rss += `    <category>${art.category_name || 'समाचार'}</category>\n`;
+      rss += `    <pubDate>${pubDate}</pubDate>\n`;
+      rss += `    <guid isPermaLink="true">${artUrl}</guid>\n`;
       rss += `  </item>\n`;
     }
 
     rss += `</channel>\n</rss>`;
-    res.header('Content-Type', 'application/xml');
+    res.header('Content-Type', 'application/rss+xml; charset=utf-8');
     res.send(rss);
   } catch (e: any) {
     res.status(500).send('Error generating RSS');
   }
-});
-
-app.get('/robots.txt', (req: Request, res: Response) => {
-  const appUrl = process.env.APP_URL || 'https://teznazar.com';
-  res.type('text/plain');
-  res.send(`User-agent: *\nAllow: /\nDisallow: /admin\nSitemap: ${appUrl}/sitemap.xml\n`);
 });
 
 // -------------------------------------------------------------
@@ -1642,9 +1615,246 @@ async function startServer() {
   }
 
   // -------------------------------------------------------------
-  // DYNAMIC OPENGRAPH SOCIAL SHARING HANDLER (WhatsApp / Facebook / X / SEO)
-  // When a link is shared on WhatsApp, WhatsApp's bot fetches this URL
-  // and parses the OpenGraph tags (title, description, and article image)
+  // TECHNICAL SEO: ROBOTS.TXT
+  // -------------------------------------------------------------
+  app.get('/robots.txt', (req: Request, res: Response) => {
+    const host = req.get('host') || `localhost:${PORT}`;
+    const protocol = req.protocol === 'https' || req.get('x-forwarded-proto') === 'https' ? 'https' : 'http';
+    const baseUrl = host.includes('localhost') ? 'https://blacklens.co.in' : `${protocol}://${host}`;
+
+    const robots = [
+      'User-agent: *',
+      'Allow: /',
+      'Allow: /news/',
+      'Allow: /category/',
+      'Allow: /assets/',
+      'Allow: /uploads/',
+      'Disallow: /api/admin/',
+      'Disallow: /api/reporter/',
+      '',
+      'User-agent: Googlebot',
+      'Allow: /',
+      'Allow: /news/',
+      'Allow: /category/',
+      '',
+      'User-agent: Googlebot-News',
+      'Allow: /',
+      'Allow: /news/',
+      '',
+      `Sitemap: ${baseUrl}/sitemap.xml`,
+      `Sitemap: ${baseUrl}/sitemap-news.xml`
+    ].join('\n');
+
+    res.header('Content-Type', 'text/plain; charset=utf-8');
+    res.header('Cache-Control', 'public, max-age=86400');
+    return res.status(200).send(robots);
+  });
+
+  // -------------------------------------------------------------
+  // TECHNICAL SEO: XML SITEMAP (Main Sitemap for all pages & published news)
+  // -------------------------------------------------------------
+  app.get('/sitemap.xml', async (req: Request, res: Response) => {
+    try {
+      const host = req.get('host') || `localhost:${PORT}`;
+      const protocol = req.protocol === 'https' || req.get('x-forwarded-proto') === 'https' ? 'https' : 'http';
+      const baseUrl = host.includes('localhost') ? 'https://blacklens.co.in' : `${protocol}://${host}`;
+
+      const escapeXml = (unsafe: string) => {
+        return (unsafe || '').replace(/[<>&'"]/g, (c) => {
+          switch (c) {
+            case '<': return '&lt;';
+            case '>': return '&gt;';
+            case '&': return '&amp;';
+            case '\'': return '&apos;';
+            case '"': return '&quot;';
+            default: return c;
+          }
+        });
+      };
+
+      const { data: publishedArticles } = await db.getNewsArticles({ status: 'published', limit: 5000 });
+      const categories = await db.getCategories();
+
+      let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+      xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n`;
+
+      // 1. Homepage
+      xml += `  <url>\n`;
+      xml += `    <loc>${baseUrl}/</loc>\n`;
+      xml += `    <changefreq>hourly</changefreq>\n`;
+      xml += `    <priority>1.0</priority>\n`;
+      xml += `  </url>\n`;
+
+      // 2. Category Pages
+      for (const cat of categories) {
+        if (cat.is_active === false) continue;
+        xml += `  <url>\n`;
+        xml += `    <loc>${baseUrl}/category/${encodeURIComponent(cat.slug)}</loc>\n`;
+        xml += `    <changefreq>daily</changefreq>\n`;
+        xml += `    <priority>0.8</priority>\n`;
+        xml += `  </url>\n`;
+      }
+
+      // 3. Published News Articles (Only published, public content)
+      for (const art of publishedArticles) {
+        const lastMod = art.updated_at || art.published_at || art.created_at || new Date().toISOString();
+        const articleUrl = `${baseUrl}/news/${encodeURIComponent(art.slug)}`;
+        xml += `  <url>\n`;
+        xml += `    <loc>${articleUrl}</loc>\n`;
+        xml += `    <lastmod>${new Date(lastMod).toISOString()}</lastmod>\n`;
+        xml += `    <changefreq>weekly</changefreq>\n`;
+        xml += `    <priority>0.7</priority>\n`;
+        if (art.featured_image) {
+          const imgUrl = art.featured_image.startsWith('/') ? `${baseUrl}${art.featured_image}` : art.featured_image;
+          xml += `    <image:image>\n`;
+          xml += `      <image:loc>${escapeXml(imgUrl)}</image:loc>\n`;
+          xml += `      <image:title>${escapeXml(art.title)}</image:title>\n`;
+          xml += `    </image:image>\n`;
+        }
+        xml += `  </url>\n`;
+      }
+
+      xml += `</urlset>`;
+
+      res.header('Content-Type', 'application/xml; charset=utf-8');
+      res.header('Cache-Control', 'public, max-age=1800');
+      return res.status(200).send(xml);
+    } catch (err: any) {
+      console.error('[Sitemap XML Error]:', err);
+      res.status(500).send('Error generating sitemap');
+    }
+  });
+
+  // -------------------------------------------------------------
+  // TECHNICAL SEO: GOOGLE NEWS SITEMAP
+  // -------------------------------------------------------------
+  app.get(['/sitemap-news.xml', '/news-sitemap.xml'], async (req: Request, res: Response) => {
+    try {
+      const host = req.get('host') || `localhost:${PORT}`;
+      const protocol = req.protocol === 'https' || req.get('x-forwarded-proto') === 'https' ? 'https' : 'http';
+      const baseUrl = host.includes('localhost') ? 'https://blacklens.co.in' : `${protocol}://${host}`;
+
+      const { data: publishedArticles } = await db.getNewsArticles({ status: 'published', limit: 1000 });
+
+      let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+      xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">\n`;
+
+      for (const art of publishedArticles) {
+        const pubDate = new Date(art.published_at || art.created_at || Date.now()).toISOString();
+        const articleUrl = `${baseUrl}/news/${encodeURIComponent(art.slug)}`;
+        xml += `  <url>\n`;
+        xml += `    <loc>${articleUrl}</loc>\n`;
+        xml += `    <news:news>\n`;
+        xml += `      <news:publication>\n`;
+        xml += `        <news:name>ब्लैक लेंस</news:name>\n`;
+        xml += `        <news:language>hi</news:language>\n`;
+        xml += `      </news:publication>\n`;
+        xml += `      <news:publication_date>${pubDate}</news:publication_date>\n`;
+        xml += `      <news:title><![CDATA[${art.title}]]></news:title>\n`;
+        xml += `    </news:news>\n`;
+        xml += `  </url>\n`;
+      }
+
+      xml += `</urlset>`;
+
+      res.header('Content-Type', 'application/xml; charset=utf-8');
+      res.header('Cache-Control', 'public, max-age=900');
+      return res.status(200).send(xml);
+    } catch (err: any) {
+      console.error('[News Sitemap Error]:', err);
+      res.status(500).send('Error generating news sitemap');
+    }
+  });
+
+  // -------------------------------------------------------------
+  // TECHNICAL SEO: CATEGORY PAGES SSR HANDLER
+  // -------------------------------------------------------------
+  app.get(['/category/:slug', '/category/:slug/'], async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const rawSlug = req.params.slug;
+      if (!rawSlug) return next();
+      const slug = decodeURIComponent(rawSlug).trim();
+      const categories = await db.getCategories();
+      const category = categories.find(c => c.slug === slug || String(c.id) === slug);
+      if (!category) return next();
+
+      const host = req.get('host') || `localhost:${PORT}`;
+      const protocol = req.protocol === 'https' || req.get('x-forwarded-proto') === 'https' ? 'https' : 'http';
+      const baseUrl = host.includes('localhost') ? 'https://blacklens.co.in' : `${protocol}://${host}`;
+
+      const catUrl = `${baseUrl}/category/${encodeURIComponent(slug)}`;
+      const pageTitle = `${category.name_hi} समाचार - ताज़ा एवं निष्पक्ष खबरें | ब्लैक लेंस`;
+      const catDesc = `${category.name_hi} (${category.name_en || ''}) की ताज़ा, ब्रेकिंग और निष्पक्ष खबरें। पढ़ें ब्लैक लेंस (Black Lens) डिजिटल न्यूज़ पोर्टल पर।`;
+      const ogImage = `${baseUrl}/logo.svg`;
+
+      const indexPath = isProduction 
+        ? path.join(__dirname, 'dist', 'index.html') 
+        : path.join(__dirname, 'index.html');
+
+      if (fs.existsSync(indexPath)) {
+        let html = fs.readFileSync(indexPath, 'utf-8');
+
+        html = html.replace(/<title>.*?<\/title>/i, `<title>${pageTitle}</title>`);
+        html = html.replace(/<meta name="description" content=".*?" \/>/i, `<meta name="description" content="${catDesc.replace(/"/g, '&quot;')}" />`);
+        html = html.replace(/<link rel="canonical" href=".*?" \/>/i, `<link rel="canonical" href="${catUrl}" />`);
+
+        html = html.replace(/<meta property="og:.*?" \/>\n?/gi, '');
+        html = html.replace(/<meta name="twitter:.*?" \/>\n?/gi, '');
+
+        const schemaBreadcrumb = JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "होम",
+              "item": `${baseUrl}/`
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": category.name_hi,
+              "item": catUrl
+            }
+          ]
+        });
+
+        const catTags = `
+    <!-- Category SEO Metadata -->
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <link rel="canonical" href="${catUrl}" />
+    <meta property="og:title" content="${pageTitle.replace(/"/g, '&quot;')}" />
+    <meta property="og:description" content="${catDesc.replace(/"/g, '&quot;')}" />
+    <meta property="og:image" content="${ogImage}" />
+    <meta property="og:url" content="${catUrl}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ब्लैक लेंस | Black Lens" />
+    <meta property="og:locale" content="hi_IN" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="${pageTitle.replace(/"/g, '&quot;')}" />
+    <meta name="twitter:description" content="${catDesc.replace(/"/g, '&quot;')}" />
+    <meta name="twitter:image" content="${ogImage}" />
+    <script type="application/ld+json">${schemaBreadcrumb}</script>
+        `;
+
+        html = html.replace('<head>', `<head>\n${catTags}`);
+
+        if (!isProduction && vite) {
+          html = await vite.transformIndexHtml(req.originalUrl, html);
+        }
+
+        return res.status(200).type('html').send(html);
+      }
+    } catch (e) {
+      console.error('[Category SSR Error]:', e);
+    }
+    next();
+  });
+
+  // -------------------------------------------------------------
+  // TECHNICAL SEO: DYNAMIC NEWS ARTICLE SSR HANDLER
+  // Full Schema.org NewsArticle JSON-LD, OpenGraph & Twitter Cards
   // -------------------------------------------------------------
   app.get(['/news/:slug', '/news/:slug/'], async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -1658,15 +1868,15 @@ async function startServer() {
 
       const host = req.get('host') || `localhost:${PORT}`;
       const protocol = req.protocol === 'https' || req.get('x-forwarded-proto') === 'https' ? 'https' : 'http';
-      const baseUrl = `${protocol}://${host}`;
+      const baseUrl = host.includes('localhost') ? 'https://blacklens.co.in' : `${protocol}://${host}`;
 
       let imageUrl = article.featured_image || `${baseUrl}/logo.svg`;
       if (imageUrl.startsWith('/')) {
         imageUrl = `${baseUrl}${imageUrl}`;
       }
       const articleUrl = `${baseUrl}/news/${encodeURIComponent(slug)}`;
-      const pageTitle = `${article.title} - ताज़ा हिंदी समाचार`;
-      const cleanExcerpt = (article.excerpt || article.content || '').replace(/<[^>]*>?/gm, '').slice(0, 200).trim();
+      const pageTitle = `${article.seo_title || article.title} | ब्लैक लेंस`;
+      const cleanExcerpt = (article.seo_description || article.excerpt || article.content || '').replace(/<[^>]*>?/gm, '').slice(0, 200).trim();
 
       const indexPath = isProduction 
         ? path.join(__dirname, 'dist', 'index.html') 
@@ -1678,13 +1888,74 @@ async function startServer() {
         // Replace page title & meta description
         html = html.replace(/<title>.*?<\/title>/i, `<title>${pageTitle}</title>`);
         html = html.replace(/<meta name="description" content=".*?" \/>/i, `<meta name="description" content="${cleanExcerpt.replace(/"/g, '&quot;')}" />`);
+        html = html.replace(/<link rel="canonical" href=".*?" \/>/i, `<link rel="canonical" href="${articleUrl}" />`);
 
         // Strip static template OG/Twitter tags
         html = html.replace(/<meta property="og:.*?" \/>\n?/gi, '');
         html = html.replace(/<meta name="twitter:.*?" \/>\n?/gi, '');
 
+        // Schema.org NewsArticle JSON-LD
+        const schemaNewsArticle = JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "NewsArticle",
+          "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": articleUrl
+          },
+          "headline": article.title,
+          "description": cleanExcerpt,
+          "image": [imageUrl],
+          "datePublished": new Date(article.published_at || article.created_at || Date.now()).toISOString(),
+          "dateModified": new Date(article.updated_at || article.published_at || article.created_at || Date.now()).toISOString(),
+          "articleSection": article.category_name || "समाचार",
+          "inLanguage": "hi-IN",
+          "author": [
+            {
+              "@type": "Person",
+              "name": article.author_name || "ब्लैक लेंस ब्यूरो",
+              "jobTitle": "संवाददाता"
+            }
+          ],
+          "publisher": {
+            "@type": "NewsMediaOrganization",
+            "name": "ब्लैक लेंस (Black Lens)",
+            "url": baseUrl,
+            "logo": {
+              "@type": "ImageObject",
+              "url": `${baseUrl}/logo.svg`
+            }
+          }
+        });
+
+        const schemaBreadcrumb = JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "होम",
+              "item": `${baseUrl}/`
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": article.category_name || "समाचार",
+              "item": `${baseUrl}/category/${encodeURIComponent(article.category_slug || 'news')}`
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": article.title,
+              "item": articleUrl
+            }
+          ]
+        });
+
         const ogTags = `
-    <!-- Dynamic Social Share Cards for WhatsApp, Facebook, X, LinkedIn -->
+    <!-- Dynamic News Article SEO & Social Share Cards -->
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <link rel="canonical" href="${articleUrl}" />
     <meta property="og:title" content="${article.title.replace(/"/g, '&quot;')}" />
     <meta property="og:description" content="${cleanExcerpt.replace(/"/g, '&quot;')}" />
     <meta property="og:image" content="${imageUrl}" />
@@ -1696,12 +1967,16 @@ async function startServer() {
     <meta property="og:image:height" content="630" />
     <meta property="og:url" content="${articleUrl}" />
     <meta property="og:type" content="article" />
-    <meta property="og:site_name" content="ताज़ा हिंदी समाचार" />
+    <meta property="og:site_name" content="ब्लैक लेंस | Black Lens" />
+    <meta property="og:locale" content="hi_IN" />
+    <meta property="article:published_time" content="${new Date(article.published_at || article.created_at || Date.now()).toISOString()}" />
+    <meta property="article:section" content="${(article.category_name || 'समाचार').replace(/"/g, '&quot;')}" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="${article.title.replace(/"/g, '&quot;')}" />
     <meta name="twitter:description" content="${cleanExcerpt.replace(/"/g, '&quot;')}" />
     <meta name="twitter:image" content="${imageUrl}" />
-    <link rel="canonical" href="${articleUrl}" />
+    <script type="application/ld+json">${schemaNewsArticle}</script>
+    <script type="application/ld+json">${schemaBreadcrumb}</script>
         `;
 
         html = html.replace('<head>', `<head>\n${ogTags}`);
