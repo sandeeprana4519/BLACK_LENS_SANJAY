@@ -162,6 +162,9 @@ export const CategoryPopupModal: React.FC<CategoryPopupModalProps> = ({
                         <img
                           src={art.featured_image || 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=600&auto=format&fit=crop&q=80'}
                           alt={art.title}
+                          onError={(e) => {
+                            (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=600&auto=format&fit=crop&q=80';
+                          }}
                           className="w-full h-full object-cover group-hover:scale-104 transition-transform duration-300"
                           loading="lazy"
                         />

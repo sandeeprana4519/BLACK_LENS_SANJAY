@@ -30,6 +30,8 @@ export interface Article {
   author_id: number;
   author_name?: string;
   author_avatar?: string;
+  author_bio?: string;
+  author_role?: string;
   category_name?: string;
   category_slug?: string;
   location?: string;
@@ -163,6 +165,11 @@ export interface SiteSettings {
   site_description?: string;
   seo_title?: string;
   seo_description?: string;
+  seo_keywords?: string;
+  trending_topics?: string;
+  google_site_verification?: string;
+  google_analytics_id?: string;
+  canonical_url?: string;
   site_logo?: string;
   header_logo?: string;
   footer_logo?: string;

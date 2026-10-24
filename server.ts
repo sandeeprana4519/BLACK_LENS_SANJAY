@@ -789,7 +789,7 @@ app.get('/api/auth/me', authenticateToken, async (req: any, res: Response) => {
 // Supports editable fields: Full Name, Email Address, Mobile/Phone, Avatar Photo, and Password with validation and bcrypt hashing
 app.put(['/api/reporter/profile', '/api/editor/profile', '/api/auth/profile'], authenticateToken, async (req: any, res: Response) => {
   try {
-    const { name, email, phone, current_password, new_password, confirm_password, avatar_url } = req.body;
+    const { name, email, phone, current_password, new_password, confirm_password, avatar_url, bio, assigned_region } = req.body;
 
     // 1. Full name validation
     if (!name || !name.trim()) {
@@ -851,13 +851,15 @@ app.put(['/api/reporter/profile', '/api/editor/profile', '/api/auth/profile'], a
       password_hash = await bcrypt.hash(new_password, 10);
     }
 
-    // Update only allowed fields (name, email, phone, avatar_url, password)
+    // Update only allowed fields (name, email, phone, avatar_url, bio, assigned_region, password)
     // Server ignores and rejects any tampering with role_id, approval_status, etc.
     const updated = await db.updateUserProfile(req.user.id, {
       name: name.trim(),
       email: targetEmail,
       phone: phone !== undefined ? phone.trim() : undefined,
       avatar_url: avatar_url !== undefined ? avatar_url : undefined,
+      bio: bio !== undefined ? bio.trim() : undefined,
+      assigned_region: assigned_region !== undefined ? assigned_region.trim() : undefined,
       password_hash
     });
 
@@ -869,7 +871,9 @@ app.put(['/api/reporter/profile', '/api/editor/profile', '/api/auth/profile'], a
         name: updated.name,
         role_id: updated.role_id,
         role_name: updated.role_name,
-        avatar_url: updated.avatar_url
+        avatar_url: updated.avatar_url,
+        bio: updated.bio,
+        assigned_region: updated.assigned_region
       },
       JWT_SECRET,
       { expiresIn: '7d' }
@@ -877,7 +881,7 @@ app.put(['/api/reporter/profile', '/api/editor/profile', '/api/auth/profile'], a
 
     res.json({
       success: true,
-      message: 'आपकी प्रोफ़ाइल सेटिंग्स (नाम, ईमेल व पासवर्ड) सफलतापूर्वक अपडेट हो गई हैं।',
+      message: 'आपकी प्रोफ़ाइल एवं पत्रकारिता परिचय (Bio) सफलतापूर्वक अपडेट हो गई हैं।',
       user: updated,
       token: newToken
     });
@@ -1610,7 +1614,7 @@ async function startServer() {
     const { createServer: createViteServer } = await import('vite');
     vite = await createViteServer({
       server: { middlewareMode: true },
-      appType: 'spa'
+      appType: 'custom'
     });
   }
 
@@ -1764,6 +1768,55 @@ async function startServer() {
       console.error('[News Sitemap Error]:', err);
       res.status(500).send('Error generating news sitemap');
     }
+  });
+
+  // -------------------------------------------------------------
+  // TECHNICAL SEO: HOMEPAGE DYNAMIC SEO SSR HANDLER
+  // Injects dynamic title, meta description, keywords, Google site verification, and tracking
+  // -------------------------------------------------------------
+  app.get(['/', '/index.html'], async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const siteSettings = await db.getSiteSettings();
+      const host = req.get('host') || `localhost:${PORT}`;
+      const protocol = req.protocol === 'https' || req.get('x-forwarded-proto') === 'https' ? 'https' : 'http';
+      const baseUrl = host.includes('localhost') ? (siteSettings.canonical_url || 'https://blacklens.co.in') : `${protocol}://${host}`;
+
+      const pageTitle = siteSettings.seo_title || 'ब्लैक लेंस | Black Lens Hindi News Portal - ताज़ा एवं निष्पक्ष खबरें';
+      const pageDesc = siteSettings.seo_description || 'ब्लैक लेंस (Black Lens) - एक संपूर्ण एवं अत्याधुनिक हिंदी डिजिटल न्यूज़ पोर्टल - गाजियाबाद, दिल्ली एनसीआर और देश-विदेश की ताज़ा एवं निष्पक्ष खबरें।';
+      const keywords = siteSettings.seo_keywords || 'गाजियाबाद समाचार, यूपी न्यूज़, ब्रेकिंग न्यूज़, Ghaziabad News, Crime News UP, Delhi NCR News, Black Lens Hindi News';
+      const verificationCode = siteSettings.google_site_verification || '';
+
+      const indexPath = isProduction 
+        ? path.join(__dirname, 'dist', 'index.html') 
+        : path.join(__dirname, 'index.html');
+
+      if (fs.existsSync(indexPath)) {
+        let html = fs.readFileSync(indexPath, 'utf-8');
+
+        html = html.replace(/<title>.*?<\/title>/i, `<title>${pageTitle}</title>`);
+        html = html.replace(/<meta name="description" content=".*?" \/>/i, `<meta name="description" content="${pageDesc.replace(/"/g, '&quot;')}" />`);
+
+        let extraMeta = `\n    <meta name="keywords" content="${keywords.replace(/"/g, '&quot;')}" />`;
+        if (verificationCode) {
+          extraMeta += `\n    <meta name="google-site-verification" content="${verificationCode.replace(/"/g, '&quot;')}" />`;
+        }
+        if (siteSettings.google_analytics_id) {
+          const gaId = siteSettings.google_analytics_id.trim();
+          extraMeta += `\n    <!-- Google tag (gtag.js) -->\n    <script async src="https://www.googletagmanager.com/gtag/js?id=${gaId}"></script>\n    <script>\n      window.dataLayer = window.dataLayer || [];\n      function gtag(){dataLayer.push(arguments);}\n      gtag('js', new Date());\n      gtag('config', '${gaId}');\n    </script>`;
+        }
+
+        html = html.replace('<head>', `<head>${extraMeta}`);
+
+        if (!isProduction && vite) {
+          html = await vite.transformIndexHtml(req.originalUrl, html);
+        }
+
+        return res.status(200).type('html').send(html);
+      }
+    } catch (e) {
+      console.error('[Homepage SSR Error]:', e);
+    }
+    next();
   });
 
   // -------------------------------------------------------------
@@ -1995,6 +2048,18 @@ async function startServer() {
 
   if (!isProduction && vite) {
     app.use(vite.middlewares);
+    app.get('*', async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const url = req.originalUrl;
+        const indexPath = path.join(__dirname, 'index.html');
+        let html = fs.readFileSync(indexPath, 'utf-8');
+        html = await vite.transformIndexHtml(url, html);
+        res.status(200).type('html').send(html);
+      } catch (e: any) {
+        if (vite) vite.ssrFixStacktrace(e);
+        next(e);
+      }
+    });
   } else {
     app.use(express.static(path.join(__dirname, 'dist')));
     app.get('*', (req: Request, res: Response) => {

@@ -49,8 +49,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             >
               <div className="relative aspect-[16/9] w-full overflow-hidden bg-stone-900">
                 <img
-                  src={leadStory.featured_image}
+                  src={leadStory.featured_image || 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=1000&auto=format&fit=crop&q=80'}
                   alt={leadStory.title}
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=1000&auto=format&fit=crop&q=80';
+                  }}
                   className="w-full h-full object-cover object-center group-hover:scale-103 transition-transform duration-500"
                   loading="eager"
                 />
@@ -110,8 +113,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               >
                 <div className="aspect-[16/10] overflow-hidden bg-stone-100 relative">
                   <img
-                    src={story.featured_image}
+                    src={story.featured_image || 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=600&auto=format&fit=crop&q=80'}
                     alt={story.title}
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=600&auto=format&fit=crop&q=80';
+                    }}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     loading="lazy"
                   />

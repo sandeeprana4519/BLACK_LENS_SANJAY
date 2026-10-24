@@ -236,6 +236,9 @@ export const VideoSection: React.FC<VideoSectionProps> = ({ articles, videoAd, o
                         <img
                           src={video.featured_image || 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=600&auto=format&fit=crop&q=80'}
                           alt={video.title}
+                          onError={(e) => {
+                            (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=600&auto=format&fit=crop&q=80';
+                          }}
                           className="w-full h-full object-cover group-hover/videocard:scale-105 transition-transform duration-300 opacity-90"
                           loading="lazy"
                         />

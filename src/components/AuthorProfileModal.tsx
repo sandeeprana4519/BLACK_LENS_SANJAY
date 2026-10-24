@@ -154,6 +154,9 @@ export const AuthorProfileModal: React.FC<AuthorProfileModalProps> = ({
                     <img 
                       src={activeAvatar} 
                       alt={activeName} 
+                      onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80';
+                      }}
                       className="w-24 h-24 sm:w-28 sm:h-28 rounded-full object-cover border-4 border-red-600 shadow-md ring-4 ring-red-50"
                     />
                   ) : (
@@ -246,6 +249,9 @@ export const AuthorProfileModal: React.FC<AuthorProfileModalProps> = ({
                           <img 
                             src={story.featured_image} 
                             alt={story.title} 
+                            onError={(e) => {
+                              (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=300&auto=format&fit=crop&q=80';
+                            }}
                             className="w-16 h-14 rounded object-cover shrink-0 border border-stone-200 group-hover:scale-102 transition-transform" 
                           />
                         ) : (

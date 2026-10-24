@@ -77,10 +77,10 @@
       "phone": "+91 98222 33445",
       "role_id": 5,
       "role_name": "Reporter",
-      "bio": "गाजियाबाद एवं स्थानीय निकाय संवाददाता",
-      "assigned_region": "गाजियाबाद शहर एवं ट्रांस हिंडन",
+      "bio": "वरिष्ठ अपराध एवं खोजी पत्रकार (Crime & Investigative Journalist)। जमीनी मुद्दों और जनसमस्याओं पर निष्पक्ष रिपोर्टिंग।",
+      "assigned_region": "गाजियाबाद एवं पश्चिमी उत्तर प्रदेश",
       "is_active": true,
-      "updated_at": "2026-10-18T09:17:52.051Z",
+      "updated_at": "2026-10-24T14:41:50.553Z",
       "avatar_url": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80"
     },
     {
@@ -151,7 +151,8 @@
       "display_order": 12,
       "is_in_menu": true,
       "is_in_home": true,
-      "is_active": true
+      "is_active": true,
+      "article_count": 3
     },
     {
       "id": 13,
@@ -232,18 +233,6 @@
       "is_active": true
     },
     {
-      "id": 1792316144996,
-      "name_hi": "अंतरिक्ष विज्ञान",
-      "name_en": "Space Science",
-      "slug": "space-science",
-      "description": "",
-      "image_url": "",
-      "display_order": 19,
-      "is_in_menu": true,
-      "is_in_home": true,
-      "is_active": false
-    },
-    {
       "id": 2,
       "name_hi": "दिल्ली एनसीआर",
       "name_en": "Delhi NCR",
@@ -319,17 +308,6 @@
       "is_in_menu": true,
       "is_in_home": true,
       "is_active": true
-    },
-    {
-      "id": 9,
-      "name_hi": "व्यापार व शेयर",
-      "name_en": "Business",
-      "slug": "business",
-      "description": "बाजार, अर्थव्यवस्था, रियल एस्टेट, टैक्स और एमएसएमई समाचार",
-      "display_order": 9,
-      "is_in_menu": true,
-      "is_in_home": true,
-      "is_active": false
     },
     {
       "id": 15,
@@ -417,18 +395,12 @@
   ],
   "breaking_news": [
     {
-      "id": 1,
-      "title": "गाजियाबाद: हिंडन एलिवेटेड रोड पर सुरक्षा के पुख्ता इंतजाम, 40 नए सीसीटीवी कैमरे सक्रिय",
-      "is_active": false,
-      "display_order": 999999,
-      "created_at": "2026-10-18T11:01:20.293Z"
-    },
-    {
       "id": 2,
-      "title": "दिल्ली-एनसीआर में प्रदूषण नियंत्रण के लिए विशेष टास्क फोर्स गठित, ग्रेडेड रिस्पॉन्स एक्शन प्लान लागू",
+      "title": "Sandeep Rana Ticket Live ",
       "article_id": 2,
       "display_order": 2,
-      "is_active": true
+      "is_active": true,
+      "updated_at": "2026-10-22T04:44:54.401Z"
     },
     {
       "id": 3,
@@ -466,49 +438,172 @@
   "advertisements": [
     {
       "id": 1,
-      "title": "एनसीआर इंफ्राटेक बिल्डर्स - 3BHK लग्जरी अपार्टमेंट्स गाजियाबाद",
+      "title": "मुस्कान - एक छोटी सी पहल",
       "placement": "header_banner",
-      "image_url": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1200&auto=format&fit=crop&q=80",
-      "destination_url": "https://example.com/ncr-properties",
-      "advertiser_name": "एनसीआर इंफ्राटेक बिल्डर्स",
+      "image_url": "/uploads/1792574410372-1000640060.jpg",
+      "destination_url": "https://happiiz.co.in",
+      "advertiser_name": "Header Add",
       "start_date": "2026-01-01",
       "end_date": "2026-12-31",
       "impressions_count": 14200,
       "clicks_count": 312,
-      "is_active": true
+      "is_active": true,
+      "display_order": 1,
+      "description": "Regd. No. 2702/2017 | लगातार पिछले 9 सालों से सदैव आपकी सेवा में"
+    },
+    {
+      "id": 1792440300330,
+      "title": "मुस्कान फाउंडेशन ",
+      "placement": "header_banner",
+      "image_url": "/uploads/1792781167115-1000187145.jpg",
+      "destination_url": "https://www.facebook.com/share/1FGH872cnK/",
+      "advertiser_name": "",
+      "description": "",
+      "start_date": "2026-10-19",
+      "end_date": "2026-12-31",
+      "display_order": 3,
+      "impressions_count": 0,
+      "clicks_count": 0,
+      "is_active": true,
+      "status": "active",
+      "created_at": "2026-10-19T20:05:00.330Z"
+    },
+    {
+      "id": 1792551944700,
+      "title": "मुस्कान - एक छोटी सी पहल",
+      "placement": "header_banner",
+      "image_url": "/uploads/1792781381804-2a5f8d4c-6085-4384-a28a-0f18ec4aec77-1-a.jpg",
+      "destination_url": "http://happiiz.co.in",
+      "advertiser_name": "मुस्कान",
+      "description": "Regd. No. 2702/2017 | लगातार पिछले 9 सालों से सदैव आपकी सेवा में",
+      "start_date": "2026-10-21",
+      "end_date": "2026-12-31",
+      "display_order": 4,
+      "impressions_count": 0,
+      "clicks_count": 0,
+      "is_active": true,
+      "status": "active",
+      "created_at": "2026-10-21T03:05:44.700Z"
+    },
+    {
+      "id": 1792574657370,
+      "title": "Rexon Security ",
+      "placement": "header_banner",
+      "image_url": "/uploads/1792657291618-1000635697.png",
+      "destination_url": "https://",
+      "advertiser_name": "Rexon",
+      "description": "",
+      "start_date": "2026-10-21",
+      "end_date": "2026-12-31",
+      "display_order": 6,
+      "impressions_count": 0,
+      "clicks_count": 0,
+      "is_active": true,
+      "status": "active",
+      "created_at": "2026-10-21T09:24:17.370Z"
+    },
+    {
+      "id": 1792657471054,
+      "title": "Rexon Security ",
+      "placement": "header_banner",
+      "image_url": "/uploads/1792657466891-1000635697.png",
+      "destination_url": "https://",
+      "advertiser_name": "Rexon Security And Manpower Solutions ",
+      "description": "",
+      "start_date": "2026-10-22",
+      "end_date": "2026-12-31",
+      "display_order": 4,
+      "impressions_count": 0,
+      "clicks_count": 0,
+      "is_active": true,
+      "status": "active",
+      "created_at": "2026-10-22T08:24:31.054Z"
+    },
+    {
+      "id": 1792780799796,
+      "title": "स्पेशल दिवाली डिस्काउंट ",
+      "placement": "header_banner",
+      "image_url": "/uploads/1792780781327-1000187145.jpg",
+      "destination_url": "https://",
+      "advertiser_name": "Muskan Foundation ",
+      "description": "",
+      "start_date": "2026-10-23",
+      "end_date": "2026-12-31",
+      "display_order": 7,
+      "impressions_count": 0,
+      "clicks_count": 0,
+      "is_active": true,
+      "status": "active",
+      "created_at": "2026-10-23T18:39:59.796Z"
+    },
+    {
+      "id": 1792780845974,
+      "title": "Ngo ",
+      "placement": "header_banner",
+      "image_url": "/uploads/1792780843306-1000186081.jpg",
+      "destination_url": "https://",
+      "advertiser_name": "मुस्कान फाउंडेशन ",
+      "description": "",
+      "start_date": "2026-10-23",
+      "end_date": "2026-12-31",
+      "display_order": 8,
+      "impressions_count": 0,
+      "clicks_count": 0,
+      "is_active": true,
+      "status": "active",
+      "created_at": "2026-10-23T18:40:45.974Z"
     },
     {
       "id": 2,
-      "title": "एपेक्स ग्रुप ऑफ इंस्टीट्यूशंस - बीटेक और एमबीए में प्रवेश प्रारंभ",
+      "title": "मुस्कान - एक छोटी सी पहल",
       "placement": "sidebar",
-      "image_url": "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=600&auto=format&fit=crop&q=80",
+      "image_url": "/uploads/1792781131176-1000186081.jpg",
       "destination_url": "https://example.com/apex-admissions",
-      "advertiser_name": "एपेक्स ग्रुप",
+      "advertiser_name": "मुस्कान",
       "start_date": "2026-01-01",
       "end_date": "2026-12-31",
       "impressions_count": 8900,
-      "clicks_count": 185,
-      "is_active": true
+      "clicks_count": 187,
+      "is_active": true,
+      "display_order": 1,
+      "description": "Regd. No. 2702/2017 | लगातार पिछले 9 सालों से सदैव आपकी सेवा में"
     }
   ],
   "site_settings": {
     "site_name": "BLACK LENS",
     "tagline": "Media & Entertainment",
     "contact_email": "editor@teznazar.com",
-    "contact_phone": "+91 98765 43210",
+    "contact_phone": "+91 9650995928",
     "office_address": "तेज़ नज़र मीडिया प्राइवेट लिमिटेड, 402-404, फॉर्च्यून टॉवर, राजनगर डिस्ट्रिक्ट सेंटर (RDC), गाजियाबाद, उत्तर प्रदेश - 201002",
     "logo_url": "/logo.svg",
     "footer_text": "BLACK LENS (Media & Entertainment) निष्पक्ष, निर्भीक और जनहितैषी डिजिटल पत्रकारिता का विश्वसनीय मंच है। गाजियाबाद, दिल्ली एनसीआर और राष्ट्र की हर बड़ी खबर पर पैनी नजर।",
-    "facebook_url": "https://facebook.com/teznazarnews",
-    "twitter_url": "https://twitter.com/teznazarnews",
+    "facebook_url": "https://www.facebook.com/share/19whYo416y/",
+    "twitter_url": "https://twitter.com/blacklensbharat",
     "youtube_url": "https://youtube.com/@teznazarnews",
     "instagram_url": "https://instagram.com/teznazarnews",
-    "whatsapp_number": "+919876543210",
+    "whatsapp_number": "+919650995928",
     "whatsapp_channel_url": "https://whatsapp.com/channel/blacklens",
     "site_logo": "",
-    "site_tagline": "सत्यमेव जयते · निर्भीक एवं निष्पक्ष डिजिटल समाचार",
+    "site_tagline": "सत्यमेव जयते · निर्भीक एवं निष्पक्ष डिजिटल समाचार पोर्टल ",
     "header_logo": "",
-    "footer_logo": ""
+    "footer_logo": "",
+    "site_description": "ब्लैक लेंस - गाजियाबाद, दिल्ली एनसीआर और देश-विदेश की ताज़ा एवं निष्पक्ष खबरें।",
+    "seo_title": "ब्लैक लेंस | Black Lens Hindi News Portal - ताज़ा एवं निष्पक्ष खबरें",
+    "seo_description": "गाजियाबाद, दिल्ली एनसीआर और देश-विदेश की ताज़ा एवं निष्पक्ष खबरें। पढ़ें ब्लैक लेंस डिजिटल न्यूज़ पोर्टल पर।",
+    "favicon_url": "",
+    "og_image": "",
+    "contact_phone_alt": "+91 98765 43210",
+    "contact_address": "ब्लैक लेंस मीडिया हाउस, विजय नगर , गाजियाबाद ",
+    "contact_city": "गाजियाबाद",
+    "contact_state": "उत्तर प्रदेश",
+    "contact_pincode": "201002",
+    "contact_country": "भारत",
+    "copyright_text": "© 2026 ब्लैक लेंस डिजिटल मीडिया. सर्वाधिकार सुरक्षित।",
+    "footer_about": "ब्लैक लेंस उत्तर प्रदेश, दिल्ली एनसीआर और देश का एक निर्भीक, विश्वसनीय एवं निष्पक्ष डिजिटल समाचार पोर्टल है।",
+    "seo_keywords": "गाजियाबाद समाचार, यूपी न्यूज़, ब्रेकिंग न्यूज़, Ghaziabad News Today, Crime News UP, Black Lens News",
+    "trending_topics": "#गाजियाबाद_न्यूज़, #यूपी_अपडेट्स, #क्राइम_अलर्ट, #नमो_भारत, #राजनीति_हलचल",
+    "google_site_verification": "google-site-verification=abc123demoTestToken456",
+    "canonical_url": "https://blacklens.co.in"
   },
   "contact_messages": [
     {
@@ -554,49 +649,6 @@
   ],
   "news_articles": [
     {
-      "id": 1792411167863,
-      "title": "local 3008",
-      "slug": "local-3008-167862",
-      "subtitle": "",
-      "excerpt": "utcc iut7c uyttc",
-      "content": "utcc iut7c uyttc",
-      "category_id": 1,
-      "category_name": "गाजियाबाद",
-      "category_slug": "ghaziabad",
-      "author_id": 1,
-      "author_name": "संदीप राणा (प्रधान संपादक)",
-      "location": "समस्त भारत / गाजियाबाद",
-      "featured_image": "/uploads/1792411141346-screenshot-2026-10-18-145106.png",
-      "image_caption": "",
-      "image_credit": "संदीप राणा (प्रधान संपादक)",
-      "gallery_images": [],
-      "video_url": "",
-      "is_video_news": false,
-      "is_breaking": true,
-      "is_featured": true,
-      "is_trending": true,
-      "is_on_home": true,
-      "status": "published",
-      "tags": [],
-      "view_count": 0,
-      "seo_title": "",
-      "seo_description": "",
-      "seo_keywords": "",
-      "scheduled_at": "",
-      "published_at": "2026-10-19T11:59:27.862Z",
-      "created_at": "2026-10-19T11:59:27.862Z",
-      "updated_at": "2026-10-19T11:59:27.862Z",
-      "audit_logs": [
-        {
-          "action": "created",
-          "user_id": 1,
-          "user_name": "संदीप राणा (प्रधान संपादक)",
-          "timestamp": "2026-10-19T11:59:27.862Z",
-          "to_status": "published"
-        }
-      ]
-    },
-    {
       "id": 1,
       "title": "गाजियाबाद: हिंडन एलिवेटेड रोड पर सुरक्षा बढ़ाने के लिए 40 नए एआई कैमरे स्थापित, तेज रफ्तार पर होगा ई-चालान",
       "slug": "ghaziabad-hindon-elevated-road-ai-cameras-traffic-safety",
@@ -626,7 +678,10 @@
       "seo_description": "गाजियाबाद हिंडन एलिवेटेड रोड पर 40 नए एआई कैमरे लगाए गए हैं। गति सीमा पार करने पर तुरंत ई-चालान कटेगा।",
       "published_at": "2026-10-16T10:00:00.000Z",
       "created_at": "2026-10-16T09:30:00.000Z",
-      "updated_at": "2026-10-16T10:00:00.000Z"
+      "updated_at": "2026-10-16T10:00:00.000Z",
+      "author_avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "मुख्य संपादक एवं डिजिटल पत्रकारिता विशेषज्ञ",
+      "author_role": "Super Admin"
     },
     {
       "id": 1792241257185,
@@ -658,7 +713,10 @@
       "updated_at": "2026-10-17T12:47:37.185Z",
       "category_name": "गाजियाबाद",
       "category_slug": "ghaziabad",
-      "author_name": "संदीप राणा (प्रधान संपादक)"
+      "author_name": "संदीप राणा (प्रधान संपादक)",
+      "author_avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "मुख्य संपादक एवं डिजिटल पत्रकारिता विशेषज्ञ",
+      "author_role": "Super Admin"
     },
     {
       "id": 1792241541242,
@@ -690,7 +748,10 @@
       "updated_at": "2026-10-17T12:52:21.242Z",
       "category_name": "दिल्ली एनसीआर",
       "category_slug": "delhi-ncr",
-      "author_name": "संदीप राणा (प्रधान संपादक)"
+      "author_name": "संदीप राणा (प्रधान संपादक)",
+      "author_avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "मुख्य संपादक एवं डिजिटल पत्रकारिता विशेषज्ञ",
+      "author_role": "Super Admin"
     },
     {
       "id": 1792241894993,
@@ -722,7 +783,10 @@
       "updated_at": "2026-10-17T12:58:14.992Z",
       "category_name": "गाजियाबाद",
       "category_slug": "ghaziabad",
-      "author_name": "संदीप राणा (प्रधान संपादक)"
+      "author_name": "संदीप राणा (प्रधान संपादक)",
+      "author_avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "मुख्य संपादक एवं डिजिटल पत्रकारिता विशेषज्ञ",
+      "author_role": "Super Admin"
     },
     {
       "id": 1792242389356,
@@ -754,7 +818,10 @@
       "updated_at": "2026-10-17T13:06:29.356Z",
       "category_name": "गाजियाबाद",
       "category_slug": "ghaziabad",
-      "author_name": "संदीप राणा (प्रधान संपादक)"
+      "author_name": "संदीप राणा (प्रधान संपादक)",
+      "author_avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "मुख्य संपादक एवं डिजिटल पत्रकारिता विशेषज्ञ",
+      "author_role": "Super Admin"
     },
     {
       "id": 1792242840445,
@@ -786,7 +853,10 @@
       "scheduled_at": "",
       "published_at": "2026-10-17T13:14:00.445Z",
       "created_at": "2026-10-17T13:14:00.445Z",
-      "updated_at": "2026-10-17T13:14:00.445Z"
+      "updated_at": "2026-10-17T13:14:00.445Z",
+      "author_avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "मुख्य संपादक एवं डिजिटल पत्रकारिता विशेषज्ञ",
+      "author_role": "Super Admin"
     },
     {
       "id": 1792243086266,
@@ -818,7 +888,10 @@
       "scheduled_at": "",
       "published_at": "2026-10-17T13:18:06.265Z",
       "created_at": "2026-10-17T13:18:06.265Z",
-      "updated_at": "2026-10-17T13:18:06.265Z"
+      "updated_at": "2026-10-17T13:18:06.265Z",
+      "author_avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "मुख्य संपादक एवं डिजिटल पत्रकारिता विशेषज्ञ",
+      "author_role": "Super Admin"
     },
     {
       "id": 1792243992983,
@@ -850,7 +923,10 @@
       "scheduled_at": "",
       "published_at": "2026-10-17T13:33:12.983Z",
       "created_at": "2026-10-17T13:33:12.983Z",
-      "updated_at": "2026-10-17T13:33:12.983Z"
+      "updated_at": "2026-10-17T13:33:12.983Z",
+      "author_avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "मुख्य संपादक एवं डिजिटल पत्रकारिता विशेषज्ञ",
+      "author_role": "Super Admin"
     },
     {
       "id": 1792253036113,
@@ -882,7 +958,10 @@
       "scheduled_at": "",
       "published_at": "2026-10-17T16:03:56.113Z",
       "created_at": "2026-10-17T16:03:56.113Z",
-      "updated_at": "2026-10-17T16:03:56.113Z"
+      "updated_at": "2026-10-17T16:03:56.113Z",
+      "author_avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "मुख्य संपादक एवं डिजिटल पत्रकारिता विशेषज्ञ",
+      "author_role": "Super Admin"
     },
     {
       "id": 1792315071239,
@@ -907,7 +986,7 @@
       "is_featured": false,
       "is_trending": false,
       "is_on_home": true,
-      "status": "pending_review",
+      "status": "approved",
       "tags": [],
       "view_count": 0,
       "seo_title": "",
@@ -916,8 +995,17 @@
       "scheduled_at": "",
       "published_at": "",
       "created_at": "2026-10-18T09:17:51.239Z",
-      "updated_at": "2026-10-18T09:17:51.239Z",
+      "updated_at": "2026-10-24T14:41:50.553Z",
       "audit_logs": [
+        {
+          "action": "status_change:approved",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-22T20:16:51.859Z",
+          "from_status": "pending_review",
+          "to_status": "approved",
+          "notes": "संपादक द्वारा स्वीकृत"
+        },
         {
           "action": "created",
           "user_id": 3,
@@ -925,7 +1013,14 @@
           "timestamp": "2026-10-18T09:17:51.239Z",
           "to_status": "pending_review"
         }
-      ]
+      ],
+      "author_avatar": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80",
+      "review_notes": "संपादक द्वारा स्वीकृत",
+      "reviewed_by": 1,
+      "reviewed_by_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+      "reviewed_at": "2026-10-22T20:16:51.859Z",
+      "author_bio": "वरिष्ठ अपराध एवं खोजी पत्रकार (Crime & Investigative Journalist)। जमीनी मुद्दों और जनसमस्याओं पर निष्पक्ष रिपोर्टिंग।",
+      "author_role": "Reporter"
     },
     {
       "id": 1792316032244,
@@ -968,7 +1063,1448 @@
           "timestamp": "2026-10-18T09:33:52.243Z",
           "to_status": "published"
         }
-      ]
+      ],
+      "author_avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "मुख्य संपादक एवं डिजिटल पत्रकारिता विशेषज्ञ",
+      "author_role": "Super Admin"
+    },
+    {
+      "id": 1792429426477,
+      "title": "ओड राजपूत समाज ने मनाई 35 वीं क्षत्रिय सम्राट सगर जयंती  ",
+      "slug": "ओड-राजपूत-समाज-मनाई-35-वीं-क्षत्रिय-सम्राट-सगर-जयंती-426477",
+      "subtitle": "सैकड़ों स्वजातीय रहे उपस्थित,युवाओं ने निकाली भव्य शोभा यात्रा",
+      "excerpt": "गाजियाबाद( संजय कुमार राजपूत)। सगरवंशीओड राजपूत सेवा समिति (पंजी) गाजियाबाद की ओर से 35वाँ क्षत्रिय सम्राट सगर जयंती समारोह का भव्य आयोजन विजय नगर के सी ब्लॉक प...",
+      "content": "गाजियाबाद( संजय कुमार राजपूत)। सगरवंशीओड  राजपूत सेवा समिति (पंजी) गाजियाबाद की ओर से 35वाँ क्षत्रिय सम्राट सगर जयंती समारोह का भव्य आयोजन विजय नगर के सी ब्लॉक पार्क में किया गया ।\n\nआपको बता दे कि पिछले 35 वर्ष से हर वर्ष अश्विन शुक्ला अष्टमी को ओड राजपूत समाज चक्रवर्ती सम्राट राजा सगर की जयंती का आयोजन करता आ रहा है, गत वर्ष की भांति इस बार भी समारोह का भव्य आयोजन किया गया।\n\nइस बार समारोह की अध्यक्षता दिल्ली से आए डा. राजेश वर्मा के की वही मंच संचालन अजयपाल सिंह पूनम वीर सिंह, विकास त्यागी ने किया।कार्यक्रम में वरिष्ठ नागरिकों को साफा बाँधकर सम्मानित किया गया।\n\nकार्यक्रम में सर्व प्रथम गाडर पूजन कर महाराजा सगर की प्रतिमा पर पुष्पांजलि अर्पित की गई।\nइस अवसर पर समाज के युवाओं ने भगीरथ चौक (प्रताप विहार) से सगर पार्क तक सम्राट सगर की शोभा-यात्रा निकाली, जिसमें सम्राट सगर जी का प्रतिरूप एक अनोखे अंदाज में दिखाई दिया।\n\nइस दौरान साथ के प्रांतीय अध्यक्ष वीरभान राणा ने कहा कि गाजियाबाद में ओड समाज एक महत्त्वपूर्ण भूमिका रखता है, आज ग़ाज़ियाबाद राजपूतों की जनसंख्या में एक महत्त्वपूर्ण स्थान रखता है।\n\nइस अवसर पर प्रोफेसर ठाकुर जगदीश सिंह चित्तौड़ा ने कहा कि इस समय ओड राजपूत को संगठित होने की आवश्यकता है, उन्होंने कहा कि हम काफी समय से देख रहे है युवा इस आयोजन में बढ़ चढ़ कर हिस्सा ले रहे है जो कि समाज की आने वाली पीढ़ी के लिए एक अच्छा विकल्प है।\n\nइस दौरान ठाकुर अजयपाल सिंह ने कहा कि आज ओड समाज एक संगठित समाज बनता जा रहा है जो एक अच्छा विषय है उन्होंने कहा कि सभी समितियाँ एकजुट होकर सामने आए जिससे समाज की एकता का परिचय संपूर्ण भारत देख सके।\n\n इस अवसर पर\nपूनम वीर कश्यप\nएवं जिला अध्यक्ष\nडा. वशिष्ठ सिंह राणा ,ग्रामीण अध्यक्ष\nडा. हरीश चन्द सिंह  ग्रामीण महामंत्री,\nडा. गोपाल सिंह, ग्रामीण संगठन सचिव,डा. जितेन्द्र सिंह ग्रामीण उपाध्यक्ष उपस्थित रहे \n\nकार्यक्रम के दौरान \n\nओड राजपूत समाज मनाई 35 वीं क्षत्रिय सम्राट सगर जयंती\n\nस्वजातीय बंधु बड़ी संख्या में रहे उपस्थित, युवाओं ने निकाली भव्य शोभा यात्रा\n\nगाजियाबाद( संजय कुमार राजपूत)। सगरवंशीओड  राजपूत सेवा समिति (पंजी) गाजियाबाद की ओर से 35वाँ क्षत्रिय सम्राट सगर जयंती समारोह का भव्य आयोजन विजय नगर के सी ब्लॉक पार्क में किया गया ।\n\nआपको बता दे कि पिछले 35 वर्ष से हर वर्ष अश्विन शुक्ला अष्टमी को ओड राजपूत समाज चक्रवर्ती सम्राट राजा सगर की जयंती का आयोजन करता आ रहा है, गत वर्ष की भांति इस बार भी समारोह का भव्य आयोजन किया गया।\n\nइस बार समारोह की अध्यक्षता दिल्ली से आए डा. राजेश के की वही मंच संचालन अजयपाल सिंह ने किया।कार्यक्रम में वरिष्ठ नागरिकों को पगड़ी बाँधकर सम्मानित किया गया।\n\nकार्यक्रम में सर्व प्रथम गाडर पूजन कर महाराजा सगर की प्रतिमा पर पुष्पांजलि अर्पित की गई।\nइस अवसर पर समाज के युवाओं ने भगीरथ चौक (प्रताप विहार) से सगर पार्क तक सम्राट सगर की शोभा-यात्रा निकाली, जिसमें सम्राट सगर जी का प्रतिरूप एक अनोखे अंदाज में दिखाई दिया।\n\nइस दौरान साथ के प्रांतीय अध्यक्ष वीरभान राणा ने कहा कि गाजियाबाद में ओड समाज एक महत्त्वपूर्ण भूमिका रखता है, आज ग़ाज़ियाबाद राजपूतों की जनसंख्या में एक महत्त्वपूर्ण स्थान रखता है।\n\nइस अवसर पर प्रोफेसर ठाकुर जगदीश सिंह चित्तौड़ा ने कहा कि इस समय ओड राजपूत को संगठित होने की आवश्यकता है, उन्होंने कहा कि हम काफी समय से देख रहे है युवा इस आयोजन में बढ़ चढ़ कर हिस्सा ले रहे है जो कि समाज की आने वाली पीढ़ी के लिए एक अच्छा विकल्प है।\n\nइस दौरान ठाकुर अजयपाल सिंह ने कहा कि आज ओड समाज एक संगठित समाज बनता जा रहा है जो एक अच्छा विषय है उन्होंने कहा कि सभी समितियाँ एकजुट होकर सामने आए जिससे समाज की एकता का परिचय संपूर्ण भारत देख सके।\n\n इस अवसर पर\nपूनम वीर कश्यप\nएवं जिला अध्यक्ष\nडा. वशिष्ठ सिंह राणा ,ग्रामीण अध्यक्ष\nडा. हरीश चन्द सिंह  ग्रामीण महामंत्री,\nडा. गोपाल सिंह, ग्रामीण संगठन सचिव,डा. जितेन्द्र सिंह ग्रामीण उपाध्यक्ष उपस्थित रहे। डा. जगदीश चितौड़, एडवोकेट \nमेनका दिल्ली, डा. हरी राम क्षेत्रव, बलवीर सिंह, ज्ञानवीर सिंह, \nधर्मेन्द्र सिंह, दिलीप सिंह राणा, जोधपुरा शाह, ओम प्रकाश औड़ पार्षद, \nगोपाल सिंह शिशोदिया पार्षद, धरन सिंह वीर, \nतरुण, शारदा, दिलीप राणा, वीरपाल सिंह आदि,\nछोटे सिंह ठेकेदार, मन्दर सिंह, मुकेश कुमार, उमेश राणा आदि संस्था के सदस्य मौजूद रहे।",
+      "category_id": 1,
+      "category_name": "गाजियाबाद",
+      "category_slug": "ghaziabad",
+      "author_id": 1,
+      "author_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+      "location": "गाजियाबाद ",
+      "featured_image": "/uploads/1792715795563-1000185658.png",
+      "image_caption": "समारोह को संबोधित करते प्रांतीय अध्यक्ष वीरभान सिंह राणा",
+      "image_credit": "ब्लैक लेंस ब्यूरो",
+      "gallery_images": [
+        "/uploads/1792715795563-1000185658.png",
+        "/uploads/1792715795976-1000185636.jpg",
+        "/uploads/1792715796334-1000185637.jpg",
+        "/uploads/1792715796770-1000185624.jpg",
+        "/uploads/1792715797186-1000185623.jpg"
+      ],
+      "video_url": "",
+      "is_video_news": false,
+      "is_breaking": false,
+      "is_featured": true,
+      "is_trending": true,
+      "is_on_home": true,
+      "status": "published",
+      "tags": [
+        "गाजियाबाद",
+        "राजपूत समाज"
+      ],
+      "view_count": 0,
+      "seo_title": "",
+      "seo_description": "",
+      "seo_keywords": "गाजियाबाद, राजपूत समाज",
+      "scheduled_at": "",
+      "published_at": "2026-10-19T17:03:46.477Z",
+      "created_at": "2026-10-19T17:03:46.477Z",
+      "updated_at": "2026-10-23T00:36:43.486Z",
+      "audit_logs": [
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-23T00:36:43.486Z",
+          "from_status": "published",
+          "to_status": "published"
+        },
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-21T19:06:17.514Z",
+          "from_status": "published",
+          "to_status": "published"
+        },
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संदीप राणा (प्रधान संपादक)",
+          "timestamp": "2026-10-19T17:33:00.427Z",
+          "from_status": "published",
+          "to_status": "published"
+        },
+        {
+          "action": "created",
+          "user_id": 1,
+          "user_name": "संदीप राणा (प्रधान संपादक)",
+          "timestamp": "2026-10-19T17:03:46.477Z",
+          "to_status": "published"
+        }
+      ],
+      "tagsInput": "गाजियाबाद, राजपूत समाज",
+      "author_avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "मुख्य संपादक एवं डिजिटल पत्रकारिता विशेषज्ञ",
+      "author_role": "Super Admin"
+    },
+    {
+      "id": 1792440489442,
+      "title": "मिशन शक्ति 6.0: नुक्कड़ नाटक से बाल विवाह के खिलाफ जगाई अलख",
+      "slug": "मिशन-शक्ति-6-0-नुक्कड़-नाटक-से-बाल-विवाह-के-खिलाफ-जगाई-अलख-489442",
+      "subtitle": "",
+      "excerpt": "गाजियाबाद। मिशन शक्ति 6.0 के तहत गाजियाबाद पुलिस की ओर से महिलाओं और बालिकाओं की सुरक्षा, सम्मान, शिक्षा एवं सशक्तिकरण को लेकर लगातार जागरूकता अभियान चलाए जा रह...",
+      "content": "गाजियाबाद। मिशन शक्ति 6.0 के तहत गाजियाबाद पुलिस की ओर से महिलाओं और बालिकाओं की सुरक्षा, सम्मान, शिक्षा एवं सशक्तिकरण को लेकर लगातार जागरूकता अभियान चलाए जा रहे हैं। इसी क्रम में रविवार को वेव सिटी थाना क्षेत्र के ग्राम एकला में बाल विवाह जैसी सामाजिक कुरीति के खिलाफ विशेष जागरूकता कार्यक्रम आयोजित किया गया। शारदीय नवरात्रि के नौ दिवसीय विशेष अभियान के आठवें दिन आयोजित इस कार्यक्रम में ग्रामीणों को बाल विवाह के दुष्परिणामों से अवगत कराते हुए इसे रोकने के लिए आगे आने की अपील की गई।\nकार्यक्रम के दौरान एंटी ह्यूमन ट्रैफिकिंग थाना पुलिस ने गैर-सरकारी संगठन और संबंधित विभागों के सहयोग से नुक्कड़ नाटक प्रस्तुत कर बाल विवाह से होने वाले नुकसान को प्रभावशाली ढंग से समझाया। इसके साथ ही ‘बढ़ते बच्चों’ नामक लघु फिल्म के माध्यम से लोगों को बच्चों के अधिकारों, उनके समुचित विकास और शिक्षा के महत्व के प्रति जागरूक किया गया। कार्यक्रम में बताया गया कि बाल विवाह बच्चों के शारीरिक और मानसिक विकास पर प्रतिकूल प्रभाव डालता है। इससे उनकी शिक्षा बाधित होती है और उन्हें अपने अधिकारों एवं बेहतर भविष्य के अवसरों से वंचित होना पड़ सकता है।\nबाल विवाह रोकने के लिए समाज से सहयोग की अपील\nजागरूकता कार्यक्रम में सहायक पुलिस आयुक्त महिला अपराध शुचिता सिंह, एंटी ह्यूमन ट्रैफिकिंग थाना प्रभारी सर्वेश कुमार और वेव सिटी थाना प्रभारी शैलेन्द्र सिंह सहित अन्य पुलिसकर्मी मौजूद रहे। पुलिस अधिकारियों ने ग्रामीणों को बाल विवाह प्रतिषेध कानून की जानकारी देते हुए बताया कि बाल विवाह को रोकना समाज की सामूहिक जिम्मेदारी है। उन्होंने लोगों से अपील की कि कहीं भी बाल विवाह की जानकारी मिलने पर इसकी सूचना संबंधित जिम्मेदार अधिकारियों तक पहुंचाएं, ताकि समय रहते आवश्यक कार्रवाई की जा सके।\nपुलिस अधिकारियों ने बालिकाओं की शिक्षा, सुरक्षा और सम्मान सुनिश्चित करने के साथ उन्हें समान अवसर उपलब्ध कराने की आवश्यकता पर भी जोर दिया। उन्होंने कहा कि जागरूकता और सामाजिक सहभागिता के माध्यम से बाल विवाह जैसी कुप्रथा पर प्रभावी रोक लगाई जा सकती है। मिशन शक्ति 6.0 के तहत चलाए जा रहे इन अभियानों का उद्देश्य महिलाओं और बालिकाओं को उनके अधिकारों के प्रति जागरूक करना, उन्हें सुरक्षित वातावरण उपलब्ध कराना और समाज में सकारात्मक बदलाव को बढ़ावा देना है। कार्यक्रम के माध्यम से ग्रामीणों से अपील की गई कि वे बाल विवाह के विरुद्ध जागरूकता फैलाएं और बच्चों के सुरक्षित, शिक्षित एवं उज्ज्वल भविष्य के निर्माण में अपनी भूमिका निभाएं।",
+      "category_id": 1,
+      "category_name": "गाजियाबाद",
+      "category_slug": "ghaziabad",
+      "author_id": 1,
+      "author_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+      "location": "गाजियाबाद",
+      "featured_image": "/uploads/1792716155619-1000081840.jpg",
+      "image_caption": "",
+      "image_credit": "संजय कुमार राजपूत (प्रधान संपादक)",
+      "gallery_images": [
+        "/uploads/1792716155619-1000081840.jpg"
+      ],
+      "video_url": "",
+      "is_video_news": false,
+      "is_breaking": true,
+      "is_featured": true,
+      "is_trending": true,
+      "is_on_home": true,
+      "status": "published",
+      "tags": [],
+      "view_count": 0,
+      "seo_title": "",
+      "seo_description": "",
+      "seo_keywords": "",
+      "scheduled_at": "",
+      "published_at": "2026-10-19T20:08:09.442Z",
+      "created_at": "2026-10-19T20:08:09.442Z",
+      "updated_at": "2026-10-23T00:42:39.715Z",
+      "audit_logs": [
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-23T00:42:39.715Z",
+          "from_status": "published",
+          "to_status": "published"
+        },
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-21T19:10:55.223Z",
+          "from_status": "published",
+          "to_status": "published"
+        },
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-21T14:53:49.768Z",
+          "from_status": "published",
+          "to_status": "published"
+        },
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-19T20:08:32.046Z",
+          "from_status": "published",
+          "to_status": "published"
+        },
+        {
+          "action": "created",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-19T20:08:09.442Z",
+          "to_status": "published"
+        }
+      ],
+      "tagsInput": "",
+      "author_avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "मुख्य संपादक एवं डिजिटल पत्रकारिता विशेषज्ञ",
+      "author_role": "Super Admin"
+    },
+    {
+      "id": 1792441201123,
+      "title": "मणिमहेश की यात्रा 2026",
+      "slug": "https://youtu.be/D54oAVfq1fs?si=R2pkGjIewNmD31BQ",
+      "subtitle": "",
+      "excerpt": "मणिमहेश की सुंदर यात्रा की प्रस्तुति",
+      "content": "मणिमहेश की सुंदर यात्रा की प्रस्तुति ",
+      "category_id": 1792242037187,
+      "category_name": "धर्म और संस्कृति",
+      "category_slug": "cat-1792242037187",
+      "author_id": 1,
+      "author_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+      "location": "देश",
+      "featured_image": "/uploads/1792716104675-1000000256.jpg",
+      "image_caption": "",
+      "image_credit": "संजय कुमार राजपूत (प्रधान संपादक)",
+      "gallery_images": [
+        "/uploads/1792716104675-1000000256.jpg"
+      ],
+      "video_url": "https://youtu.be/D54oAVfq1fs?si=R2pkGjIewNmD31BQ",
+      "is_video_news": true,
+      "is_breaking": true,
+      "is_featured": true,
+      "is_trending": true,
+      "is_on_home": true,
+      "status": "published",
+      "tags": [],
+      "view_count": 0,
+      "seo_title": "",
+      "seo_description": "",
+      "seo_keywords": "",
+      "scheduled_at": "",
+      "published_at": "2026-10-19T20:20:01.123Z",
+      "created_at": "2026-10-19T20:20:01.123Z",
+      "updated_at": "2026-10-23T00:41:47.099Z",
+      "audit_logs": [
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-23T00:41:47.099Z",
+          "from_status": "published",
+          "to_status": "published"
+        },
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-21T19:07:48.476Z",
+          "from_status": "published",
+          "to_status": "published"
+        },
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-21T19:07:38.975Z",
+          "from_status": "published",
+          "to_status": "published"
+        },
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-21T14:52:06.525Z",
+          "from_status": "published",
+          "to_status": "published"
+        },
+        {
+          "action": "created",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-19T20:20:01.123Z",
+          "to_status": "published"
+        }
+      ],
+      "tagsInput": "",
+      "author_avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "मुख्य संपादक एवं डिजिटल पत्रकारिता विशेषज्ञ",
+      "author_role": "Super Admin"
+    },
+    {
+      "id": 1792474800187,
+      "title": " फर्जी मुकदमे से 24 वर्ष बाद न्यायालय से बाइज्जत बरी हुए वरिष्ठ पत्रकार महेंद्र त्रिपाठी",
+      "slug": "फर्जी-मुकदमे-से-24-वर्ष-बाद-न्यायालय-से-बाइज्जत-बरी-हुवे-वरिष्ठ-पत्रकार-महेंद्र-800186",
+      "subtitle": "",
+      "excerpt": "अयोध्या ।वरिष्ठ पत्रकार प्रेस क्लब अयोध्या के अध्यक्ष महेंद्र त्रिपाठी को एक झूठे मामले में 24 वर्ष बाद मिला न्याय महिला थाने की थानेदार रही पूर्व महिला थानाध्य...",
+      "content": "अयोध्या ।वरिष्ठ पत्रकार प्रेस क्लब अयोध्या के अध्यक्ष महेंद्र त्रिपाठी को एक झूठे मामले में 24 वर्ष बाद मिला न्याय महिला थाने की थानेदार रही पूर्व महिला थानाध्यक्ष सत्यवती आर्या के विरुद्ध उनके कारनामों की  शिकायतउच्च अधिकारियों से की थी जिसके इंटेंशन में सत्यवती आर्या के द्वारा एक फर्जी मुकदमा वर्ष 2002 में वरिष्ठ पत्रकार महेंद्र त्रिपाठी के विरुद्ध लिख कर न्यायालय में झूठी घटना दिखा कर चारसौबीसी की धारा में चार्जशीट भी लगा दिया गया था जिसे पीड़ित  वरिष्ठ पत्रकार महेंद्र त्रिपाठी ने अपने वरिष्ठ अधिवक्ता भूपेंद्र सिंह गांधी के द्वारा न्यायालय में चैलेंज किया गया और अपना पक्ष मजबूती से रखा  जिसे एफटीसीडब्लू कोर्ट की न्यायिक मजिस्ट्रेट निवेदिता सिंह के द्वारा सबूतों और दिए गए साक्ष्य के आधार पर बाइज्जत बरी कर दिया  कोर्ट के आदेश पर अपनी प्रतिक्रिया देते हुवे वरिष्ठ पत्रकार महेंद्र त्रिपाठी ने इसे न्याय की जीत बताया है और प्रशन्नता ब्यक्त की और अब वे शीघ्र ही  सत्यवती आर्या के विरुद्ध दायर करेंगें आपराधिक मुकदमा।",
+      "category_id": 3,
+      "category_name": "उत्तर प्रदेश",
+      "category_slug": "uttar-pradesh",
+      "author_id": 1,
+      "author_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+      "location": "अयोध्या",
+      "featured_image": "/uploads/1792716031570-1000187108.jpg",
+      "image_caption": "",
+      "image_credit": "संजय कुमार राजपूत (प्रधान संपादक)",
+      "gallery_images": [
+        "/uploads/1792716031570-1000187108.jpg"
+      ],
+      "video_url": "",
+      "is_video_news": false,
+      "is_breaking": true,
+      "is_featured": false,
+      "is_trending": true,
+      "is_on_home": true,
+      "status": "published",
+      "tags": [
+        "#अयोध्या"
+      ],
+      "view_count": 2,
+      "seo_title": "",
+      "seo_description": "",
+      "seo_keywords": "#अयोध्या",
+      "scheduled_at": "",
+      "published_at": "2026-10-20T05:40:00.186Z",
+      "created_at": "2026-10-20T05:40:00.186Z",
+      "updated_at": "2026-10-23T00:40:37.835Z",
+      "audit_logs": [
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-23T00:40:37.835Z",
+          "from_status": "published",
+          "to_status": "published"
+        },
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-21T19:08:19.998Z",
+          "from_status": "published",
+          "to_status": "published"
+        },
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-21T14:50:31.562Z",
+          "from_status": "published",
+          "to_status": "published"
+        },
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-20T05:58:43.084Z",
+          "from_status": "published",
+          "to_status": "published"
+        },
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-20T05:43:08.914Z",
+          "from_status": "published",
+          "to_status": "published"
+        },
+        {
+          "action": "created",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-20T05:40:00.186Z",
+          "to_status": "published"
+        }
+      ],
+      "tagsInput": "#अयोध्या",
+      "author_avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "मुख्य संपादक एवं डिजिटल पत्रकारिता विशेषज्ञ",
+      "author_role": "Super Admin"
+    },
+    {
+      "id": 1792484415383,
+      "title": "पुराना विजयनगर में अशोक वाटिका का मंचन किया गया",
+      "slug": "श्री-पुराना-विजयनगर-में-अशोक-वाटिका-का-मंचन-किया-गया-415383",
+      "subtitle": "",
+      "excerpt": "श्री विजय रामलीला कमेटी पुराना विजयनगर गाजियाबाद में अशोक वाटिका का मंचन किया गया। रामलीला के अध्यक्ष श्री लेखराज माहौर एड. ने बताया कि श्री विजय रामलीला कमेटी ...",
+      "content": "श्री विजय रामलीला कमेटी \n पुराना विजयनगर गाजियाबाद में अशोक वाटिका का मंचन किया गया।\nरामलीला के अध्यक्ष श्री लेखराज माहौर एड. ने बताया कि श्री विजय रामलीला कमेटी पुराना विजय नगर गाजियाबाद में हनुमान जी का लंका में प्रवेश करते हैं व सीता जी की खोज करते हुए अशोक वाटिका में पहुंच जाते हैं और वहा पर सीता जी की क्या हालत है, ऐसा सीन देखते हैं, तत्पश्चात राम चन्द्र जी की अंगुठी निशानी सीता जी और फेंक देते हैं. जिससे सीता जी समझ जाती हैं कि कोई राम दूत आया है. फिर साक्षात दर्शन देकर राम चन्द्र जी का संदेश सीता जी को देते हैं. रावण के दूतों को जैसे ही पता लगता है कि लंका में कोई बानर घुस आया है. इसकी शिकायत रावण से करते हैं रावण अक्षय कुमार को हनुमान जी को पकड़ने के लिए भेजता है. परंतु अक्षय कुमार हनुमान जी के हाथों मारा जाता है, फिर मेघनाथ हनुमान जी को ब्रह्मास्त्र में फाँस रावण दरबार में पेस करता हैं. रावण के आदेश पर हनुमान जी की पूंछ में आग लगा दी जाती हैं, जिससे हनुमान जी पूरी लंका को जला देते हैं. \n\nइस अवसर पर रामलीला के अध्यक्ष लेखराज माहौर एडवोकेट, महामंत्री शिवकुमार शिबू, संरक्षक जॉनसन मेसी, अजय पाल, राम सिंह नेता जी, ठाकुर शंकर सिंह, ठाकुर राजपाल मास्टर जी, ठाकुर राजेश सिंह, डायरेक्टर हेमराज माहौर, घनश्याम माहौर, चौब सिंह, मनोहर सिंह कुशवाहा, विमल माहौर, भोला माहौर, मातृशक्ति बबीता, अंशु शर्मा, सुनीता, संगीता, मूलो देवी, उषा, चंचल माहौर, शीला देवी, देवकी देवी, वर्षा, असलम खान, सुरेश कोरी, गौरव सिसोदिया, शेर सिंह कोरी, संदीप कनौजिया, आदेश कोरी, गिरिराज माहौर, प्रेमचंद पाल, बंशीधर पाण्डेय, कोषाध्यक्ष पवन माहौर, अमन माहौर, अभिनव प्रधान, प्रणीत, तुषार, लक्ष्य माहौर, पवन शर्मा, रोहित जोशी, आचार्य अखिलेश मिश्र, शिवाकांत द्विवेदी, सारांश द्विवेदी, विशाल माहौर, सतीश कोरी, केशव कोरी, नानक चंद, मुकेश कोरी, चमन माहौर, विजय सक्सेना, यश, दीपांशु, तुषार, विराट माहौर, रविन्द्र, डॉ राकेश, डॉ सुभाष, रोशन लाल, महेंद्र सिंह, राजेंद्र सिंह रेलवे वाले, कुलवंत सिंह राजेश कुमार विश्वकर्मा आदि उपस्थित रहे.",
+      "category_id": 1,
+      "category_name": "गाजियाबाद",
+      "category_slug": "ghaziabad",
+      "author_id": 1,
+      "author_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+      "location": "समस्त भारत / गाजियाबाद",
+      "featured_image": "/uploads/1792716189796-1000187520.jpg",
+      "image_caption": "",
+      "image_credit": "संजय कुमार राजपूत (प्रधान संपादक)",
+      "gallery_images": [
+        "/uploads/1792716189796-1000187520.jpg",
+        "/uploads/1792716190232-1000187522.jpg",
+        "/uploads/1792716190615-1000187524.jpg"
+      ],
+      "video_url": "",
+      "is_video_news": false,
+      "is_breaking": true,
+      "is_featured": false,
+      "is_trending": true,
+      "is_on_home": true,
+      "status": "published",
+      "tags": [],
+      "view_count": 0,
+      "seo_title": "",
+      "seo_description": "",
+      "seo_keywords": "",
+      "scheduled_at": "",
+      "published_at": "2026-10-20T08:20:15.383Z",
+      "created_at": "2026-10-20T08:20:15.383Z",
+      "updated_at": "2026-10-23T00:43:14.293Z",
+      "audit_logs": [
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-23T00:43:14.293Z",
+          "from_status": "published",
+          "to_status": "published"
+        },
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-21T19:13:19.899Z",
+          "from_status": "published",
+          "to_status": "published"
+        },
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-21T14:50:09.044Z",
+          "from_status": "published",
+          "to_status": "published"
+        },
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-20T08:22:52.336Z",
+          "from_status": "published",
+          "to_status": "published"
+        },
+        {
+          "action": "created",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-20T08:20:15.383Z",
+          "to_status": "published"
+        }
+      ],
+      "tagsInput": "",
+      "author_avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "मुख्य संपादक एवं डिजिटल पत्रकारिता विशेषज्ञ",
+      "author_role": "Super Admin"
+    },
+    {
+      "id": 1792594829680,
+      "title": "पुराना विजयनगर धूमधाम से मनाया गया दशहरा महोत्सव ",
+      "slug": "पुराना-विजयनगर-धूमधाम-से-मनाया-गया-दशहरा-महोत्सव-829680",
+      "subtitle": "असत्य पर सत्य की जीत का प्रतीक है दशहरा : अजय शर्मा ",
+      "excerpt": "गाजियाबाद। श्री विजय रामलीला कमेटी (रजि.) पुराना विजय नगर गाजियाबाद में दशहरा महोत्सव बहुत धूमधाम से मनाया गया एवं रावण, मेघनाथ व कुंभकरण के पुतलों का दहन किया ...",
+      "content": "गाजियाबाद। श्री विजय रामलीला कमेटी (रजि.) पुराना विजय नगर गाजियाबाद में दशहरा महोत्सव बहुत धूमधाम से मनाया गया एवं रावण, मेघनाथ व कुंभकरण के पुतलों का दहन किया गया.\nइस अवसर पर मुख्य अतिथि के रूप में भारतीय जनता पार्टी राष्ट्रीय सदस्यता अभियान के प्रदेश संयोजक श्री अजय शर्मा, श्री अवधेश चौधरी जी, श्री आसिफ़ अली चेयरमेन जीवन ज्योति हॉस्पिटल व श्री कुंजन पंडित युवा नेता भाजपा मुख्य रूप से उपस्थित रहे।\n\nश्री अजय शर्मा ने बताया कि यह पर्व असत्य पर सत्य की जीत का प्रतीक है भगवान पुरुषोत्तम श्री रामचंद्र जी ने असत्य रूपी रावण पर विजय प्राप्त कर लंका को जीता था तथा तत्पश्चात विभीषण को लंका का राजा घोषित किया था, रामलीला के द्वारा भगवान पुरुषोत्तम श्री रामचंद्र जी के जीवन वृत्त के बारे में हम सबको जानकारी होती है तथा भगवान रामचंद्र जी अपने पिता की आज्ञा हेतु जिस प्रकार 14 वर्ष के लिए वनवास में गए और उन्होंने अपने पिता की आज्ञा को पूरा किया ऐसे महान चरित्रवान हमारे भगवान पुरुषोत्तम श्री रामचंद्र जी का वर्णन रामायण में किया गया है हम सबको रामायण के द्वारा भगवान राम के चरित्र को अपने जीवन में चरितार्थ करना है, रामायण में वर्णित अच्छी-अच्छी बातों से अपने जीवन को सरल बनाना है. उन्होंने कहा कि मैं श्री विजय रामलीला कमेटी के आयोजकों को बहुत-बहुत शुभकामनाएं प्रेषित करता हूं कि उन्होंने बहुत सुंदर रामलीला का आयोजन किया है और बहुत अच्छी व्यवस्थाओं के साथ में रामलीला हो रही है, विशेष तौर पर श्री विजय रामलीला कमेटी के अध्यक्ष लेखराज माहौर जी का मैं आभार व्यक्त करता हूं, उन्होंने मुझे यहां बुला कर आप सभी राम भक्तों से रूबरू कराया और मैं भविष्य में भी आपके समक्ष इसी प्रकार आता रहूंगा।\n\nरामलीला कमेटी के अध्यक्ष श्री लेखराज माहौर एडवोकेट ने बताया कि यह रामलीला पिछले 62 वर्षों से इसी स्थान पर लगातार होती आ रही है और इस रामलीला के संस्थापक मेरे दादाजी हमारे सभी के प्रेरणा स्रोत स्वर्गीय श्री कंछी लाल प्रधान जी रहे हैं। इस रामलीला की सबसे बड़ी खासियत यही है कि यहां सभी धर्म के लोग मिलकर इस रामलीला को सफल बनाते हैं और भव्य आयोजन करने में सभी का योगदान बराबर का रहता है. हमारी इस रामलीला में हमारे लोकल कलाकार ही अपनी कला से भगवान प्रभु श्री रामचंद्र जी का मंचन करते हैं।\n\nइस अवसर पर रामलीला के अध्यक्ष लेखराज माहौर एडवोकेट, महामंत्री शिवकुमार शिबू, संरक्षक जॉनसन मेसी, अजय पाल, राम सिंह नेता जी, ठाकुर शंकर सिंह, ठाकुर राजपाल मास्टर जी, ठाकुर राजेश सिंह, डायरेक्टर हेमराज माहौर, घनश्याम माहौर, चौब सिंह, मनोहर सिंह कुशवाहा, विमल माहौर, भोला माहौर, मातृशक्ति बबीता, अंशु शर्मा, सुनीता, संगीता, मूलो देवी, उषा, चंचल माहौर, शीला देवी, देवकी देवी, वर्षा, असलम खान, सुरेश कोरी, गौरव सिसोदिया, शेर सिंह कोरी, संदीप कनौजिया, आदेश कोरी, गिरिराज माहौर, प्रेमचंद पाल, बंशीधर पाण्डेय, कोषाध्यक्ष पवन माहौर, अमन माहौर, अभिनव प्रधान, प्रणीत, तुषार, लक्ष्य माहौर, पवन शर्मा, रोहित जोशी, आचार्य अखिलेश मिश्र, शिवाकांत द्विवेदी, सारांश द्विवेदी, विशाल माहौर, सतीश कोरी, केशव कोरी, नानक चंद, मुकेश कोरी, चमन माहौर, विजय सक्सेना, यश, दीपांशु, तुषार, विराट माहौर, रविन्द्र, डॉ राकेश, डॉ सुभाष, रोशन लाल, महेंद्र सिंह, राजेंद्र सिंह रेलवे वाले, कुलवंत सिंह राजेश कुमार विश्वकर्मा आदि उपस्थित रहे।",
+      "category_id": 1,
+      "category_name": "गाजियाबाद",
+      "category_slug": "ghaziabad",
+      "author_id": 1,
+      "author_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+      "location": " गाजियाबाद",
+      "featured_image": "/uploads/1792716231969-1000191520.jpg",
+      "image_caption": "",
+      "image_credit": "संजय कुमार राजपूत (प्रधान संपादक)",
+      "gallery_images": [
+        "/uploads/1792716231969-1000191520.jpg",
+        "/uploads/1792716232334-1000191521.jpg"
+      ],
+      "video_url": "",
+      "is_video_news": false,
+      "is_breaking": false,
+      "is_featured": false,
+      "is_trending": false,
+      "is_on_home": true,
+      "status": "published",
+      "tags": [],
+      "view_count": 19,
+      "seo_title": "",
+      "seo_description": "",
+      "seo_keywords": "",
+      "scheduled_at": "",
+      "published_at": "2026-10-21T15:00:29.679Z",
+      "created_at": "2026-10-21T15:00:29.679Z",
+      "updated_at": "2026-10-23T00:43:54.640Z",
+      "audit_logs": [
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-23T00:43:54.640Z",
+          "from_status": "published",
+          "to_status": "published"
+        },
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-21T19:12:25.201Z",
+          "from_status": "published",
+          "to_status": "published"
+        },
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-21T19:11:24.318Z",
+          "from_status": "published",
+          "to_status": "published"
+        },
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-21T17:35:27.797Z",
+          "from_status": "published",
+          "to_status": "published"
+        },
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-21T15:01:03.301Z",
+          "from_status": "published",
+          "to_status": "published"
+        },
+        {
+          "action": "created",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-21T15:00:29.679Z",
+          "to_status": "published"
+        }
+      ],
+      "tagsInput": "",
+      "author_avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "मुख्य संपादक एवं डिजिटल पत्रकारिता विशेषज्ञ",
+      "author_role": "Super Admin"
+    },
+    {
+      "id": 1792603797797,
+      "title": "वांछित अभियुक्ता गिरफ्तार, घटना में प्रयुक्त डण्डा बरामद ",
+      "slug": "वांछित-अभियुक्ता-गिरफ्तार-घटना-में-प्रयुक्त-डण्डा-बरामद-797797",
+      "subtitle": "",
+      "excerpt": "अमेठी । पुलिस अधीक्षक अमेठी सरवणन टी. के निर्देशन में एवं अपर पुलिस अधीक्षक अमेठी ज्ञानेन्द्र कुमार सिंह के पर्यवेक्षण में जनपद अमेठी में अपराध व अपराधियों की ध...",
+      "content": "अमेठी । पुलिस अधीक्षक अमेठी  सरवणन टी. के निर्देशन में एवं अपर पुलिस अधीक्षक अमेठी ज्ञानेन्द्र कुमार सिंह के पर्यवेक्षण में जनपद अमेठी में अपराध व अपराधियों की धर पकड़ हेतु चलाये जा रहे अभियान के तहत क्षेत्राधिकारी तिलोई दिनेश कुमार मिश्र के कुशल नेतृत्व में मुखबिर की सूचना पर थाना मोहनगंज पुलिस द्वारा मु0अ0सं0 318/26 धारा 190,191(2), 191(3),115(2),109 बीएनएस में वांछित अभियुक्ता रेनु पुत्री बाबूलाल निवासी पूरे रानी मजरे तिलोई थाना मोहनगंज जनपद अमेठी उम्र करीब 22 वर्ष को गिरफ्तार किया गया है । अभियुक्ता के कब्जे से घटना  में प्रयुक्त 01 डण्डा बरामद हुआ है । गिरफ्तारी के संबन्ध में थाना मोहनगंज पुलिस द्वारा विधिक कार्यवाही की जा रही है ।",
+      "category_id": 3,
+      "category_name": "उत्तर प्रदेश",
+      "category_slug": "uttar-pradesh",
+      "author_id": 1,
+      "author_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+      "location": "अमेठी",
+      "featured_image": "/uploads/1792609751145-1000191403.jpg",
+      "image_caption": "",
+      "image_credit": "संजय कुमार राजपूत (प्रधान संपादक)",
+      "gallery_images": [
+        "/uploads/1792609751145-1000191403.jpg"
+      ],
+      "video_url": "",
+      "is_video_news": false,
+      "is_breaking": false,
+      "is_featured": false,
+      "is_trending": false,
+      "is_on_home": true,
+      "status": "published",
+      "tags": [],
+      "view_count": 0,
+      "seo_title": "",
+      "seo_description": "",
+      "seo_keywords": "",
+      "scheduled_at": "",
+      "published_at": "2026-10-21T17:29:57.797Z",
+      "created_at": "2026-10-21T17:29:57.797Z",
+      "updated_at": "2026-10-21T19:09:14.237Z",
+      "audit_logs": [
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-21T19:09:14.237Z",
+          "from_status": "published",
+          "to_status": "published"
+        },
+        {
+          "action": "created",
+          "user_id": 1,
+          "user_name": "संदीप राणा (प्रधान संपादक)",
+          "timestamp": "2026-10-21T17:29:57.797Z",
+          "to_status": "published"
+        }
+      ],
+      "author_avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+      "tagsInput": "",
+      "author_bio": "मुख्य संपादक एवं डिजिटल पत्रकारिता विशेषज्ञ",
+      "author_role": "Super Admin"
+    },
+    {
+      "id": 1792605608926,
+      "title": "पश्चिम के जिलों को मिलाकर अलग प्रदेश बनाने की मांग ",
+      "slug": "पश्चिम-के-जिलों-को-मिलाकर-अलग-प्रदेश-बनाने-की-मांग-608926",
+      "subtitle": "राष्ट्रपति के नाम सौपा गया ज्ञापन",
+      "excerpt": "गाजियाबाद। उत्तर प्रदेश के पश्चिम क्षेत्र के जिलों को मिलाकर अलग प्रदेश की मांग को लेकर पश्चिम प्रदेश निर्माण मोर्चा ने आज महामहिम राष्ट्रपति भारत सरकार को गाजि...",
+      "content": "गाजियाबाद। उत्तर प्रदेश के पश्चिम क्षेत्र के जिलों को मिलाकर अलग प्रदेश की मांग को लेकर पश्चिम प्रदेश निर्माण मोर्चा ने आज महामहिम राष्ट्रपति भारत सरकार को गाजियाबाद सिटी मजिस्ट्रेट द्वारा ज्ञापन सोपा । \n\nइस दौरान पश्चिम प्रदेश निर्माण मोर्चा के केंद्रीय अध्यक्ष सत्यपाल सिंह यादव ने कहा कि उत्तर प्रदेश के पश्चिम क्षेत्र के लोग उत्तर प्रदेश की राजधानी तथा हाईकोर्ट जाने के लिए कब तक मुसीबत झेलते रहेंगे। उत्तर प्रदेश के पश्चिम क्षेत्र के 27 जिलों को मिलाकर अलग पश्चिम प्रदेश बनने पर हजारों युवकों को सरकारी नौकरियां मिलेंगी।  मुख्यमंत्री व मंत्री भी लोगों की पहचान वाले होंगे। व्यापार के नए अफसर मिलेंगे।\n\nइस दौरान मुख्य रूप से उपस्थित लोगों में पश्चिम प्रदेश निर्माण मोर्चा के केंद्रीय महासचिव कर्नल सुधीर चौधरी, ओमवीर सिंह बीरबाल, केंद्रीय उपाध्यक्ष दिलशाद प्रमुख, गाजियाबाद जिला अध्यक्ष राजेंद्र पाराशर, ओमप्रकाश सेना एडवोकेट, संजय गुप्ता, करण यादव, रवीश चौधरी, गौरव यादव एडवोकेट, आदि उपस्थित रहे।",
+      "category_id": 1,
+      "category_name": "गाजियाबाद",
+      "category_slug": "ghaziabad",
+      "author_id": 1792605284778,
+      "author_name": "Arjun singh",
+      "location": "गाजियाबाद / दिल्ली एनसीआर",
+      "featured_image": "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=1000&auto=format&fit=crop&q=80",
+      "image_caption": "",
+      "image_credit": "Arjun singh",
+      "gallery_images": [],
+      "video_url": "",
+      "is_video_news": false,
+      "is_breaking": true,
+      "is_featured": true,
+      "is_trending": true,
+      "is_on_home": true,
+      "status": "published",
+      "tags": [],
+      "view_count": 12,
+      "seo_title": "",
+      "seo_description": "",
+      "seo_keywords": "",
+      "scheduled_at": "",
+      "published_at": "2026-10-21T18:01:00.328Z",
+      "created_at": "2026-10-21T18:00:08.925Z",
+      "updated_at": "2026-10-23T16:00:33.044Z",
+      "audit_logs": [
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-23T16:00:33.044Z",
+          "from_status": "published",
+          "to_status": "published"
+        },
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-23T00:39:32.795Z",
+          "from_status": "published",
+          "to_status": "published"
+        },
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-21T19:09:39.436Z",
+          "from_status": "published",
+          "to_status": "published"
+        },
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-21T19:08:49.596Z",
+          "from_status": "published",
+          "to_status": "published"
+        },
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-21T18:02:59.573Z",
+          "from_status": "published",
+          "to_status": "published"
+        },
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-21T18:01:45.651Z",
+          "from_status": "published",
+          "to_status": "published"
+        },
+        {
+          "action": "status_change:published",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-21T18:01:00.328Z",
+          "from_status": "pending_review",
+          "to_status": "published"
+        },
+        {
+          "action": "created",
+          "user_id": 1792605284778,
+          "user_name": "Arjun singh",
+          "timestamp": "2026-10-21T18:00:08.925Z",
+          "to_status": "pending_review"
+        }
+      ],
+      "reviewed_by": 1,
+      "reviewed_by_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+      "reviewed_at": "2026-10-21T18:01:00.328Z",
+      "tagsInput": "",
+      "author_avatar": "/uploads/avatar-1792696039156-screenshot-20261017-113303.jpg",
+      "author_bio": "ब्लैक लेंस डिजिटल मीडिया हाउस के साथ निष्पक्ष एवं स्वतंत्र पत्रकारिता।",
+      "author_role": "संवाददाता"
+    },
+    {
+      "id": 1792606449701,
+      "title": "श्रीराम-भरत मिलाप ने किया भावविभोर, जय श्रीराम के जयकारों से गूंजा परिसर  राजतिलक के साथ रामलीला का समापन",
+      "slug": "श्रीराम-भरत-मिलाप-ने-किया-भावविभोर-जय-श्रीराम-के-जयकारों-से-गूंजा-परिसर-राजतिलक-449701",
+      "subtitle": "भव्य आतिशबाजी ने बांधा समां; कलाकारों को किया सम्मानित",
+      "excerpt": "गाजियाबाद। विजयनगर स्थित श्री सनातन धर्म रामलीला कमेटी ट्रस्ट की ओर से आयोजित रामलीला में बुधवार को श्रीराम-भरत मिलाप और भगवान श्रीराम के राजतिलक का भावपूर्ण मं...",
+      "content": "गाजियाबाद। विजयनगर स्थित श्री सनातन धर्म रामलीला कमेटी ट्रस्ट की ओर से आयोजित रामलीला में बुधवार को श्रीराम-भरत मिलाप और भगवान श्रीराम के राजतिलक का भावपूर्ण मंचन किया गया। दोनों भाइयों के मिलन का दृश्य देखकर दर्शक भावविभोर हो उठे। पूरा रामलीला परिसर जय श्रीराम के जयकारों से गूंज उठा।\n\nमंचन में दिखाया गया कि 14 वर्ष का वनवास पूरा करने और रावण पर विजय प्राप्त करने के बाद भगवान श्रीराम माता सीता और लक्ष्मण के साथ अयोध्या लौटते हैं। प्रभु श्रीराम के आगमन की सूचना मिलते ही अयोध्यावासी खुशी से झूम उठते हैं। वहीं, भरत अपने बड़े भाई के स्वागत के लिए आतुर रहते हैं। दोनों भाइयों के मिलन के दृश्य ने दर्शकों को भावुक कर दिया। इसके बाद विधि-विधान से भगवान श्रीराम के राजतिलक का मंचन हुआ। कलाकारों ने अपने सशक्त अभिनय से रामायण के इन प्रसंगों को जीवंत कर दिया। दर्शकों ने तालियां बजाकर कलाकारों का उत्साहवर्धन किया।\n\nआतिशबाजी से जगमगाया आसमान\n\nरामलीला के समापन पर भव्य आतिशबाजी की गई। रंग-बिरंगी रोशनी से आसमान जगमगा उठा। आतिशबाजी का दर्शकों ने उत्साह के साथ आनंद लिया। इसके बाद आयोजन समिति की ओर से रामलीला के विभिन्न प्रसंगों में अभिनय करने वाले कलाकारों को पुरस्कार देकर सम्मानित किया गया।\n\nकमेटी पदाधिकारियों ने कहा कि रामलीला भारतीय संस्कृति, धार्मिक परंपराओं और आदर्श जीवन मूल्यों को अगली पीढ़ी तक पहुंचाने का सशक्त माध्यम है। इसके जरिए समाज को मर्यादा, धर्म, सत्य, भाईचारे और पारिवारिक मूल्यों का संदेश मिलता है।\n\nइस मौके पर कमेटी अध्यक्ष वीरेंद्र कुमार गुप्ता, महासचिव सतीश शर्मा, वरिष्ठ उपाध्यक्ष धीरेंद्र अग्रवाल, सुनील कुमार शर्मा, उपाध्यक्ष अरविंद कौशिक, विकास त्यागी, मनोज नागर, कोषाध्यक्ष गिरीश मेहता, सहसंयोजक बाबूराम गौतम व देवेंद्र त्रिपाठी और सहसचिव रवि कौशिक सहित अन्य लोग मौजूद रहे।",
+      "category_id": 1,
+      "category_name": "गाजियाबाद",
+      "category_slug": "ghaziabad",
+      "author_id": 1792605284778,
+      "author_name": "Arjun singh",
+      "author_avatar": "/uploads/avatar-1792696039156-screenshot-20261017-113303.jpg",
+      "location": "गाजियाबाद / दिल्ली एनसीआर",
+      "featured_image": "/uploads/1792715907353-1000191710.jpg",
+      "image_caption": "",
+      "image_credit": "Arjun singh",
+      "gallery_images": [
+        "/uploads/1792715907353-1000191710.jpg",
+        "/uploads/1792715907846-1000191716.jpg",
+        "/uploads/1792715908237-1000191713.jpg"
+      ],
+      "video_url": "",
+      "is_video_news": false,
+      "is_breaking": true,
+      "is_featured": true,
+      "is_trending": true,
+      "is_on_home": true,
+      "status": "published",
+      "tags": [
+        "#SEO",
+        "#GHAZIABADNEWS"
+      ],
+      "view_count": 10,
+      "seo_title": "",
+      "seo_description": "",
+      "seo_keywords": "",
+      "scheduled_at": "",
+      "published_at": "2026-10-21T18:14:43.678Z",
+      "created_at": "2026-10-21T18:14:09.701Z",
+      "updated_at": "2026-10-23T00:38:35.081Z",
+      "audit_logs": [
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-23T00:38:35.081Z",
+          "from_status": "published",
+          "to_status": "published"
+        },
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-21T19:04:18.263Z",
+          "from_status": "published",
+          "to_status": "published"
+        },
+        {
+          "action": "status_change:published",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-21T18:14:43.678Z",
+          "from_status": "pending_review",
+          "to_status": "published",
+          "notes": "समीक्षा उपरांत लाइव प्रकाशित किया गया"
+        },
+        {
+          "action": "created",
+          "user_id": 1792605284778,
+          "user_name": "संपादक",
+          "timestamp": "2026-10-21T18:14:09.701Z",
+          "to_status": "pending_review"
+        }
+      ],
+      "review_notes": "समीक्षा उपरांत लाइव प्रकाशित किया गया",
+      "reviewed_by": 1,
+      "reviewed_by_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+      "reviewed_at": "2026-10-21T18:14:43.678Z",
+      "tagsInput": "#SEO, #GHAZIABADNEWS",
+      "author_bio": "ब्लैक लेंस डिजिटल मीडिया हाउस के साथ निष्पक्ष एवं स्वतंत्र पत्रकारिता।",
+      "author_role": "संवाददाता"
+    },
+    {
+      "id": 1792608220277,
+      "title": "अवैध  शराब निर्माण में तीन गिरफ्तार ",
+      "slug": "अवैध-शराब-निर्माण-में-तीन-गिरफ्तार-220277",
+      "subtitle": "अवैध शराब और लाहन किया नष्ट ",
+      "excerpt": "अमेठी। आबकारी आयुक्त , उ०प्र० के निर्देश पर प्रदेश भर में अवैध शराब के विरुद्ध चलाये जा रहे प्रवर्तन अभियान के अंतर्गत, जिलाधिकारी अमेठी व उप आबकारी आयुक्त अयोध...",
+      "content": "अमेठी। आबकारी आयुक्त , उ०प्र० के निर्देश  पर प्रदेश भर में अवैध शराब के विरुद्ध चलाये जा रहे प्रवर्तन अभियान के अंतर्गत, जिलाधिकारी अमेठी  व उप आबकारी आयुक्त अयोध्या  प्रभार के निर्देशन तथा पुलिस अधीक्षक व जिला आबकारी अधिकारी, अमेठी में अवैध कच्ची शराब की बिक्री एवं तस्करी के रोकथाम हेतु आज दिनाँक 21/10/2026 को जनपद अमेठी में गठित आबकारी टीम द्वारा ग्राम -त्रिलोकपुर, अन्नी बैजल, औरंगाबाद व हंसा का पुरवा  में आकस्मिक दबिश दी गयी । क्षेत्र- 3 के थाना- मुसाफिरखाना  के अंतर्गत ग्राम -औरंगाबाद व हंसा का पुरवा  से लगभग 56ली० अवैध कच्ची शराब  बरामद की गई तथा  लगभग150किलो ग्राम लहन महुआ मौके पर नष्ट किया । इस कार्यवाही मे 03 अभियोग आबकारी अधिनियम में पंजीकृत किए  तथा ग्राम वासियो को अवैध शराब पीने से होने वाले दुष्प्रभावों के बारे में जागरूक करते हुए विभाग के  टोल फ्री नम्बर अथवा संबंधित निरीक्षक के मोबाइल नम्बर पर अवैध शराब के निर्माण करने व बेचने की रोकथाम हेतु  सूचना देने की अपील की गई l\n\n दबिश की कार्यवाही मे  श्री पंकज विवेक (प्रभारी आबकारी निरीक्षक क्षेत्र-3) व समस्त आबकारी  स्टाफ रामनाथ मौर्या व शमशेर कुमार (प्रधान आबकारी सिपाही)संजय सरोज व सर्वेश वर्मा (आबकारी सिपाही)शामिल रहे।",
+      "category_id": 3,
+      "category_name": "उत्तर प्रदेश",
+      "category_slug": "uttar-pradesh",
+      "author_id": 1,
+      "author_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+      "author_avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+      "location": "अमेठी",
+      "featured_image": "/uploads/1792771260205-1000191954.jpg",
+      "image_caption": "",
+      "image_credit": "संवाददाता ",
+      "gallery_images": [
+        "/uploads/1792771260205-1000191954.jpg",
+        "/uploads/1792771260904-1000191953.jpg",
+        "/uploads/1792771261390-1000191952.jpg"
+      ],
+      "video_url": "",
+      "is_video_news": false,
+      "is_breaking": true,
+      "is_featured": true,
+      "is_trending": true,
+      "is_on_home": true,
+      "status": "published",
+      "tags": [
+        "@upgovt @nitinagarwal_n @chiefSecyUP @infodeptup @uppolice @DmAmethi"
+      ],
+      "view_count": 3,
+      "seo_title": "",
+      "seo_description": "",
+      "seo_keywords": "@upgovt @nitinagarwal_n @chiefSecyUP @infodeptup @uppolice @DmAmethi",
+      "scheduled_at": "",
+      "published_at": "2026-10-21T18:43:40.276Z",
+      "created_at": "2026-10-21T18:43:40.276Z",
+      "updated_at": "2026-10-23T16:01:06.096Z",
+      "audit_logs": [
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-23T16:01:06.096Z",
+          "from_status": "published",
+          "to_status": "published"
+        },
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-23T00:40:04.490Z",
+          "from_status": "published",
+          "to_status": "published"
+        },
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-21T18:44:45.040Z",
+          "from_status": "published",
+          "to_status": "published"
+        },
+        {
+          "action": "created",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-21T18:43:40.276Z",
+          "to_status": "published"
+        }
+      ],
+      "tagsInput": "@upgovt @nitinagarwal_n @chiefSecyUP @infodeptup @uppolice @DmAmethi",
+      "author_bio": "मुख्य संपादक एवं डिजिटल पत्रकारिता विशेषज्ञ",
+      "author_role": "Super Admin"
+    },
+    {
+      "id": 1792692075022,
+      "title": "प्रदेश के 72 जिलों में बंद रहेंगी शराब की दुकानें ",
+      "slug": "प्रदेश-के-72-जिलों-में-बंद-रहेंगी-शराब-की-दुकानें-075022",
+      "subtitle": "",
+      "excerpt": "गाजियाबाद। उत्तर प्रदेश में विधान परिषद की 11 सीटों पर होने वाले चुनाव को लेकर शराब और बीयर की बिक्री पर प्रतिबंध लगाने का आदेश जारी किया गया है। आदेश के मुताबि...",
+      "content": "गाजियाबाद। उत्तर प्रदेश में विधान परिषद की 11 सीटों पर होने वाले चुनाव को लेकर शराब और बीयर की बिक्री पर प्रतिबंध लगाने का आदेश जारी किया गया है। आदेश के मुताबिक, मतदान और मतगणना के दौरान प्रदेश के 72 जिलों में शराब की दुकानें बंद रहेंगी। \n\nमतदान के दिन 23 अक्टूबर और मतगणना के दिन 27 अक्टूबर को निर्धारित प्रतिबंधित अवधि में देशी-विदेशी शराब और बीयर की बिक्री नहीं होगी। कानपुर नगर, कानपुर देहात और उन्नाव जिले इसमें शामिल नहीं है।\n\nआबकारी आयुक्त की ओर से जारी निर्देश में संबंधित जिलों के अधिकारियों को शुष्क दिवस के आदेश का पालन कराने और दुकानों की निगरानी करने को कहा गया है। प्रतिबंधित अवधि में नियमों का उल्लंघन कर शराब की दुकान खोलने पर संबंधित लोगों के खिलाफ कानूनी कार्रवाई की जा सकती है।\n\nउत्तर प्रदेश विधान परिषद की 11 सीटों के लिए मतदान 23 अक्टूबर को होना है, जबकि मतगणना 27 अक्टूबर को प्रस्तावित है। स्वतंत्र, निष्पक्ष और शांतिपूर्ण चुनाव संपन्न कराने के उद्देश्य से इन तारीखों पर शराब की बिक्री पर रोक लगाई गई है।\n\nआबकारी आयुक्त ने जिलाधिकारियों को अपने स्तर से भी आवश्यक आदेश जारी करने और शुष्क दिवस के दौरान निगरानी सुनिश्चित करने के निर्देश दिए हैं।",
+      "category_id": 1,
+      "category_name": "गाजियाबाद",
+      "category_slug": "ghaziabad",
+      "author_id": 1,
+      "author_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+      "author_avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+      "location": "गाजियाबाद ",
+      "featured_image": "/uploads/1792771175998-1000194474.png",
+      "image_caption": "",
+      "image_credit": "संजय कुमार राजपूत (प्रधान संपादक)",
+      "gallery_images": [
+        "/uploads/1792771175998-1000194474.png"
+      ],
+      "video_url": "",
+      "is_video_news": false,
+      "is_breaking": false,
+      "is_featured": false,
+      "is_trending": false,
+      "is_on_home": true,
+      "status": "published",
+      "tags": [
+        "#आबकारी",
+        "#ghaziabadpolice",
+        "#SEO"
+      ],
+      "view_count": 43,
+      "seo_title": "",
+      "seo_description": "",
+      "seo_keywords": "#आबकारी, #ghaziabadpolice, #SEO",
+      "scheduled_at": "",
+      "published_at": "2026-10-22T18:01:15.021Z",
+      "created_at": "2026-10-22T18:01:15.021Z",
+      "updated_at": "2026-10-23T15:59:38.813Z",
+      "audit_logs": [
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-23T15:59:38.813Z",
+          "from_status": "published",
+          "to_status": "published"
+        },
+        {
+          "action": "created",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-22T18:01:15.021Z",
+          "to_status": "published"
+        }
+      ],
+      "tagsInput": "#आबकारी, #ghaziabadpolice, #SEO",
+      "author_bio": "मुख्य संपादक एवं डिजिटल पत्रकारिता विशेषज्ञ",
+      "author_role": "Super Admin"
+    },
+    {
+      "id": 1792696750050,
+      "title": "धान के खेत में मिला  लापता 16 वर्षीय किशोर का शव",
+      "slug": "धान-के-खेत-में-मिला-लापता-16-वर्षीय-किशोर-का-शव-750050",
+      "subtitle": "",
+      "excerpt": "अमेठी। जिले के संग्रामपुर थाना क्षेत्र के गूजीपुर मजरे पांडेय का पुरवा गांव में गुरुवार को उस समय हड़कंप मच गया, जब घर से करीब डेढ़ सौ मीटर की दूरी पर खेत में 1...",
+      "content": "अमेठी।  जिले के संग्रामपुर थाना क्षेत्र के गूजीपुर मजरे पांडेय का पुरवा गांव में गुरुवार को उस समय हड़कंप मच गया, जब घर से करीब डेढ़ सौ मीटर की दूरी पर खेत में 16 वर्षीय किशोर का शव मिला। मृतक की पहचान शतीश वर्मा पुत्र बद्री प्रसाद वर्मा के रूप में हुई है। किशोर पिछले तीन दिनों से संदिग्ध परिस्थितियों में घर से लापता था।\n\nजानकारी के अनुसार सतीश वर्मा चाट की दुकान पर काम करता था। उसके अचानक लापता होने के बाद परिजन उसकी तलाश में जुटे थे। पुलिस ने भी गुमशुदगी दर्ज कर किशोर की तलाश शुरू की थी। गुरुवार को घर के पास खेत में उसका शव मिलने की सूचना से गांव में सनसनी फैल गई।\n\nघटना की जानकारी मिलते ही परिजन मौके पर पहुंचे। किशोर का शव देखकर परिवार में चीख-पुकार मच गई और परिजनों का रो-रोकर बुरा हाल हो गया। सूचना पर पहुंची संग्रामपुर पुलिस ने शव को कब्जे में लेकर जांच शुरू कर दी है।",
+      "category_id": 3,
+      "category_name": "उत्तर प्रदेश",
+      "category_slug": "uttar-pradesh",
+      "author_id": 1,
+      "author_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+      "author_avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+      "location": "अमेठी",
+      "featured_image": "/uploads/1792696747210-1000194444.jpg",
+      "image_caption": "",
+      "image_credit": "संजय कुमार राजपूत (प्रधान संपादक)",
+      "gallery_images": [
+        "/uploads/1792696747210-1000194444.jpg"
+      ],
+      "video_url": "",
+      "is_video_news": false,
+      "is_breaking": false,
+      "is_featured": false,
+      "is_trending": false,
+      "is_on_home": true,
+      "status": "published",
+      "tags": [],
+      "view_count": 10,
+      "seo_title": "",
+      "seo_description": "",
+      "seo_keywords": "",
+      "scheduled_at": "",
+      "published_at": "2026-10-22T19:19:10.049Z",
+      "created_at": "2026-10-22T19:19:10.049Z",
+      "updated_at": "2026-10-22T19:19:10.049Z",
+      "audit_logs": [
+        {
+          "action": "created",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-22T19:19:10.049Z",
+          "to_status": "published"
+        }
+      ],
+      "author_bio": "मुख्य संपादक एवं डिजिटल पत्रकारिता विशेषज्ञ",
+      "author_role": "Super Admin"
+    },
+    {
+      "id": 1792701457167,
+      "title": "जिलाधिकारी एवं पुलिस अधीक्षक अमेठी द्वारा शिक्षक निर्वाचन के दृष्टिगत अधिकारियों को दिए  निर्देश",
+      "slug": "जिलाधिकारी-एवं-पुलिस-अधीक्षक-अमेठी-द्वारा-शिक्षक-निर्वाचन-के-दृष्टिगत-अधिकारियों-457167",
+      "subtitle": "",
+      "excerpt": "अमेठी। जिलाधिकारी एवं पुलिस अधीक्षक सरवणन टी. द्वारा उत्तर प्रदेश विधान परिषद गोरखपुर-फैजाबाद खण्ड शिक्षक निर्वाचन क्षेत्र के द्विवार्षिक निर्वाचन-2026 के दृष्ट...",
+      "content": "अमेठी। जिलाधिकारी एवं पुलिस अधीक्षक सरवणन टी. द्वारा उत्तर प्रदेश विधान परिषद गोरखपुर-फैजाबाद खण्ड शिक्षक निर्वाचन क्षेत्र के द्विवार्षिक निर्वाचन-2026 के दृष्टिगत प्रस्तावित मतदान हेतु पोलिंग पार्टियों की रवानगी एवं निर्वाचन संबंधी व्यवस्थाओं के संबंध में संबंधित अधिकारियों के साथ गोष्ठी की गई।\n\nगोष्ठी में निर्वाचन प्रक्रिया को सकुशल, शांतिपूर्ण एवं निष्पक्ष ढंग से सम्पन्न कराने, पोलिंग पार्टियों की सुरक्षित रवानगी, मतदान केंद्रों पर सुरक्षा व्यवस्था तथा कानून-व्यवस्था बनाए रखने के संबंध में आवश्यक दिशा-निर्देश दिए गए। साथ ही सभी संबंधित अधिकारियों को निर्वाचन आयोग के निर्देशों का पूर्णतः अनुपालन सुनिश्चित करने हेतु निर्देशित किया गया।",
+      "category_id": 3,
+      "category_name": "उत्तर प्रदेश",
+      "category_slug": "uttar-pradesh",
+      "author_id": 1,
+      "author_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+      "author_avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+      "location": "अमेठी ",
+      "featured_image": "/uploads/1792701366047-1000194448.jpg",
+      "image_caption": "",
+      "image_credit": "संजय कुमार राजपूत (प्रधान संपादक)",
+      "gallery_images": [
+        "/uploads/1792701366047-1000194448.jpg"
+      ],
+      "video_url": "",
+      "is_video_news": false,
+      "is_breaking": false,
+      "is_featured": false,
+      "is_trending": false,
+      "is_on_home": true,
+      "status": "published",
+      "tags": [],
+      "view_count": 0,
+      "seo_title": "",
+      "seo_description": "",
+      "seo_keywords": "",
+      "scheduled_at": "",
+      "published_at": "2026-10-22T20:37:37.167Z",
+      "created_at": "2026-10-22T20:37:37.167Z",
+      "updated_at": "2026-10-22T20:41:35.907Z",
+      "audit_logs": [
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-22T20:41:35.907Z",
+          "from_status": "published",
+          "to_status": "published"
+        },
+        {
+          "action": "created",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-22T20:37:37.167Z",
+          "to_status": "published"
+        }
+      ],
+      "tagsInput": "",
+      "author_bio": "मुख्य संपादक एवं डिजिटल पत्रकारिता विशेषज्ञ",
+      "author_role": "Super Admin"
+    },
+    {
+      "id": 1792701641623,
+      "title": "अमेठी पुलिस ने चार वारण्टी को किया गिरफ्तार ",
+      "slug": "अमेठी-पुलिस-ने-चार-वारण्टी-को-किया-गिरफ्तार-641623",
+      "subtitle": "",
+      "excerpt": "अमेठी। पुलिस अधीक्षक सरवणन टी. के निर्देशन में एवं अपर पुलिस अधीक्षक अमेठी ज्ञानेन्द्र कुमार सिंह के पर्यवेक्षण में जनपद में वांछित वारण्टी की धरपकड़ हेतु चलाए ...",
+      "content": "अमेठी। पुलिस अधीक्षक  सरवणन टी. के निर्देशन में एवं अपर पुलिस अधीक्षक अमेठी ज्ञानेन्द्र कुमार सिंह के पर्यवेक्षण में जनपद में वांछित वारण्टी की धरपकड़ हेतु चलाए जा रहे अभियान के क्रम में क्षेत्राधिकारी तिलोई  दिनेश कुमार मिश्र के कुशल नेतृत्व में थाना शिवरतनगंज पुलिस द्वारा वाद सं0 1303/15 धारा 323,504 भादवि से संबंधित 03 वारण्टी शिवराम लोध पुत्र रामकेवल उम्र करीब 41 वर्ष,  रामकेवल पुत्र स्व कुशन लोध उम्र करीब 60 वर्ष निवासी ग्राम तोता नगर मजरे जुगराजपुर थाना शिवरतनगंज जनपद अमेठी , खुशीराम लोध पुत्र भगौती प्रसाद निवासी ग्राम जलालपुर तिवारी थाना जगदीशपुर जनपद अमेठी उम्र करीब 45 वर्ष व वाद सं0 1370/15 धारा 323,504 भादवि से संबंधित वारण्टी हरीराम पुत्र नान्हू रावत निवासी ग्राम पट्टी बक्शी मठ मजरे पन्हौना थाना शिवरतनगंज जनपद अमेठी उम्र करीब 50 वर्ष को गिरफ्तार किया गया है । थाना शिवरतनगंज पुलिस द्वारा विधिक कार्यवाही की जा रही है।",
+      "category_id": 3,
+      "category_name": "उत्तर प्रदेश",
+      "category_slug": "uttar-pradesh",
+      "author_id": 1,
+      "author_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+      "author_avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+      "location": "अमेठी",
+      "featured_image": "/uploads/1792701634835-1000194453.jpg",
+      "image_caption": "",
+      "image_credit": "संजय कुमार राजपूत (प्रधान संपादक)",
+      "gallery_images": [
+        "/uploads/1792701634835-1000194453.jpg"
+      ],
+      "video_url": "",
+      "is_video_news": false,
+      "is_breaking": false,
+      "is_featured": true,
+      "is_trending": true,
+      "is_on_home": true,
+      "status": "published",
+      "tags": [],
+      "view_count": 2,
+      "seo_title": "",
+      "seo_description": "",
+      "seo_keywords": "",
+      "scheduled_at": "",
+      "published_at": "2026-10-22T20:40:41.623Z",
+      "created_at": "2026-10-22T20:40:41.623Z",
+      "updated_at": "2026-10-22T20:40:41.623Z",
+      "audit_logs": [
+        {
+          "action": "created",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-22T20:40:41.623Z",
+          "to_status": "published"
+        }
+      ],
+      "author_bio": "मुख्य संपादक एवं डिजिटल पत्रकारिता विशेषज्ञ",
+      "author_role": "Super Admin"
+    },
+    {
+      "id": 1792701787591,
+      "title": "गाजियाबाद में तीन महीने लगेंगे परिवहन मेले",
+      "slug": "गाजियाबाद-में-तीन-महीने-लगेंगे-परिवहन-मेले-वाहन-मालिकों-को-मिलेगी-राहत-787591",
+      "subtitle": "वाहन मालिकों को मिलेगी राहत",
+      "excerpt": "गाजियाबाद में तीन महीने लगेंगे परिवहन मेले, वाहन मालिकों को मिलेगी राहत बकाया टैक्स जमा करने से लेकर फिटनेस, परमिट और नए वाहनों के पंजीकरण तक की सुविधा; अक्टूबर...",
+      "content": "गाजियाबाद। वाहन मालिकों और परिवहन कारोबारियों को राहत देने के लिए गाजियाबाद में अक्टूबर से दिसंबर 2026 तक परिवहन मेलों का आयोजन किया जाएगा। सहायक संभागीय परिवहन कार्यालय (प्रशासन) की ओर से आयोजित इन मेलों में बकाया टैक्स जमा करने, नए वाहनों के पंजीकरण, फिटनेस और परमिट संबंधी कार्यों का निस्तारण किया जाएगा। इसके अलावा पुराने वाहनों को स्क्रैप कराने और परिवहन विभाग की योजनाओं से जुड़ी जानकारी भी उपलब्ध कराई जाएगी।\n\nपरिवहन कार्यालय की ओर से जारी प्रेस विज्ञप्ति के अनुसार, उत्तर प्रदेश के परिवहन आयुक्त के सात अक्टूबर 2026 को जारी निर्देशों के अनुपालन में मेलों का कार्यक्रम निर्धारित किया गया है। इसका उद्देश्य वाहन मालिकों और परिवहन व्यवसाय से जुड़े लोगों को विभागीय सेवाएं उपलब्ध कराने के साथ लंबित मामलों के निस्तारण में सुविधा देना है।\n\nबकाया टैक्स जमा करने का मिलेगा मौका\n\nपरिवहन मेलों में बकाया कर की वसूली और कर जमा करने की सुविधा उपलब्ध रहेगी। इसके साथ ही नियमानुसार कर में मिलने वाली छूट का लाभ लेकर बकाया जमा करने की प्रक्रिया में भी सहायता की जाएगी। नए वाहनों के पंजीकरण, फिटनेस प्रमाणपत्र और परमिट से संबंधित कार्य भी किए जाएंगे। इससे परिवहन संबंधी लंबित कार्यों के लिए वाहन मालिकों को जरूरी सुविधाएं एक ही स्थान पर मिल सकेंगी।\n\nपुराने वाहनों और स्क्रैप नीति की मिलेगी जानकारी\n\nमेले में स्क्रैप किए गए वाहनों के सापेक्ष नए वाहन खरीदने की प्रक्रिया के बारे में जानकारी दी जाएगी। इसके अलावा जीवनकाल पूरा कर चुके वाहनों (ईओएल यानी एंड ऑफ लाइफ) को लेकर जागरूक किया जाएगा। ऐसे वाहनों के संबंध में शासन की ओर से जारी आदेशों और नियमों की जानकारी भी वाहन मालिकों को उपलब्ध कराई जाएगी।\n\nपरिवहन विभाग की योजनाओं के बारे में जानकारी देने के साथ संबंधित योजना के अंतर्गत पंजीकरण कराने में भी सहायता की जाएगी।\n\nनिर्धारित तिथियों पर पहुंचने की अपील\n\nसहायक संभागीय परिवहन अधिकारी (प्रशासन), गाजियाबाद अशोक कुमार श्रीवास्तव ने वाहन मालिकों और परिवहन व्यवसायियों से निर्धारित तिथियों पर आयोजित होने वाले मेलों में पहुंचकर सुविधाओं का लाभ उठाने की अपील की है। कार्यालय की ओर से जारी विज्ञप्ति में आयोजन की तिथियों के साथ स्थल और समय का स्पष्ट विवरण उपलब्ध नहीं कराया गया है। ऐसे में वाहन मालिकों को आयोजन स्थल और समय की जानकारी परिवहन कार्यालय से प्राप्त करने के बाद मेले में पहुंचना चाहिए।",
+      "category_id": 1,
+      "category_name": "गाजियाबाद",
+      "category_slug": "ghaziabad",
+      "author_id": 1792605284778,
+      "author_name": "Arjun singh",
+      "author_avatar": "/uploads/avatar-1792696039156-screenshot-20261017-113303.jpg",
+      "location": "गाजियाबाद / दिल्ली एनसीआर",
+      "featured_image": "/uploads/1792771103848-1000195317.jpg",
+      "image_caption": "",
+      "image_credit": "Arjun singh",
+      "gallery_images": [
+        "/uploads/1792771103848-1000195317.jpg"
+      ],
+      "video_url": "",
+      "is_video_news": false,
+      "is_breaking": true,
+      "is_featured": true,
+      "is_trending": true,
+      "is_on_home": true,
+      "status": "published",
+      "tags": [],
+      "view_count": 27,
+      "seo_title": "",
+      "seo_description": "",
+      "seo_keywords": "",
+      "scheduled_at": "",
+      "published_at": "2026-10-22T20:54:52.254Z",
+      "created_at": "2026-10-22T20:43:07.591Z",
+      "updated_at": "2026-10-23T15:58:26.749Z",
+      "audit_logs": [
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-23T15:58:26.749Z",
+          "from_status": "published",
+          "to_status": "published"
+        },
+        {
+          "action": "status_changed:published",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-22T20:54:52.254Z",
+          "from_status": "approved",
+          "to_status": "published"
+        },
+        {
+          "action": "status_change:approved",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-22T20:52:08.743Z",
+          "from_status": "pending_review",
+          "to_status": "approved",
+          "notes": "संपादक द्वारा स्वीकृत"
+        },
+        {
+          "action": "created",
+          "user_id": 1792605284778,
+          "user_name": "Arjun singh",
+          "timestamp": "2026-10-22T20:43:07.591Z",
+          "to_status": "pending_review"
+        }
+      ],
+      "review_notes": "संपादक द्वारा स्वीकृत",
+      "reviewed_by": 1,
+      "reviewed_by_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+      "reviewed_at": "2026-10-22T20:52:08.743Z",
+      "tagsInput": "",
+      "author_bio": "ब्लैक लेंस डिजिटल मीडिया हाउस के साथ निष्पक्ष एवं स्वतंत्र पत्रकारिता।",
+      "author_role": "संवाददाता"
+    },
+    {
+      "id": 1792774292409,
+      "title": "सनातन चेतना, जनआस्था और वैश्विक गौरव का महापर्व बनेगा दीपोत्सव-2026: मुख्यमंत्री योगी आदित्यनाथ",
+      "slug": "सनातन-चेतना-जनआस्था-और-वैश्विक-गौरव-का-महापर्व-बनेगा-दीपोत्सव-2026-मुख्यमंत्री-य-292408",
+      "subtitle": "10वें दीपोत्सव में लाखों से अधिक दीपों से जगमगाएगी रामनगरी, अनेक विदेशी राजनयिक भी बनेंगे साक्षी",
+      "excerpt": "लखनऊ। मुख्यमंत्री योगी आदित्यनाथ ने कहा कि अयोध्या में आयोजित होने वाला 10वां दीपोत्सव भारतीय संस्कृति, सनातन परंपरा और जनआस्था का भव्य उत्सव होगा। प्रधानमंत्री...",
+      "content": "लखनऊ। मुख्यमंत्री योगी आदित्यनाथ ने कहा कि अयोध्या में आयोजित होने वाला 10वां दीपोत्सव भारतीय संस्कृति, सनातन परंपरा और जनआस्था का भव्य उत्सव होगा। प्रधानमंत्री श्री नरेन्द्र मोदी के मार्गदर्शन में वर्ष 2017 में प्रारंभ हुई दीपोत्सव की यात्रा आज वैश्विक पहचान प्राप्त कर चुकी है। इस वर्ष दीपोत्सव के एक दशक पूर्ण होने के अवसर पर राम की पैड़ी सहित संपूर्ण अवधपुरी को गत वर्ष की भांति लाखों दीपों से आलोकित किया जाए। \n\nआगामी 7 नवंबर को आयोजित होने वाले दीपोत्सव की तैयारियों की समीक्षा करते हुए मुख्यमंत्री ने निर्देश दिए कि आयोजन की धार्मिक गरिमा, सांस्कृतिक परंपरा और भव्यता के अनुरूप सभी व्यवस्थाएं सुनिश्चित की जाएं। श्रद्धालुओं एवं अतिथियों की सुविधा, सुरक्षा, सुगम आवागमन, प्रकाश, स्वच्छता और मार्गदर्शन की समुचित व्यवस्था पर विशेष ध्यान दिया जाए।\n\nमुख्यमंत्री को तैयारियों से अवगत कराते हुए अपर मुख्य सचिव, पर्यटन एवं संस्कृति ने बताया कि दीपोत्सव का आयोजन तीन प्रमुख चरणों में संपन्न होगा। प्रथम चरण में साकेत महाविद्यालय से भव्य शोभायात्रा निकाली जाएगी, जिसमें रामायण के प्रसंगों और सांस्कृतिक प्रस्तुतियों के माध्यम से प्रभु श्रीराम के जीवन आदर्शों को दर्शाया जाएगा। द्वितीय चरण में रामकथा पार्क में प्रभु श्रीराम और माता सीता के स्वरूपों का प्रतीकात्मक आगमन, भरत मिलाप और श्रीराम के राज्याभिषेक से जुड़े कार्यक्रम होंगे। तृतीय चरण में सरयू आरती, दीप प्रज्ज्वलन, राम की पैड़ी पर 200 कलाकारों की प्रस्तुतियां, 2,100 ड्रोनों का आकाश में रामायण आधारित शो, लेजर प्रस्तुति, गोंडा पुल के समीप हरित आतिशबाजी और अंतर्राष्ट्रीय रामलीलाओं का मंचन होगा। लगभग 35 हजार स्वयंसेवक सहभागी होंगे। आयोजन में 2,147 प्रतिभागियों द्वारा सरयू आरती, 2,100 स्वदेशी ड्रोनों के माध्यम से आकाशीय प्रस्तुति, 3D प्रोजेक्शन और विविध सांस्कृतिक कार्यक्रम प्रमुख आकर्षण होंगे। डिजिटल माध्यमों से दीपोत्सव को पांच करोड़ से अधिक लोगों तक पहुंचाने का लक्ष्य निर्धारित किया गया है।  \n\nसमीक्षा में बताया गया कि आयोजन में उत्तर प्रदेश सहित मध्य प्रदेश, ओडिशा, कर्नाटक, झारखंड, पश्चिम बंगाल, महाराष्ट्र, असम, राजस्थान, बिहार, केरल, गोवा और तेलंगाना के लगभग 1,000 कलाकार लोककलाओं और नृत्य परंपराओं की प्रस्तुतियां देंगे। इसके साथ ही 12 देशों के सांस्कृतिक प्रतिनिधियों की सहभागिता प्रस्तावित है तथा भारत में तैनात विदेशी राजदूतों और विदेशों में तैनात भारतीय राजनयिकों को भी आमंत्रित किया जा रहा है। मुख्यमंत्री ने श्रीराम जन्मभूमि तीर्थ क्षेत्र न्यास के पदाधिकारियों और अयोध्या के पूज्य संतों के साथ समन्वय कर तैयारियों को अंतिम रूप देने और स्थानीय व्यापारियों व सामाजिक संगठनों का सहयोग लेने के निर्देश दिए। साथ ही, आगामी 26 अक्टूबर को प्रस्तावित महर्षि वाल्मीकि जयंती के अवसर पर सभी जनपदों में मंदिरों में वाल्मीकि रामायण का अखंड पाठ, रामायण आधारित प्रस्तुतियां और चित्रकला गतिविधियां कराने के भी निर्देश दिए गए।\n\nबैठक में चित्रकूट स्थित रामघाट के विकास और श्रद्धालुओं की सुविधाओं को बेहतर बनाने पर भी चर्चा हुई। मुख्यमंत्री ने कहा कि विगत दिनों अतिवृष्टि और बाढ़ के कारण प्रभावित क्षेत्रों का प्राथमिकता के आधार पर पुनर्विकास कराया जाए। उन्होंने दुकानों के व्यवस्थित पुनर्वास, नालों के सुदृढ़ीकरण और तुलसी चबूतरे के विकास कार्य त्वरित गति से पूरे करने के निर्देश दिए। मुख्यमंत्री ने स्पष्ट किया कि रामघाट के विकास में स्थानीय धार्मिक व ऐतिहासिक महत्त्व और जनभावनाओं का पूरा ध्यान रखा जाए तथा भविष्य में बाढ़ की परिस्थितियों और श्रद्धालुओं की सुरक्षा को देखते हुए निर्माण कार्यों की गुणवत्ता सुनिश्चित की जाए।",
+      "category_id": 3,
+      "category_name": "उत्तर प्रदेश",
+      "category_slug": "uttar-pradesh",
+      "author_id": 1,
+      "author_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+      "author_avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+      "location": "अयोध्या",
+      "featured_image": "/uploads/1792781022788-1000197029.jpg",
+      "image_caption": "अयोध्या दीपोत्सव ",
+      "image_credit": "गूगल",
+      "gallery_images": [
+        "/uploads/1792781022788-1000197029.jpg",
+        "/uploads/1792781022992-1000197028.jpg",
+        "/uploads/1792781023457-1000197027.webp"
+      ],
+      "video_url": "",
+      "is_video_news": false,
+      "is_breaking": true,
+      "is_featured": true,
+      "is_trending": true,
+      "is_on_home": true,
+      "status": "published",
+      "tags": [],
+      "view_count": 15,
+      "seo_title": "",
+      "seo_description": "",
+      "seo_keywords": "",
+      "scheduled_at": "",
+      "published_at": "2026-10-23T16:51:32.408Z",
+      "created_at": "2026-10-23T16:51:32.408Z",
+      "updated_at": "2026-10-23T18:43:46.306Z",
+      "audit_logs": [
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-23T18:43:46.306Z",
+          "from_status": "published",
+          "to_status": "published"
+        },
+        {
+          "action": "created",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-23T16:51:32.408Z",
+          "to_status": "published"
+        }
+      ],
+      "tagsInput": "",
+      "author_bio": "मुख्य संपादक एवं डिजिटल पत्रकारिता विशेषज्ञ",
+      "author_role": "Super Admin"
+    },
+    {
+      "id": 2,
+      "title": "दिल्ली-एनसीआर में वायु गुणवत्ता सुधार के लिए GRAP-4 की कड़ी निगरानी, निर्माण कार्यों पर सख्त पाबंदी",
+      "slug": "delhi-ncr-air-quality-grap-4-curbs-construction-ban",
+      "subtitle": "प्रदूषण नियंत्रण बोर्ड ने प्रदूषण फैलाने वाली 50 औद्योगिक इकाइयों पर लगाया भारी जुर्माना",
+      "excerpt": "सर्दियों की शुरुआत के साथ ही दिल्ली-एनसीआर में प्रदूषण का स्तर बढ़ने लगा है। वायु गुणवत्ता प्रबंधन आयोग ने गाजियाबाद, नोएडा, गुरुग्राम और फरीदाबाद में विशेष एंटी-स्मॉग गन और स्प्रिंकलर तैनात किए हैं।",
+      "content": "<p><strong>दिल्ली / नोएडा (तेज़ नज़र ब्यूरो):</strong> राजधानी दिल्ली और आसपास के राष्ट्रीय राजधानी क्षेत्र (NCR) में हवा की गुणवत्ता लगातार 'खराब' श्रेणी में बनी हुई है। इसे देखते हुए वायु गुणवत्ता प्रबंधन आयोग (CAQM) ने सभी संबंधित विभागों को ग्रेडेड रिस्पॉन्स एक्शन प्लान (GRAP) के कड़े नियमों का पालन सुनिश्चित करने का निर्देश दिया है।</p>\n      <p>गाजियाबाद के साहिबाबाद और लोनी औद्योगिक क्षेत्र में बिना पीयूसी (PUC) वाले व्यावसायिक वाहनों के प्रवेश पर रोक लगा दी गई है। साथ ही खुले में कूड़ा जलाने और निर्माण सामग्री को बिना ढके परिवहन करने पर 50 हजार रुपये तक का जुर्माना लगाया जा रहा है।</p>",
+      "category_id": 2,
+      "author_id": 2,
+      "author_name": "अमित शर्मा (वरिष्ठ संपादक)",
+      "category_name": "दिल्ली एनसीआर",
+      "category_slug": "delhi-ncr",
+      "location": "दिल्ली / नोएडा एनसीआर",
+      "featured_image": "https://images.unsplash.com/photo-1584824486509-112e4181ff6b?w=1000&auto=format&fit=crop&q=80",
+      "image_caption": "दिल्ली एनसीआर में धुंध और प्रदूषण पर पानी का छिड़काव करती एंटी-स्मॉग गन",
+      "image_credit": "पीटीआई / फ़ाइल फोटो",
+      "is_breaking": true,
+      "is_featured": true,
+      "is_trending": true,
+      "is_on_home": true,
+      "status": "published",
+      "view_count": 2153,
+      "published_at": "2026-10-16T08:30:00.000Z",
+      "created_at": "2026-10-16T08:00:00.000Z",
+      "updated_at": "2026-10-16T08:30:00.000Z",
+      "author_avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "राजनीतिक एवं अपराध डेस्क प्रमुख",
+      "author_role": "Editor"
+    },
+    {
+      "id": 3,
+      "title": "उत्तर प्रदेश: मुख्यमंत्री योगी आदित्यनाथ ने युवाओं के लिए 50,000 नई सरकारी नौकरियों की घोषणा की",
+      "slug": "up-govt-50000-new-jobs-recruitment-announcement-cm-yogi",
+      "subtitle": "पुलिस भर्ती, स्वास्थ्य विभाग और माध्यमिक शिक्षा में जल्द जारी होंगे विज्ञापन",
+      "excerpt": "उत्तर प्रदेश लोक सेवा आयोग और अधीनस्थ सेवा चयन आयोग (UPSSSC) को मिशन मोड में पारदर्शी भर्ती प्रक्रिया पूरी करने के निर्देश दिए गए हैं।",
+      "content": "<p><strong>लखनऊ (तेज़ नज़र ब्यूरो):</strong> उत्तर प्रदेश के मुख्यमंत्री योगी आदित्यनाथ ने राज्य के बेरोजगार युवाओं को बड़ा तोहफा देते हुए विभिन्न विभागों में 50,000 रिक्त पदों पर तत्काल भर्ती प्रक्रिया शुरू करने का ऐलान किया है।</p>\n      <p>मुख्यमंत्री ने उच्चस्तरीय बैठक में स्पष्ट निर्देश दिए कि भर्ती परीक्षाएं पूर्णतः पारदर्शी और समयबद्ध तरीके से आयोजित की जाएं। पेपर लीक रोकने के लिए बनाए गए नए कड़े कानून के तहत सख्त निगरानी रखी जाएगी।</p>",
+      "category_id": 3,
+      "author_id": 1,
+      "author_name": "संदीप राणा (प्रधान संपादक)",
+      "category_name": "उत्तर प्रदेश",
+      "category_slug": "uttar-pradesh",
+      "location": "लखनऊ",
+      "featured_image": "https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=1000&auto=format&fit=crop&q=80",
+      "image_caption": "उत्तर प्रदेश सचिवालय लखनऊ में आयोजित रोजगार समीक्षा बैठक",
+      "is_breaking": false,
+      "is_featured": true,
+      "is_trending": true,
+      "is_on_home": true,
+      "status": "published",
+      "view_count": 3410,
+      "published_at": "2026-10-15T15:00:00.000Z",
+      "created_at": "2026-10-15T14:30:00.000Z",
+      "updated_at": "2026-10-15T15:00:00.000Z",
+      "author_avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "मुख्य संपादक एवं डिजिटल पत्रकारिता विशेषज्ञ",
+      "author_role": "Super Admin"
+    },
+    {
+      "id": 4,
+      "title": "नमो भारत रैपिड रेल: गाजियाबाद स्टेशन से मेरठ के बीच दैनिक यात्रियों की संख्या 60,000 के पार",
+      "slug": "namo-bharat-rapid-rail-ghaziabad-meerut-ridership-milestone",
+      "subtitle": "यात्रियों की भारी भीड़ को देखते हुए फेरों की संख्या में वृद्धि की तैयारी",
+      "excerpt": "दिल्ली-गाजियाबाद-मेरठ आरआरटीएस कॉरिडोर पर नमो भारत ट्रेन आमजन की पहली पसंद बन गई है। प्रदूषण मुक्त और समय की बचत के चलते यात्री मेट्रो और सड़क मार्ग की जगह रैपिड रेल को प्राथमिकता दे रहे हैं।",
+      "content": "<p><strong>गाजियाबाद:</strong> राष्ट्रीय राजधानी क्षेत्र परिवहन निगम (NCRTC) द्वारा संचालित नमो भारत ट्रेनों ने यात्रियों की संख्या का नया कीर्तिमान स्थापित किया है। साहिबाबाद, गाजियाबाद, गुलधर, दुहाई और मुरादनगर होते हुए मेरठ साउथ तक प्रतिदिन 60 हजार से अधिक नागरिक यात्रा कर रहे हैं।</p>",
+      "category_id": 1,
+      "author_id": 3,
+      "author_name": "प्रिया चौहान (फील्ड रिपोर्टर)",
+      "category_name": "गाजियाबाद",
+      "category_slug": "ghaziabad",
+      "location": "गाजियाबाद आरआरटीएस स्टेशन",
+      "featured_image": "https://images.unsplash.com/photo-1474487548417-781cb71495f3?w=1000&auto=format&fit=crop&q=80",
+      "is_breaking": false,
+      "is_featured": true,
+      "is_trending": false,
+      "is_on_home": true,
+      "status": "published",
+      "view_count": 1820,
+      "published_at": "2026-10-15T12:00:00.000Z",
+      "created_at": "2026-10-15T11:45:00.000Z",
+      "updated_at": "2026-10-24T14:41:50.555Z",
+      "author_avatar": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "वरिष्ठ अपराध एवं खोजी पत्रकार (Crime & Investigative Journalist)। जमीनी मुद्दों और जनसमस्याओं पर निष्पक्ष रिपोर्टिंग।",
+      "author_role": "Reporter"
+    },
+    {
+      "id": 5,
+      "title": "गाजियाबाद पुलिस कमिश्नरेट का बड़ा एक्शन: ट्रांस हिंडन में वाहन चोर गिरोह का पर्दाफाश, 12 लग्जरी गाड़ियां बरामद",
+      "slug": "ghaziabad-police-vehicle-theft-gang-arrest-trans-hindon",
+      "subtitle": "इंदिरापुरम थाना पुलिस और स्वाट टीम ने संयुक्त अभियान चलाकर 4 शातिर चोरों को दबोचा",
+      "excerpt": "गाजियाबाद के इंदिरापुरम और वैशाली क्षेत्र से लग्जरी गाड़ियां चोरी करने वाले अंतरराज्यीय गिरोह का पर्दाफाश हुआ है। फर्जी नंबर प्लेट और हाईटेक स्कैनर से गाड़ियां चुराते थे आरोपी।",
+      "content": "<p><strong>गाजियाबाद (अपराध डेस्क):</strong> गाजियाबाद कमिश्नरेट की इंदिरापुरम पुलिस और स्वाट टीम ने वाहन चोरी करने वाले एक संगठित सिंडिकेट का भंडाफोड़ किया है। पुलिस ने गिरोह के चार शातिर सदस्यों को गिरफ्तार कर उनके कब्जे से 12 चोरी की कारें, इलेक्ट्रॉनिक चाबियां और मास्टर कोड स्कैनर बरामद किए हैं।</p>",
+      "category_id": 6,
+      "author_id": 2,
+      "author_name": "अमित शर्मा (वरिष्ठ संपादक)",
+      "category_name": "अपराध",
+      "category_slug": "crime",
+      "location": "इंदिरापुरम, गाजियाबाद",
+      "featured_image": "https://images.unsplash.com/photo-1508847154043-be5407fcaa5a?w=1000&auto=format&fit=crop&q=80",
+      "is_breaking": false,
+      "is_featured": false,
+      "is_trending": true,
+      "is_on_home": true,
+      "status": "published",
+      "view_count": 980,
+      "published_at": "2026-10-14T16:00:00.000Z",
+      "created_at": "2026-10-14T15:30:00.000Z",
+      "updated_at": "2026-10-14T16:00:00.000Z",
+      "author_avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "राजनीतिक एवं अपराध डेस्क प्रमुख",
+      "author_role": "Editor"
+    },
+    {
+      "id": 7,
+      "title": "गाजियाबाद नगर निगम की विशेष वीडियो रिपोर्ट: शहर में 50 नए पिंक टॉयलेट और ओपन जिम का लोकार्पण",
+      "slug": "video-ghaziabad-nagar-nigam-open-gym-pink-toilet-inauguration",
+      "subtitle": "स्वच्छ भारत मिशन 2.0 के तहत शहर के सौंदर्यीकरण और जनसुविधाओं में अभूतपूर्व विस्तार",
+      "excerpt": "गाजियाबाद की महापौर और नगर आयुक्त ने राजनगर और शास्त्रीनगर में आधुनिक ओपन जिम का शुभारंभ किया। देखिए विशेष वीडियो रिपोर्ट।",
+      "content": "<p><strong>गाजियाबाद:</strong> स्वच्छता सर्वेक्षण में गाजियाबाद को अव्वल दर्जा दिलाने के संकल्प के साथ नगर निगम ने शहर के प्रमुख पार्कों में अत्याधुनिक ओपन जिम और महिलाओं के लिए सुरक्षित पिंक टॉयलेट समर्पित किए हैं।</p>",
+      "category_id": 1,
+      "author_id": 3,
+      "author_name": "प्रिया चौहान (फील्ड रिपोर्टर)",
+      "category_name": "गाजियाबाद",
+      "category_slug": "ghaziabad",
+      "location": "गाजियाबाद",
+      "featured_image": "https://images.unsplash.com/photo-1517649763962-0c623266ddc0?w=1000&auto=format&fit=crop&q=80",
+      "video_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "is_video_news": true,
+      "is_breaking": false,
+      "is_featured": false,
+      "is_trending": false,
+      "is_on_home": true,
+      "status": "published",
+      "view_count": 1540,
+      "published_at": "2026-10-13T17:00:00.000Z",
+      "created_at": "2026-10-13T16:30:00.000Z",
+      "updated_at": "2026-10-24T14:41:50.556Z",
+      "author_avatar": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "वरिष्ठ अपराध एवं खोजी पत्रकार (Crime & Investigative Journalist)। जमीनी मुद्दों और जनसमस्याओं पर निष्पक्ष रिपोर्टिंग।",
+      "author_role": "Reporter"
+    },
+    {
+      "id": 701,
+      "title": "आईपीएल 2026: लखनऊ सुपर जायंट्स ने दर्ज की धमाकेदार जीत, मयंक यादव की 156 किमी/घंटा रफ्तार ने चौंकाया",
+      "slug": "ipl-2026-lucknow-super-giants-mayank-yadav-fast-bowling",
+      "subtitle": "इकाना स्टेडियम में घरेलू दर्शकों के सामने गुजरात को 35 रनों से हराया",
+      "excerpt": "भारत के युवा तेज गेंदबाज मयंक यादव ने एक बार फिर अपनी आग उगलती गेंदों से बल्लेबाजों को बेबस कर दिया। 4 ओवर में मात्र 14 रन देकर 3 अहम विकेट चटकाए।",
+      "content": "<p><strong>लखनऊ:</strong> भारत रत्न श्री अटल बिहारी वाजपेयी इकाना क्रिकेट स्टेडियम में खेले गए रोमांचक मुकाबले में एलएसजी ने शानदार खेल का प्रदर्शन किया।</p>",
+      "category_id": 10,
+      "author_id": 2,
+      "author_name": "अमित शर्मा (मुख्य संपादक)",
+      "category_name": "खेल जगत",
+      "category_slug": "sports",
+      "location": "लखनऊ (इकाना स्टेडियम)",
+      "featured_image": "https://images.unsplash.com/photo-1531415074868-036b1c57e329?w=800&auto=format&fit=crop&q=80",
+      "is_breaking": true,
+      "is_featured": false,
+      "is_trending": false,
+      "is_on_home": false,
+      "status": "published",
+      "view_count": 5100,
+      "published_at": "2026-10-19T08:24:19.501Z",
+      "created_at": "2026-10-19T07:24:19.501Z",
+      "image_caption": "",
+      "image_credit": "संजय कुमार राजपूत (प्रधान संपादक)",
+      "gallery_images": [],
+      "video_url": "",
+      "is_video_news": false,
+      "tags": [],
+      "tagsInput": "",
+      "scheduled_at": "",
+      "updated_at": "2026-10-19T20:12:51.618Z",
+      "audit_logs": [
+        {
+          "action": "edited",
+          "user_id": 1,
+          "user_name": "संजय कुमार राजपूत (प्रधान संपादक)",
+          "timestamp": "2026-10-19T20:12:51.618Z",
+          "from_status": "published",
+          "to_status": "published"
+        }
+      ],
+      "author_avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "राजनीतिक एवं अपराध डेस्क प्रमुख",
+      "author_role": "Editor"
+    },
+    {
+      "id": 8,
+      "title": "शेयर बाजार में रिकॉर्ड तेजी: सेंसेक्स 85,000 के ऐतिहासिक स्तर पर, आईटी व ऑटो सेक्टर में जबरदस्त उछाल",
+      "slug": "share-market-sensex-nifty-record-high-bull-run",
+      "subtitle": "विदेशी संस्थागत निवेशकों (FII) की भारी लिवाली और मजबूत जीडीपी ग्रोथ से बाजार में उत्साह",
+      "excerpt": "भारतीय शेयर बाजार ने सप्ताह के अंतिम कारोबारी दिन नया कीर्तिमान रच दिया। सेंसेक्स और निफ्टी दोनों अपने सर्वकालिक उच्चतम स्तर पर बंद हुए।",
+      "content": "<p><strong>मुंबई:</strong> दलाल स्ट्रीट में आज निवेशकों की चांदी रही। बॉम्बे स्टॉक एक्सचेंज (BSE) का 30 शेयरों वाला प्रमुख सूचकांक सेंसेक्स 650 अंकों की शानदार बढ़त के साथ पहली बार 85,000 के ऐतिहासिक स्तर को पार कर गया।</p>",
+      "category_id": 1,
+      "author_id": 2,
+      "author_name": "अमित शर्मा (वरिष्ठ संपादक)",
+      "category_name": "गाजियाबाद",
+      "category_slug": "ghaziabad",
+      "location": "मुंबई",
+      "featured_image": "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1000&auto=format&fit=crop&q=80",
+      "is_breaking": false,
+      "is_featured": false,
+      "is_trending": true,
+      "is_on_home": true,
+      "status": "published",
+      "view_count": 1120,
+      "published_at": "2026-10-13T14:00:00.000Z",
+      "created_at": "2026-10-13T13:30:00.000Z",
+      "updated_at": "2026-10-17T16:58:40.964Z",
+      "author_avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "राजनीतिक एवं अपराध डेस्क प्रमुख",
+      "author_role": "Editor"
+    },
+    {
+      "id": 1792411167863,
+      "title": "local 3008",
+      "slug": "local-3008-167862",
+      "subtitle": "",
+      "excerpt": "utcc iut7c uyttc",
+      "content": "utcc iut7c uyttc",
+      "category_id": 1,
+      "category_name": "गाजियाबाद",
+      "category_slug": "ghaziabad",
+      "author_id": 1,
+      "author_name": "संदीप राणा (प्रधान संपादक)",
+      "location": "समस्त भारत / गाजियाबाद",
+      "featured_image": "/uploads/1792411141346-screenshot-2026-10-18-145106.png",
+      "image_caption": "",
+      "image_credit": "संदीप राणा (प्रधान संपादक)",
+      "gallery_images": [],
+      "video_url": "",
+      "is_video_news": false,
+      "is_breaking": true,
+      "is_featured": true,
+      "is_trending": true,
+      "is_on_home": true,
+      "status": "published",
+      "tags": [],
+      "view_count": 0,
+      "seo_title": "",
+      "seo_description": "",
+      "seo_keywords": "",
+      "scheduled_at": "",
+      "published_at": "2026-10-19T11:59:27.862Z",
+      "created_at": "2026-10-19T11:59:27.862Z",
+      "updated_at": "2026-10-19T11:59:27.862Z",
+      "audit_logs": [
+        {
+          "action": "created",
+          "user_id": 1,
+          "user_name": "संदीप राणा (प्रधान संपादक)",
+          "timestamp": "2026-10-19T11:59:27.862Z",
+          "to_status": "published"
+        }
+      ],
+      "author_avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "मुख्य संपादक एवं डिजिटल पत्रकारिता विशेषज्ञ",
+      "author_role": "Super Admin"
     },
     {
       "id": 1792404972960,
@@ -1011,156 +2547,10 @@
           "timestamp": "2026-10-19T10:16:12.960Z",
           "to_status": "draft"
         }
-      ]
-    },
-    {
-      "id": 2,
-      "title": "दिल्ली-एनसीआर में वायु गुणवत्ता सुधार के लिए GRAP-4 की कड़ी निगरानी, निर्माण कार्यों पर सख्त पाबंदी",
-      "slug": "delhi-ncr-air-quality-grap-4-curbs-construction-ban",
-      "subtitle": "प्रदूषण नियंत्रण बोर्ड ने प्रदूषण फैलाने वाली 50 औद्योगिक इकाइयों पर लगाया भारी जुर्माना",
-      "excerpt": "सर्दियों की शुरुआत के साथ ही दिल्ली-एनसीआर में प्रदूषण का स्तर बढ़ने लगा है। वायु गुणवत्ता प्रबंधन आयोग ने गाजियाबाद, नोएडा, गुरुग्राम और फरीदाबाद में विशेष एंटी-स्मॉग गन और स्प्रिंकलर तैनात किए हैं।",
-      "content": "<p><strong>दिल्ली / नोएडा (तेज़ नज़र ब्यूरो):</strong> राजधानी दिल्ली और आसपास के राष्ट्रीय राजधानी क्षेत्र (NCR) में हवा की गुणवत्ता लगातार 'खराब' श्रेणी में बनी हुई है। इसे देखते हुए वायु गुणवत्ता प्रबंधन आयोग (CAQM) ने सभी संबंधित विभागों को ग्रेडेड रिस्पॉन्स एक्शन प्लान (GRAP) के कड़े नियमों का पालन सुनिश्चित करने का निर्देश दिया है।</p>\n      <p>गाजियाबाद के साहिबाबाद और लोनी औद्योगिक क्षेत्र में बिना पीयूसी (PUC) वाले व्यावसायिक वाहनों के प्रवेश पर रोक लगा दी गई है। साथ ही खुले में कूड़ा जलाने और निर्माण सामग्री को बिना ढके परिवहन करने पर 50 हजार रुपये तक का जुर्माना लगाया जा रहा है।</p>",
-      "category_id": 2,
-      "author_id": 2,
-      "author_name": "अमित शर्मा (वरिष्ठ संपादक)",
-      "category_name": "दिल्ली एनसीआर",
-      "category_slug": "delhi-ncr",
-      "location": "दिल्ली / नोएडा एनसीआर",
-      "featured_image": "https://images.unsplash.com/photo-1584824486509-112e4181ff6b?w=1000&auto=format&fit=crop&q=80",
-      "image_caption": "दिल्ली एनसीआर में धुंध और प्रदूषण पर पानी का छिड़काव करती एंटी-स्मॉग गन",
-      "image_credit": "पीटीआई / फ़ाइल फोटो",
-      "is_breaking": true,
-      "is_featured": true,
-      "is_trending": true,
-      "is_on_home": true,
-      "status": "published",
-      "view_count": 2150,
-      "published_at": "2026-10-16T08:30:00.000Z",
-      "created_at": "2026-10-16T08:00:00.000Z",
-      "updated_at": "2026-10-16T08:30:00.000Z"
-    },
-    {
-      "id": 3,
-      "title": "उत्तर प्रदेश: मुख्यमंत्री योगी आदित्यनाथ ने युवाओं के लिए 50,000 नई सरकारी नौकरियों की घोषणा की",
-      "slug": "up-govt-50000-new-jobs-recruitment-announcement-cm-yogi",
-      "subtitle": "पुलिस भर्ती, स्वास्थ्य विभाग और माध्यमिक शिक्षा में जल्द जारी होंगे विज्ञापन",
-      "excerpt": "उत्तर प्रदेश लोक सेवा आयोग और अधीनस्थ सेवा चयन आयोग (UPSSSC) को मिशन मोड में पारदर्शी भर्ती प्रक्रिया पूरी करने के निर्देश दिए गए हैं।",
-      "content": "<p><strong>लखनऊ (तेज़ नज़र ब्यूरो):</strong> उत्तर प्रदेश के मुख्यमंत्री योगी आदित्यनाथ ने राज्य के बेरोजगार युवाओं को बड़ा तोहफा देते हुए विभिन्न विभागों में 50,000 रिक्त पदों पर तत्काल भर्ती प्रक्रिया शुरू करने का ऐलान किया है।</p>\n      <p>मुख्यमंत्री ने उच्चस्तरीय बैठक में स्पष्ट निर्देश दिए कि भर्ती परीक्षाएं पूर्णतः पारदर्शी और समयबद्ध तरीके से आयोजित की जाएं। पेपर लीक रोकने के लिए बनाए गए नए कड़े कानून के तहत सख्त निगरानी रखी जाएगी।</p>",
-      "category_id": 3,
-      "author_id": 1,
-      "author_name": "संदीप राणा (प्रधान संपादक)",
-      "category_name": "उत्तर प्रदेश",
-      "category_slug": "uttar-pradesh",
-      "location": "लखनऊ",
-      "featured_image": "https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=1000&auto=format&fit=crop&q=80",
-      "image_caption": "उत्तर प्रदेश सचिवालय लखनऊ में आयोजित रोजगार समीक्षा बैठक",
-      "is_breaking": false,
-      "is_featured": true,
-      "is_trending": true,
-      "is_on_home": true,
-      "status": "published",
-      "view_count": 3410,
-      "published_at": "2026-10-15T15:00:00.000Z",
-      "created_at": "2026-10-15T14:30:00.000Z",
-      "updated_at": "2026-10-15T15:00:00.000Z"
-    },
-    {
-      "id": 4,
-      "title": "नमो भारत रैपिड रेल: गाजियाबाद स्टेशन से मेरठ के बीच दैनिक यात्रियों की संख्या 60,000 के पार",
-      "slug": "namo-bharat-rapid-rail-ghaziabad-meerut-ridership-milestone",
-      "subtitle": "यात्रियों की भारी भीड़ को देखते हुए फेरों की संख्या में वृद्धि की तैयारी",
-      "excerpt": "दिल्ली-गाजियाबाद-मेरठ आरआरटीएस कॉरिडोर पर नमो भारत ट्रेन आमजन की पहली पसंद बन गई है। प्रदूषण मुक्त और समय की बचत के चलते यात्री मेट्रो और सड़क मार्ग की जगह रैपिड रेल को प्राथमिकता दे रहे हैं।",
-      "content": "<p><strong>गाजियाबाद:</strong> राष्ट्रीय राजधानी क्षेत्र परिवहन निगम (NCRTC) द्वारा संचालित नमो भारत ट्रेनों ने यात्रियों की संख्या का नया कीर्तिमान स्थापित किया है। साहिबाबाद, गाजियाबाद, गुलधर, दुहाई और मुरादनगर होते हुए मेरठ साउथ तक प्रतिदिन 60 हजार से अधिक नागरिक यात्रा कर रहे हैं।</p>",
-      "category_id": 1,
-      "author_id": 3,
-      "author_name": "प्रिया चौहान (फील्ड रिपोर्टर)",
-      "category_name": "गाजियाबाद",
-      "category_slug": "ghaziabad",
-      "location": "गाजियाबाद आरआरटीएस स्टेशन",
-      "featured_image": "https://images.unsplash.com/photo-1474487548417-781cb71495f3?w=1000&auto=format&fit=crop&q=80",
-      "is_breaking": false,
-      "is_featured": true,
-      "is_trending": false,
-      "is_on_home": true,
-      "status": "published",
-      "view_count": 1820,
-      "published_at": "2026-10-15T12:00:00.000Z",
-      "created_at": "2026-10-15T11:45:00.000Z",
-      "updated_at": "2026-10-15T12:00:00.000Z"
-    },
-    {
-      "id": 5,
-      "title": "गाजियाबाद पुलिस कमिश्नरेट का बड़ा एक्शन: ट्रांस हिंडन में वाहन चोर गिरोह का पर्दाफाश, 12 लग्जरी गाड़ियां बरामद",
-      "slug": "ghaziabad-police-vehicle-theft-gang-arrest-trans-hindon",
-      "subtitle": "इंदिरापुरम थाना पुलिस और स्वाट टीम ने संयुक्त अभियान चलाकर 4 शातिर चोरों को दबोचा",
-      "excerpt": "गाजियाबाद के इंदिरापुरम और वैशाली क्षेत्र से लग्जरी गाड़ियां चोरी करने वाले अंतरराज्यीय गिरोह का पर्दाफाश हुआ है। फर्जी नंबर प्लेट और हाईटेक स्कैनर से गाड़ियां चुराते थे आरोपी।",
-      "content": "<p><strong>गाजियाबाद (अपराध डेस्क):</strong> गाजियाबाद कमिश्नरेट की इंदिरापुरम पुलिस और स्वाट टीम ने वाहन चोरी करने वाले एक संगठित सिंडिकेट का भंडाफोड़ किया है। पुलिस ने गिरोह के चार शातिर सदस्यों को गिरफ्तार कर उनके कब्जे से 12 चोरी की कारें, इलेक्ट्रॉनिक चाबियां और मास्टर कोड स्कैनर बरामद किए हैं।</p>",
-      "category_id": 6,
-      "author_id": 2,
-      "author_name": "अमित शर्मा (वरिष्ठ संपादक)",
-      "category_name": "अपराध",
-      "category_slug": "crime",
-      "location": "इंदिरापुरम, गाजियाबाद",
-      "featured_image": "https://images.unsplash.com/photo-1508847154043-be5407fcaa5a?w=1000&auto=format&fit=crop&q=80",
-      "is_breaking": false,
-      "is_featured": false,
-      "is_trending": true,
-      "is_on_home": true,
-      "status": "published",
-      "view_count": 980,
-      "published_at": "2026-10-14T16:00:00.000Z",
-      "created_at": "2026-10-14T15:30:00.000Z",
-      "updated_at": "2026-10-14T16:00:00.000Z"
-    },
-    {
-      "id": 7,
-      "title": "गाजियाबाद नगर निगम की विशेष वीडियो रिपोर्ट: शहर में 50 नए पिंक टॉयलेट और ओपन जिम का लोकार्पण",
-      "slug": "video-ghaziabad-nagar-nigam-open-gym-pink-toilet-inauguration",
-      "subtitle": "स्वच्छ भारत मिशन 2.0 के तहत शहर के सौंदर्यीकरण और जनसुविधाओं में अभूतपूर्व विस्तार",
-      "excerpt": "गाजियाबाद की महापौर और नगर आयुक्त ने राजनगर और शास्त्रीनगर में आधुनिक ओपन जिम का शुभारंभ किया। देखिए विशेष वीडियो रिपोर्ट।",
-      "content": "<p><strong>गाजियाबाद:</strong> स्वच्छता सर्वेक्षण में गाजियाबाद को अव्वल दर्जा दिलाने के संकल्प के साथ नगर निगम ने शहर के प्रमुख पार्कों में अत्याधुनिक ओपन जिम और महिलाओं के लिए सुरक्षित पिंक टॉयलेट समर्पित किए हैं।</p>",
-      "category_id": 1,
-      "author_id": 3,
-      "author_name": "प्रिया चौहान (फील्ड रिपोर्टर)",
-      "category_name": "गाजियाबाद",
-      "category_slug": "ghaziabad",
-      "location": "गाजियाबाद",
-      "featured_image": "https://images.unsplash.com/photo-1517649763962-0c623266ddc0?w=1000&auto=format&fit=crop&q=80",
-      "video_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      "is_video_news": true,
-      "is_breaking": false,
-      "is_featured": false,
-      "is_trending": false,
-      "is_on_home": true,
-      "status": "published",
-      "view_count": 1540,
-      "published_at": "2026-10-13T17:00:00.000Z",
-      "created_at": "2026-10-13T16:30:00.000Z",
-      "updated_at": "2026-10-13T17:00:00.000Z"
-    },
-    {
-      "id": 8,
-      "title": "शेयर बाजार में रिकॉर्ड तेजी: सेंसेक्स 85,000 के ऐतिहासिक स्तर पर, आईटी व ऑटो सेक्टर में जबरदस्त उछाल",
-      "slug": "share-market-sensex-nifty-record-high-bull-run",
-      "subtitle": "विदेशी संस्थागत निवेशकों (FII) की भारी लिवाली और मजबूत जीडीपी ग्रोथ से बाजार में उत्साह",
-      "excerpt": "भारतीय शेयर बाजार ने सप्ताह के अंतिम कारोबारी दिन नया कीर्तिमान रच दिया। सेंसेक्स और निफ्टी दोनों अपने सर्वकालिक उच्चतम स्तर पर बंद हुए।",
-      "content": "<p><strong>मुंबई:</strong> दलाल स्ट्रीट में आज निवेशकों की चांदी रही। बॉम्बे स्टॉक एक्सचेंज (BSE) का 30 शेयरों वाला प्रमुख सूचकांक सेंसेक्स 650 अंकों की शानदार बढ़त के साथ पहली बार 85,000 के ऐतिहासिक स्तर को पार कर गया।</p>",
-      "category_id": 1,
-      "author_id": 2,
-      "author_name": "अमित शर्मा (वरिष्ठ संपादक)",
-      "category_name": "गाजियाबाद",
-      "category_slug": "ghaziabad",
-      "location": "मुंबई",
-      "featured_image": "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1000&auto=format&fit=crop&q=80",
-      "is_breaking": false,
-      "is_featured": false,
-      "is_trending": true,
-      "is_on_home": true,
-      "status": "published",
-      "view_count": 1120,
-      "published_at": "2026-10-13T14:00:00.000Z",
-      "created_at": "2026-10-13T13:30:00.000Z",
-      "updated_at": "2026-10-17T16:58:40.964Z"
+      ],
+      "author_avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "मुख्य संपादक एवं डिजिटल पत्रकारिता विशेषज्ञ",
+      "author_role": "Super Admin"
     },
     {
       "id": 1792256876788,
@@ -1203,7 +2593,10 @@
           "timestamp": "2026-10-17T17:07:56.787Z",
           "to_status": "published"
         }
-      ]
+      ],
+      "author_avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "मुख्य संपादक एवं डिजिटल पत्रकारिता विशेषज्ञ",
+      "author_role": "Super Admin"
     },
     {
       "id": 1792316144218,
@@ -1246,7 +2639,10 @@
           "timestamp": "2026-10-18T09:35:44.218Z",
           "to_status": "published"
         }
-      ]
+      ],
+      "author_avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "मुख्य संपादक एवं डिजिटल पत्रकारिता विशेषज्ञ",
+      "author_role": "Super Admin"
     },
     {
       "id": 6,
@@ -1270,7 +2666,10 @@
       "view_count": 870,
       "published_at": "2026-10-14T11:00:00.000Z",
       "created_at": "2026-10-14T10:30:00.000Z",
-      "updated_at": "2026-10-14T11:00:00.000Z"
+      "updated_at": "2026-10-14T11:00:00.000Z",
+      "author_avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "मुख्य संपादक एवं डिजिटल पत्रकारिता विशेषज्ञ",
+      "author_role": "Super Admin"
     },
     {
       "id": 201,
@@ -1293,7 +2692,10 @@
       "status": "published",
       "view_count": 1850,
       "published_at": "2026-10-19T07:24:19.501Z",
-      "created_at": "2026-10-19T06:24:19.501Z"
+      "created_at": "2026-10-19T06:24:19.501Z",
+      "author_avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "मुख्य संपादक एवं डिजिटल पत्रकारिता विशेषज्ञ",
+      "author_role": "Super Admin"
     },
     {
       "id": 202,
@@ -1316,7 +2718,10 @@
       "status": "published",
       "view_count": 1420,
       "published_at": "2026-10-19T04:24:19.501Z",
-      "created_at": "2026-10-19T03:24:19.501Z"
+      "created_at": "2026-10-19T03:24:19.501Z",
+      "author_avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "राजनीतिक एवं अपराध डेस्क प्रमुख",
+      "author_role": "Editor"
     },
     {
       "id": 203,
@@ -1339,7 +2744,11 @@
       "status": "published",
       "view_count": 980,
       "published_at": "2026-10-19T01:24:19.501Z",
-      "created_at": "2026-10-19T00:24:19.501Z"
+      "created_at": "2026-10-19T00:24:19.501Z",
+      "author_avatar": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "वरिष्ठ अपराध एवं खोजी पत्रकार (Crime & Investigative Journalist)। जमीनी मुद्दों और जनसमस्याओं पर निष्पक्ष रिपोर्टिंग।",
+      "author_role": "Reporter",
+      "updated_at": "2026-10-24T14:41:50.556Z"
     },
     {
       "id": 204,
@@ -1362,7 +2771,10 @@
       "status": "published",
       "view_count": 3200,
       "published_at": "2026-10-18T23:24:19.501Z",
-      "created_at": "2026-10-18T22:24:19.501Z"
+      "created_at": "2026-10-18T22:24:19.501Z",
+      "author_avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "मुख्य संपादक एवं डिजिटल पत्रकारिता विशेषज्ञ",
+      "author_role": "Super Admin"
     },
     {
       "id": 301,
@@ -1387,7 +2799,10 @@
       "status": "published",
       "view_count": 4104,
       "published_at": "2026-10-19T08:24:19.501Z",
-      "created_at": "2026-10-19T07:24:19.501Z"
+      "created_at": "2026-10-19T07:24:19.501Z",
+      "author_avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "मुख्य संपादक एवं डिजिटल पत्रकारिता विशेषज्ञ",
+      "author_role": "Super Admin"
     },
     {
       "id": 302,
@@ -1412,7 +2827,10 @@
       "status": "published",
       "view_count": 2890,
       "published_at": "2026-10-19T05:24:19.501Z",
-      "created_at": "2026-10-19T04:24:19.501Z"
+      "created_at": "2026-10-19T04:24:19.501Z",
+      "author_avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "राजनीतिक एवं अपराध डेस्क प्रमुख",
+      "author_role": "Editor"
     },
     {
       "id": 303,
@@ -1437,7 +2855,11 @@
       "status": "published",
       "view_count": 6500,
       "published_at": "2026-10-19T03:24:19.501Z",
-      "created_at": "2026-10-19T02:24:19.501Z"
+      "created_at": "2026-10-19T02:24:19.501Z",
+      "author_avatar": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "वरिष्ठ अपराध एवं खोजी पत्रकार (Crime & Investigative Journalist)। जमीनी मुद्दों और जनसमस्याओं पर निष्पक्ष रिपोर्टिंग।",
+      "author_role": "Reporter",
+      "updated_at": "2026-10-24T14:41:50.556Z"
     },
     {
       "id": 401,
@@ -1460,7 +2882,10 @@
       "status": "published",
       "view_count": 2400,
       "published_at": "2026-10-19T06:24:19.501Z",
-      "created_at": "2026-10-19T05:24:19.501Z"
+      "created_at": "2026-10-19T05:24:19.501Z",
+      "author_avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "मुख्य संपादक एवं डिजिटल पत्रकारिता विशेषज्ञ",
+      "author_role": "Super Admin"
     },
     {
       "id": 402,
@@ -1483,7 +2908,10 @@
       "status": "published",
       "view_count": 1650,
       "published_at": "2026-10-19T02:24:19.501Z",
-      "created_at": "2026-10-19T01:24:19.501Z"
+      "created_at": "2026-10-19T01:24:19.501Z",
+      "author_avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "राजनीतिक एवं अपराध डेस्क प्रमुख",
+      "author_role": "Editor"
     },
     {
       "id": 403,
@@ -1506,7 +2934,11 @@
       "status": "published",
       "view_count": 1120,
       "published_at": "2026-10-18T21:24:19.501Z",
-      "created_at": "2026-10-18T20:24:19.501Z"
+      "created_at": "2026-10-18T20:24:19.501Z",
+      "author_avatar": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "वरिष्ठ अपराध एवं खोजी पत्रकार (Crime & Investigative Journalist)। जमीनी मुद्दों और जनसमस्याओं पर निष्पक्ष रिपोर्टिंग।",
+      "author_role": "Reporter",
+      "updated_at": "2026-10-24T14:41:50.556Z"
     },
     {
       "id": 501,
@@ -1529,7 +2961,10 @@
       "status": "published",
       "view_count": 4500,
       "published_at": "2026-10-19T07:24:19.501Z",
-      "created_at": "2026-10-19T06:24:19.501Z"
+      "created_at": "2026-10-19T06:24:19.501Z",
+      "author_avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "मुख्य संपादक एवं डिजिटल पत्रकारिता विशेषज्ञ",
+      "author_role": "Super Admin"
     },
     {
       "id": 502,
@@ -1552,7 +2987,10 @@
       "status": "published",
       "view_count": 2100,
       "published_at": "2026-10-19T01:24:19.501Z",
-      "created_at": "2026-10-19T00:24:19.501Z"
+      "created_at": "2026-10-19T00:24:19.501Z",
+      "author_avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "राजनीतिक एवं अपराध डेस्क प्रमुख",
+      "author_role": "Editor"
     },
     {
       "id": 601,
@@ -1575,7 +3013,11 @@
       "status": "published",
       "view_count": 3600,
       "published_at": "2026-10-19T05:24:19.501Z",
-      "created_at": "2026-10-19T04:24:19.501Z"
+      "created_at": "2026-10-19T04:24:19.501Z",
+      "author_avatar": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "वरिष्ठ अपराध एवं खोजी पत्रकार (Crime & Investigative Journalist)। जमीनी मुद्दों और जनसमस्याओं पर निष्पक्ष रिपोर्टिंग।",
+      "author_role": "Reporter",
+      "updated_at": "2026-10-24T14:41:50.556Z"
     },
     {
       "id": 602,
@@ -1598,30 +3040,10 @@
       "status": "published",
       "view_count": 2200,
       "published_at": "2026-10-18T22:24:19.501Z",
-      "created_at": "2026-10-18T21:24:19.501Z"
-    },
-    {
-      "id": 701,
-      "title": "आईपीएल 2026: लखनऊ सुपर जायंट्स ने दर्ज की धमाकेदार जीत, मयंक यादव की 156 किमी/घंटा रफ्तार ने चौंकाया",
-      "slug": "ipl-2026-lucknow-super-giants-mayank-yadav-fast-bowling",
-      "subtitle": "इकाना स्टेडियम में घरेलू दर्शकों के सामने गुजरात को 35 रनों से हराया",
-      "excerpt": "भारत के युवा तेज गेंदबाज मयंक यादव ने एक बार फिर अपनी आग उगलती गेंदों से बल्लेबाजों को बेबस कर दिया। 4 ओवर में मात्र 14 रन देकर 3 अहम विकेट चटकाए।",
-      "content": "<p><strong>लखनऊ:</strong> भारत रत्न श्री अटल बिहारी वाजपेयी इकाना क्रिकेट स्टेडियम में खेले गए रोमांचक मुकाबले में एलएसजी ने शानदार खेल का प्रदर्शन किया।</p>",
-      "category_id": 10,
-      "author_id": 2,
-      "author_name": "अमित शर्मा (वरिष्ठ संपादक)",
-      "category_name": "खेल जगत",
-      "category_slug": "sports",
-      "location": "लखनऊ (इकाना स्टेडियम)",
-      "featured_image": "https://images.unsplash.com/photo-1531415074868-036b1c57e329?w=800&auto=format&fit=crop&q=80",
-      "is_breaking": true,
-      "is_featured": true,
-      "is_trending": true,
-      "is_on_home": true,
-      "status": "published",
-      "view_count": 5100,
-      "published_at": "2026-10-19T08:24:19.501Z",
-      "created_at": "2026-10-19T07:24:19.501Z"
+      "created_at": "2026-10-18T21:24:19.501Z",
+      "author_avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "मुख्य संपादक एवं डिजिटल पत्रकारिता विशेषज्ञ",
+      "author_role": "Super Admin"
     },
     {
       "id": 702,
@@ -1644,7 +3066,11 @@
       "status": "published",
       "view_count": 1950,
       "published_at": "2026-10-19T00:24:19.501Z",
-      "created_at": "2026-10-18T23:24:19.501Z"
+      "created_at": "2026-10-18T23:24:19.501Z",
+      "author_avatar": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "वरिष्ठ अपराध एवं खोजी पत्रकार (Crime & Investigative Journalist)। जमीनी मुद्दों और जनसमस्याओं पर निष्पक्ष रिपोर्टिंग।",
+      "author_role": "Reporter",
+      "updated_at": "2026-10-24T14:41:50.557Z"
     },
     {
       "id": 801,
@@ -1667,7 +3093,10 @@
       "status": "published",
       "view_count": 2750,
       "published_at": "2026-10-19T06:24:19.501Z",
-      "created_at": "2026-10-19T05:24:19.501Z"
+      "created_at": "2026-10-19T05:24:19.501Z",
+      "author_avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "मुख्य संपादक एवं डिजिटल पत्रकारिता विशेषज्ञ",
+      "author_role": "Super Admin"
     },
     {
       "id": 802,
@@ -1690,7 +3119,10 @@
       "status": "published",
       "view_count": 1820,
       "published_at": "2026-10-19T00:24:19.501Z",
-      "created_at": "2026-10-18T23:24:19.501Z"
+      "created_at": "2026-10-18T23:24:19.501Z",
+      "author_avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "राजनीतिक एवं अपराध डेस्क प्रमुख",
+      "author_role": "Editor"
     },
     {
       "id": 901,
@@ -1713,7 +3145,10 @@
       "status": "published",
       "view_count": 3100,
       "published_at": "2026-10-19T05:24:19.501Z",
-      "created_at": "2026-10-19T04:24:19.501Z"
+      "created_at": "2026-10-19T04:24:19.501Z",
+      "author_avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "मुख्य संपादक एवं डिजिटल पत्रकारिता विशेषज्ञ",
+      "author_role": "Super Admin"
     },
     {
       "id": 902,
@@ -1736,7 +3171,10 @@
       "status": "published",
       "view_count": 2250,
       "published_at": "2026-10-19T02:24:19.501Z",
-      "created_at": "2026-10-19T01:24:19.501Z"
+      "created_at": "2026-10-19T01:24:19.501Z",
+      "author_avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "राजनीतिक एवं अपराध डेस्क प्रमुख",
+      "author_role": "Editor"
     },
     {
       "id": 1001,
@@ -1759,7 +3197,10 @@
       "status": "published",
       "view_count": 5900,
       "published_at": "2026-10-19T08:24:19.501Z",
-      "created_at": "2026-10-19T07:24:19.501Z"
+      "created_at": "2026-10-19T07:24:19.501Z",
+      "author_avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "मुख्य संपादक एवं डिजिटल पत्रकारिता विशेषज्ञ",
+      "author_role": "Super Admin"
     },
     {
       "id": 1002,
@@ -1782,7 +3223,10 @@
       "status": "published",
       "view_count": 3450,
       "published_at": "2026-10-19T04:24:19.502Z",
-      "created_at": "2026-10-19T03:24:19.502Z"
+      "created_at": "2026-10-19T03:24:19.502Z",
+      "author_avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "राजनीतिक एवं अपराध डेस्क प्रमुख",
+      "author_role": "Editor"
     },
     {
       "id": 1003,
@@ -1805,7 +3249,11 @@
       "status": "published",
       "view_count": 2800,
       "published_at": "2026-10-18T23:24:19.502Z",
-      "created_at": "2026-10-18T22:24:19.502Z"
+      "created_at": "2026-10-18T22:24:19.502Z",
+      "author_avatar": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80",
+      "author_bio": "वरिष्ठ अपराध एवं खोजी पत्रकार (Crime & Investigative Journalist)। जमीनी मुद्दों और जनसमस्याओं पर निष्पक्ष रिपोर्टिंग।",
+      "author_role": "Reporter",
+      "updated_at": "2026-10-24T14:41:50.557Z"
     }
   ],
   "deleted_article_ids": [

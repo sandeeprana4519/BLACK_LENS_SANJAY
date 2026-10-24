@@ -84,6 +84,8 @@ export interface Article {
   author_id: number;
   author_name?: string;
   author_avatar?: string;
+  author_bio?: string;
+  author_role?: string;
   category_name?: string;
   category_slug?: string;
   location?: string;
@@ -523,6 +525,14 @@ let localStore: LocalStore = {
   site_settings: {
     site_name: 'BLACK LENS',
     tagline: 'Media & Entertainment',
+    site_tagline: 'सत्यमेव जयते · निर्भीक एवं निष्पक्ष डिजिटल समाचार',
+    seo_title: 'ब्लैक लेंस | Black Lens Hindi News Portal - ताज़ा एवं निष्पक्ष खबरें',
+    seo_description: 'ब्लैक लेंस (Black Lens) - एक संपूर्ण एवं अत्याधुनिक हिंदी डिजिटल न्यूज़ पोर्टल - गाजियाबाद, दिल्ली एनसीआर और देश-विदेश की ताज़ा एवं निष्पक्ष खबरें।',
+    seo_keywords: 'गाजियाबाद समाचार, यूपी न्यूज़, ब्रेकिंग न्यूज़, Ghaziabad News, Crime News UP, Delhi NCR News, Black Lens Hindi News',
+    trending_topics: '#गाजियाबाद_न्यूज़, #यूपी_अपडेट्स, #क्राइम_अलर्ट, #ट्रैफिक_अपडेट, #नमो_भारत, #राजनीति_हलचल',
+    google_site_verification: '',
+    google_analytics_id: '',
+    canonical_url: 'https://blacklens.co.in',
     contact_email: 'editor@teznazar.com',
     contact_phone: '+91 98765 43210',
     office_address: 'ब्लैक लेंस मीडिया प्राइवेट लिमिटेड, 402-404, फॉर्च्यून टॉवर, राजनगर डिस्ट्रिक्ट सेंटर (RDC), गाजियाबाद, उत्तर प्रदेश - 201002',
@@ -970,22 +980,26 @@ export const db = {
           a.category_slug = a.category_slug || cat.slug;
         }
       }
-      if (!a.author_name && a.author_id) {
+      if (a.author_id) {
         const u = localStore.users.find(usr => usr.id === a.author_id);
         if (u) {
-          a.author_name = u.name;
+          if (!a.author_name || a.author_name === 'ब्लैक लेंस डेस्क') a.author_name = u.name;
+          if (u.avatar_url) a.author_avatar = u.avatar_url;
+          a.author_bio = u.bio || a.author_bio || 'ब्लैक लेंस डिजिटल मीडिया हाउस के साथ निष्पक्ष एवं स्वतंत्र पत्रकारिता।';
+          a.author_role = u.role_name || a.author_role || 'संवाददाता';
         }
       }
+      if (!a.author_bio) {
+        a.author_bio = 'ब्लैक लेंस डिजिटल मीडिया हाउस के साथ निष्पक्ष एवं स्वतंत्र पत्रकारिता।';
+      }
+      if (!a.author_role) {
+        a.author_role = 'संवाददाता';
+      }
       if (!a.author_avatar) {
-        if (a.author_id) {
-          const u = localStore.users.find(usr => usr.id === a.author_id);
-          if (u && u.avatar_url) {
-            a.author_avatar = u.avatar_url;
-          }
-        }
-        if (!a.author_avatar) {
-          a.author_avatar = 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80';
-        }
+        a.author_avatar = 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80';
+      }
+      if (!a.featured_image) {
+        a.featured_image = 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=1000&auto=format&fit=crop&q=80';
       }
       return a;
     });
@@ -1065,6 +1079,31 @@ export const db = {
   },
 
   async getArticleBySlug(slugOrId: string): Promise<Article | null> {
+    const enrichArticle = (art: Article) => {
+      if (art.author_id) {
+        const u = localStore.users.find(usr => usr.id === art.author_id);
+        if (u) {
+          if (!art.author_name || art.author_name === 'ब्लैक लेंस डेस्क') art.author_name = u.name;
+          if (u.avatar_url) art.author_avatar = u.avatar_url;
+          art.author_bio = u.bio || art.author_bio || 'ब्लैक लेंस डिजिटल मीडिया हाउस के साथ निष्पक्ष एवं स्वतंत्र पत्रकारिता।';
+          art.author_role = u.role_name || art.author_role || 'संवाददाता';
+        }
+      }
+      if (!art.author_bio) {
+        art.author_bio = 'ब्लैक लेंस डिजिटल मीडिया हाउस के साथ निष्पक्ष एवं स्वतंत्र पत्रकारिता।';
+      }
+      if (!art.author_role) {
+        art.author_role = 'संवाददाता';
+      }
+      if (!art.author_avatar) {
+        art.author_avatar = 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80';
+      }
+      if (!art.featured_image) {
+        art.featured_image = 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=1000&auto=format&fit=crop&q=80';
+      }
+      return art;
+    };
+
     if (firestoreDb && isFirestoreActive) {
       try {
         const snap = await getDocs(collection(firestoreDb, 'articles'));
@@ -1072,15 +1111,7 @@ export const db = {
           const art = docSnap.data() as Article;
           if (art.slug === slugOrId || String(art.id) === String(slugOrId)) {
             art.view_count = (art.view_count || 0) + 1;
-            if (!art.author_avatar) {
-              if (art.author_id) {
-                const u = localStore.users.find(usr => usr.id === art.author_id);
-                if (u && u.avatar_url) art.author_avatar = u.avatar_url;
-              }
-              if (!art.author_avatar) {
-                art.author_avatar = 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80';
-              }
-            }
+            enrichArticle(art);
             // Async increment
             setDoc(doc(firestoreDb, 'articles', String(art.id)), art).catch(() => {});
             return art;
@@ -1094,15 +1125,7 @@ export const db = {
     const found = localStore.news_articles.find(a => a.slug === slugOrId || String(a.id) === String(slugOrId));
     if (found) {
       found.view_count = (found.view_count || 0) + 1;
-      if (!found.author_avatar) {
-        if (found.author_id) {
-          const u = localStore.users.find(usr => usr.id === found.author_id);
-          if (u && u.avatar_url) found.author_avatar = u.avatar_url;
-        }
-        if (!found.author_avatar) {
-          found.author_avatar = 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80';
-        }
-      }
+      enrichArticle(found);
       saveFallbackStore();
       return found;
     }
@@ -1651,7 +1674,15 @@ export const db = {
     return true;
   },
 
-  async updateUserProfile(userId: number, data: { name?: string; email?: string; phone?: string; password_hash?: string; avatar_url?: string }) {
+  async updateUserProfile(userId: number, data: { 
+    name?: string; 
+    email?: string; 
+    phone?: string; 
+    password_hash?: string; 
+    avatar_url?: string;
+    bio?: string;
+    assigned_region?: string;
+  }) {
     const user = localStore.users.find(u => u.id === userId);
     if (!user) {
       throw new Error('उपयोगकर्ता नहीं मिला।');
@@ -1673,10 +1704,35 @@ export const db = {
     if (data.avatar_url !== undefined) {
       user.avatar_url = data.avatar_url.trim();
     }
+    if (data.bio !== undefined) {
+      user.bio = data.bio.trim();
+    }
+    if (data.assigned_region !== undefined) {
+      user.assigned_region = data.assigned_region.trim();
+    }
     if (data.password_hash) {
       user.password_hash = data.password_hash;
     }
     user.updated_at = new Date().toISOString();
+
+    // Cascade updated author details (name, avatar, bio, role) to existing articles by this author
+    let updatedArticleCount = 0;
+    for (const art of localStore.news_articles) {
+      if (art.author_id === userId) {
+        if (data.name) art.author_name = user.name;
+        if (data.avatar_url !== undefined) art.author_avatar = user.avatar_url;
+        if (data.bio !== undefined) art.author_bio = user.bio;
+        if (user.role_name) art.author_role = user.role_name;
+        art.updated_at = new Date().toISOString();
+        updatedArticleCount++;
+        if (firestoreDb && isFirestoreActive) {
+          try {
+            setDoc(doc(firestoreDb, 'articles', String(art.id)), cleanForFirestore(art)).catch(() => {});
+          } catch {}
+        }
+      }
+    }
+
     saveFallbackStore();
 
     if (firestoreDb && isFirestoreActive) {
@@ -1733,6 +1789,8 @@ export const db = {
     const authorUser = isReporterRole ? user : (localStore.users.find(u => u.id === assignedAuthorId) || user);
     const author_name = authorUser?.name || user?.name || art.author_name || 'ब्लैक लेंस डेस्क';
     const author_avatar = authorUser?.avatar_url || user?.avatar_url || art.author_avatar || '';
+    const author_bio = authorUser?.bio || (art as any).author_bio || 'ब्लैक लेंस डिजिटल मीडिया हाउस के साथ निष्पक्ष एवं स्वतंत्र पत्रकारिता।';
+    const author_role = authorUser?.role_name || (art as any).author_role || (isReporterRole ? 'संवाददाता' : 'संपादक');
 
     // Tags processing: can be array or comma-separated string
     let parsedTags: string[] = [];
@@ -1793,6 +1851,9 @@ export const db = {
           author_id: assignedAuthorId,
           author_name,
           author_avatar: author_avatar || existing.author_avatar || '',
+          author_bio: author_bio || existing.author_bio || 'ब्लैक लेंस डिजिटल मीडिया हाउस के साथ निष्पक्ष एवं स्वतंत्र पत्रकारिता।',
+          author_role: author_role || existing.author_role || 'संवाददाता',
+          featured_image: (art.featured_image && art.featured_image.trim()) ? art.featured_image.trim() : (existing.featured_image || 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=1000&auto=format&fit=crop&q=80'),
           tags: parsedTags.length > 0 ? parsedTags : (existing.tags || []),
           id: existing.id,
           status: newStatus,
@@ -1832,8 +1893,10 @@ export const db = {
         author_id: assignedAuthorId,
         author_name,
         author_avatar: author_avatar || '',
+        author_bio,
+        author_role,
         location: art.location || 'गाजियाबाद',
-        featured_image: art.featured_image || 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=1000&auto=format&fit=crop&q=80',
+        featured_image: (art.featured_image && art.featured_image.trim()) ? art.featured_image.trim() : 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=1000&auto=format&fit=crop&q=80',
         image_caption: art.image_caption || '',
         image_credit: art.image_credit || 'ब्लैक लेंस ब्यूरो',
         gallery_images: art.gallery_images || [],

@@ -8,7 +8,8 @@ import {
   Upload, Video, Image as ImageIcon, Link as LinkIcon, Film, Play, X, Loader2,
   Search, Filter, ChevronLeft, ChevronRight, AlertCircle, ArrowUpRight, RotateCcw,
   CheckSquare, MessageSquare, History, Globe, Users, UserCheck, UserX, ShieldAlert,
-  LayoutDashboard, UserCog, KeyRound, Mail, PhoneCall, Layers, Sparkles
+  LayoutDashboard, UserCog, KeyRound, Mail, PhoneCall, Layers, Sparkles,
+  Hash, TrendingUp, ExternalLink, HelpCircle, CheckCheck, MapPin
 } from 'lucide-react';
 import { Article, Category, Tag, BreakingNewsItem, Advertisement, User as UserType, ArticleStatus, SiteSettings, ContactMessage } from '../types';
 import { getYouTubeEmbedUrl, isYouTubeUrl } from '../utils/video';
@@ -185,11 +186,13 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   const [reporterFilter, setReporterFilter] = useState<'all' | 'published' | 'pending_review' | 'draft' | 'rejected'>('all');
   const [reporterSearchQuery, setReporterSearchQuery] = useState('');
 
-  // Profile Settings State (Full Name, Email Address, Phone, Password)
+  // Profile Settings State (Full Name, Email Address, Phone, Password, Journalist Bio & Region)
   const [profileName, setProfileName] = useState(currentUser?.name || '');
   const [profileEmail, setProfileEmail] = useState(currentUser?.email || '');
   const [profilePhone, setProfilePhone] = useState(currentUser?.phone || '');
   const [profileAvatar, setProfileAvatar] = useState(currentUser?.avatar_url || '');
+  const [profileBio, setProfileBio] = useState(currentUser?.bio || '');
+  const [profileRegion, setProfileRegion] = useState(currentUser?.assigned_region || '');
   const [profileAvatarLoading, setProfileAvatarLoading] = useState(false);
   const [profileCurrentPassword, setProfileCurrentPassword] = useState('');
   const [profileNewPassword, setProfileNewPassword] = useState('');
@@ -247,6 +250,11 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
     site_description: 'ब्लैक लेंस - गाजियाबाद, दिल्ली एनसीआर और देश-विदेश की ताज़ा एवं निष्पक्ष खबरें।',
     seo_title: 'ब्लैक लेंस | Black Lens Hindi News Portal',
     seo_description: 'ब्लैक लेंस हिंदी समाचार पोर्टल - राजनीति, अपराध, खेल, धर्म एवं गाजियाबाद विशेष',
+    seo_keywords: 'गाजियाबाद समाचार, यूपी न्यूज़, ब्रेकिंग हिंदी न्यूज़, Ghaziabad News, Crime News UP, Delhi NCR News, Black Lens News Portal',
+    trending_topics: '#गाजियाबाद_न्यूज़, #यूपी_अपडेट्स, #क्राइम_अलर्ट, #ट्रैफिक_अपडेट, #नमो_भारत, #राजनीति_हलचल',
+    google_site_verification: '',
+    google_analytics_id: '',
+    canonical_url: 'https://blacklens.co.in',
     site_logo: '',
     header_logo: '',
     footer_logo: '',
@@ -336,8 +344,10 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
     user: any | null;
   }>({ isOpen: false, user: null });
 
-  // Admin Settings Sub-Tab: 'site' | 'profile'
-  const [adminSettingsTab, setAdminSettingsTab] = useState<'site' | 'profile'>('site');
+  // Admin Settings Sub-Tab: 'site' | 'profile' | 'seo'
+  const [adminSettingsTab, setAdminSettingsTab] = useState<'site' | 'profile' | 'seo'>('site');
+  const [seoDevicePreview, setSeoDevicePreview] = useState<'mobile' | 'desktop'>('mobile');
+  const [seoCopiedNotice, setSeoCopiedNotice] = useState<string>('');
 
   // Contact Inquiries (संदेश व पूछताछ) state
   const [contactMessages, setContactMessages] = useState<ContactMessage[]>([]);
@@ -711,7 +721,19 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
     }
   }, [isReporter, isEditor, activeTab]);
 
-  // Profile Update Handler for Reporter & Editor (Name, Email, Mobile/Phone, Password)
+  // Sync profile form states whenever currentUser updates
+  useEffect(() => {
+    if (currentUser) {
+      setProfileName(currentUser.name || '');
+      setProfileEmail(currentUser.email || '');
+      setProfilePhone(currentUser.phone || '');
+      setProfileAvatar(currentUser.avatar_url || '');
+      setProfileBio(currentUser.bio || '');
+      setProfileRegion(currentUser.assigned_region || '');
+    }
+  }, [currentUser]);
+
+  // Profile Update Handler for Reporter, Editor & Admin (Name, Email, Mobile/Phone, Avatar, Bio, Region, Password)
   const handleUpdateProfile = async (e: React.FormEvent) => {
     e.preventDefault();
     setProfileMsg({ text: '', type: '' });
@@ -759,6 +781,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
           email: profileEmail.trim(),
           phone: profilePhone.trim(),
           avatar_url: profileAvatar || '',
+          bio: profileBio.trim(),
+          assigned_region: profileRegion.trim(),
           current_password: profileCurrentPassword || undefined,
           new_password: profileNewPassword || undefined,
           confirm_password: profileConfirmPassword || undefined
@@ -766,8 +790,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
       });
       const data = await res.json();
       if (data.success) {
-        setProfileMsg({ text: '✓ आपकी प्रोफ़ाइल सेटिंग्स (फोटो, नाम, ईमेल, मोबाइल व पासवर्ड) सफलतापूर्वक सुरक्षित हो गईं!', type: 'success' });
-        showAlert('✓ आपकी प्रोफ़ाइल सेटिंग्स सफलतापूर्वक अपडेट हो गईं!');
+        setProfileMsg({ text: '✓ आपकी प्रोफ़ाइल, फोटो एवं पत्रकारिता परिचय (Bio) सफलतापूर्वक सुरक्षित हो गए!', type: 'success' });
+        showAlert('✓ आपकी प्रोफ़ाइल एवं पत्रकारिता परिचय (Bio) सफलतापूर्वक अपडेट हो गई!');
         setProfileCurrentPassword('');
         setProfileNewPassword('');
         setProfileConfirmPassword('');
@@ -775,11 +799,14 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
           setCurrentUser(data.user);
           localStorage.setItem('tez_nazar_user', JSON.stringify(data.user));
           setProfileAvatar(data.user.avatar_url || '');
+          setProfileBio(data.user.bio || '');
+          setProfileRegion(data.user.assigned_region || '');
         }
         if (data.token) {
           setToken(data.token);
           localStorage.setItem('tez_nazar_token', data.token);
         }
+        onRefreshData();
       } else {
         setProfileMsg({ text: data.message || 'अपडेट करने में विफलता।', type: 'error' });
       }
@@ -2791,6 +2818,17 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 टीम ({usersList.filter(u => u.approval_status === 'pending').length})
               </button>
             )}
+            {(currentUser.role_id === 1 || currentUser.role_id === 2 || isEditor) && (
+              <button
+                onClick={() => setActiveTab('seo')}
+                className={`px-2.5 py-1 rounded text-[11px] whitespace-nowrap font-medium cursor-pointer flex items-center gap-1 ${
+                  activeTab === 'seo' ? 'bg-red-700 text-white font-bold' : 'text-stone-300'
+                }`}
+              >
+                <span>SEO & रैंकिंग</span>
+                <span className="bg-emerald-800 text-emerald-200 text-[9px] px-1 rounded font-mono font-bold">Google</span>
+              </button>
+            )}
             {(currentUser.role_id === 1 || currentUser.role_id === 2) && (
               <button
                 onClick={() => setActiveTab('settings')}
@@ -2956,7 +2994,22 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 )}
               </button>
 
-              {/* 6. Settings */}
+              {/* 6. SEO एवं ट्रेंडिंग कीवर्ड्स */}
+              <button
+                type="button"
+                onClick={() => setActiveTab('seo')}
+                className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg font-medium text-xs transition-colors cursor-pointer text-left ${
+                  activeTab === 'seo' ? 'bg-red-700 text-white font-bold shadow-xs' : 'hover:bg-stone-800 text-stone-300'
+                }`}
+              >
+                <Search className="w-4 h-4 shrink-0 text-emerald-400" />
+                <span className="flex-1 text-left truncate leading-tight">SEO एवं ट्रेंडिंग कीवर्ड्स</span>
+                <span className="ml-auto bg-emerald-900/80 text-emerald-300 border border-emerald-700/60 font-mono text-[9px] px-1.5 py-0.5 rounded font-bold">
+                  Google
+                </span>
+              </button>
+
+              {/* 7. Settings */}
               <button
                 type="button"
                 onClick={() => setActiveTab('settings')}
@@ -3089,6 +3142,21 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       {usersList.filter(u => u.approval_status === 'pending').length}
                     </span>
                   )}
+                </button>
+              )}
+
+              {(currentUser.role_id === 1 || currentUser.role_id === 2) && (
+                <button
+                  onClick={() => setActiveTab('seo')}
+                  className={`w-full flex items-center gap-2.5 px-3 py-2 rounded font-medium transition-colors cursor-pointer ${
+                    activeTab === 'seo' ? 'bg-red-700 text-white font-bold' : 'hover:bg-stone-800 text-stone-300'
+                  }`}
+                >
+                  <Search className="w-4 h-4 text-emerald-400" />
+                  <span>SEO एवं गूगल रैंकिंग</span>
+                  <span className="ml-auto bg-emerald-900/80 text-emerald-300 border border-emerald-700/60 font-mono text-[9px] px-1.5 py-0.5 rounded font-bold">
+                    Google
+                  </span>
                 </button>
               )}
 
@@ -5681,10 +5749,141 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                             फोटो हटाएं
                           </button>
                         )}
+                        <a
+                          href="#reporter-about-journalist"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-700 text-xs font-bold rounded border border-red-200 transition-colors"
+                        >
+                          <Edit3 className="w-3.5 h-3.5 text-red-600" />
+                          <span>पत्रकारिता परिचय (Bio) लिखें / संपादित करें</span>
+                        </a>
                       </div>
                       <p className="text-[11px] text-stone-500">
                         यह फोटो आपके द्वारा प्रस्तुत किए गए समाचारों में आपके नाम के साथ बायलाइन में दिखेगी।
                       </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* पत्रकारिता परिचय एवं कार्यक्षेत्र (About Journalist / Bio) */}
+                <div id="reporter-about-journalist" className="p-4 sm:p-5 bg-gradient-to-br from-stone-50 to-red-50/30 border-2 border-red-200/80 rounded-xl space-y-4 shadow-2xs">
+                  <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-stone-200">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-lg bg-red-700 text-white flex items-center justify-center font-bold text-xs shadow-xs">
+                        BL
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold text-stone-900">
+                          पत्रकारिता परिचय एवं कार्यक्षेत्र (About Journalist)
+                        </label>
+                        <p className="text-[11px] text-stone-500">
+                          अपने बारे में परिचय व कार्यक्षेत्र लिखें। जब आप खबर डालेंगे तो आपके नाम के नीचे यही परिचय दिखेगा।
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      {profileBio && (
+                        <button
+                          type="button"
+                          onClick={() => setProfileBio('')}
+                          className="px-2.5 py-1 text-[11px] font-bold text-red-700 hover:text-red-900 bg-red-50 hover:bg-red-100 rounded border border-red-200 transition-colors cursor-pointer flex items-center gap-1"
+                          title="परिचय हटाएं / खाली करें"
+                        >
+                          <Trash2 className="w-3 h-3" />
+                          <span>परिचय हटाएं</span>
+                        </button>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => setProfileBio('ब्लैक लेंस डिजिटल मीडिया हाउस के साथ गाजियाबाद, उत्तर प्रदेश व राष्ट्रीय खबरों का निष्पक्ष, स्वतंत्र एवं सटीक संकलन व प्रसारण।')}
+                        className="px-2.5 py-1 text-[11px] font-bold text-stone-700 hover:text-stone-900 bg-white hover:bg-stone-100 rounded border border-stone-300 transition-colors cursor-pointer flex items-center gap-1"
+                        title="डिफ़ॉल्ट परिचय भरें"
+                      >
+                        <Sparkles className="w-3 h-3 text-amber-600" />
+                        <span>डिफ़ॉल्ट परिचय भरें</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Bio Textarea */}
+                  <div>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <label className="text-xs font-bold text-stone-800 flex items-center gap-1">
+                        <span>पत्रकारिता परिचय (Journalist Bio / About)</span>
+                        <span className="text-[10px] text-stone-400 font-normal">(लिखें, संपादित करें या हटाएं)</span>
+                      </label>
+                      <span className={`text-[10px] font-mono ${profileBio.length > 400 ? 'text-amber-600 font-bold' : 'text-stone-400'}`}>
+                        {profileBio.length} / 500 अक्षर
+                      </span>
+                    </div>
+                    <textarea
+                      rows={3}
+                      value={profileBio}
+                      onChange={(e) => setProfileBio(e.target.value.slice(0, 500))}
+                      placeholder="उदा. 'गाजियाबाद एवं दिल्ली एनसीआर के अपराध, राजनीति और विकास कार्यों पर 8 वर्षों से निष्पक्ष ग्राउंड रिपोर्टिंग। जनसरोकार और सटीक पत्रकारिता के लिए समर्पित।'"
+                      className="w-full text-xs p-3 border border-stone-300 rounded-lg bg-white focus:border-red-600 focus:outline-none leading-relaxed font-sans shadow-2xs"
+                    />
+                  </div>
+
+                  {/* Assigned Region / Beat */}
+                  <div>
+                    <label className="block text-xs font-bold text-stone-800 mb-1">
+                      कार्यक्षेत्र / रिपोर्टिंग बीट (Assigned Reporting Region / Beat)
+                    </label>
+                    <input
+                      type="text"
+                      value={profileRegion}
+                      onChange={(e) => setProfileRegion(e.target.value)}
+                      placeholder="उदा. गाजियाबाद / दिल्ली एनसीआर / पश्चिमी उत्तर प्रदेश"
+                      className="w-full text-xs p-2.5 border border-stone-300 rounded-md bg-white focus:border-red-600 focus:outline-none font-medium"
+                    />
+                    <p className="text-[11px] text-stone-500 mt-1">
+                      यह कार्यक्षेत्र आपके प्रोफ़ाइल कार्ड और समाचार में स्थान के रूप में प्रदर्शित होगा।
+                    </p>
+                  </div>
+
+                  {/* Live Reader Preview Box */}
+                  <div className="p-3 bg-white rounded-lg border border-red-200/60 shadow-2xs space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-bold text-red-700 uppercase tracking-wider flex items-center gap-1">
+                        <Eye className="w-3 h-3" />
+                        <span>लाइव पूर्वावलोकन (आपकी खबर के नीचे पाठकों को ऐसे दिखेगा):</span>
+                      </span>
+                      <span className="text-[9px] bg-red-100 text-red-800 font-bold px-1.5 py-0.5 rounded">
+                        Live Byline Preview
+                      </span>
+                    </div>
+                    <div className="flex items-start gap-3 p-2.5 bg-stone-50 rounded-md border border-stone-200">
+                      <div className="relative shrink-0">
+                        {profileAvatar ? (
+                          <img
+                            src={profileAvatar}
+                            alt="लेखक"
+                            className="w-10 h-10 rounded-full object-cover border-2 border-red-600 shadow-2xs"
+                          />
+                        ) : (
+                          <div className="w-10 h-10 rounded-full bg-red-700 text-white flex items-center justify-center font-bold text-xs shadow-2xs">
+                            {profileName ? profileName.slice(0, 2).toUpperCase() : 'BL'}
+                          </div>
+                        )}
+                        <span className="absolute -bottom-1 -right-1 bg-emerald-600 text-white p-0.5 rounded-full border-2 border-white shadow-2xs">
+                          <UserCheck className="w-2.5 h-2.5" />
+                        </span>
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span className="font-bold text-xs text-stone-900">{profileName || 'आपका नाम'}</span>
+                          <span className="text-[9px] bg-red-50 text-red-700 px-1.5 py-0.2 rounded border border-red-200 font-semibold">
+                            {currentUser?.role_name || 'संवाददाता'}
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-stone-600 italic line-clamp-2 mt-0.5 font-sans">
+                          {profileBio || 'ब्लैक लेंस डिजिटल मीडिया हाउस के साथ निष्पक्ष एवं सटीक पत्रकारिता।'}
+                        </p>
+                        <span className="text-[10px] text-stone-500 flex items-center gap-1 mt-0.5">
+                          <MapPin className="w-2.5 h-2.5 text-red-600 shrink-0" />
+                          <span>{profileRegion || 'गाजियाबाद / दिल्ली एनसीआर'}</span>
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -5932,10 +6131,141 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                             फोटो हटाएं
                           </button>
                         )}
+                        <a
+                          href="#editor-about-journalist"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-800 text-xs font-bold rounded border border-amber-200 transition-colors"
+                        >
+                          <Edit3 className="w-3.5 h-3.5 text-amber-700" />
+                          <span>पत्रकारिता परिचय (Bio) लिखें / संपादित करें</span>
+                        </a>
                       </div>
                       <p className="text-[11px] text-stone-500">
                         यह फोटो आपके द्वारा संपादित व प्रकाशित खबरों में आपके नाम के साथ दिखेगी।
                       </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* पत्रकारिता परिचय एवं कार्यक्षेत्र (About Journalist / Bio) */}
+                <div id="editor-about-journalist" className="p-4 sm:p-5 bg-gradient-to-br from-stone-50 to-amber-50/30 border-2 border-amber-200/80 rounded-xl space-y-4 shadow-2xs">
+                  <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-stone-200">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-lg bg-amber-600 text-white flex items-center justify-center font-bold text-xs shadow-xs">
+                        ED
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold text-stone-900">
+                          पत्रकारिता परिचय एवं कार्यक्षेत्र (About Journalist / Editor)
+                        </label>
+                        <p className="text-[11px] text-stone-500">
+                          संपादक परिचय व कार्यक्षेत्र लिखें। जब आप खबर डालेंगे तो आपके नाम के नीचे यही परिचय दिखेगा।
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      {profileBio && (
+                        <button
+                          type="button"
+                          onClick={() => setProfileBio('')}
+                          className="px-2.5 py-1 text-[11px] font-bold text-red-700 hover:text-red-900 bg-red-50 hover:bg-red-100 rounded border border-red-200 transition-colors cursor-pointer flex items-center gap-1"
+                          title="परिचय हटाएं / खाली करें"
+                        >
+                          <Trash2 className="w-3 h-3" />
+                          <span>परिचय हटाएं</span>
+                        </button>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => setProfileBio('वरिष्ठ संपादक, ब्लैक लेंस डिजिटल मीडिया। राष्ट्रीय, प्रादेशिक एवं स्थानीय समाचारों का निष्पक्ष एवं उत्तरदायी संपादन व विश्लेषण।')}
+                        className="px-2.5 py-1 text-[11px] font-bold text-stone-700 hover:text-stone-900 bg-white hover:bg-stone-100 rounded border border-stone-300 transition-colors cursor-pointer flex items-center gap-1"
+                        title="डिफ़ॉल्ट परिचय भरें"
+                      >
+                        <Sparkles className="w-3 h-3 text-amber-600" />
+                        <span>डिफ़ॉल्ट परिचय भरें</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Bio Textarea */}
+                  <div>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <label className="text-xs font-bold text-stone-800 flex items-center gap-1">
+                        <span>पत्रकारिता परिचय (Journalist Bio / About)</span>
+                        <span className="text-[10px] text-stone-400 font-normal">(लिखें, संपादित करें या हटाएं)</span>
+                      </label>
+                      <span className={`text-[10px] font-mono ${profileBio.length > 400 ? 'text-amber-600 font-bold' : 'text-stone-400'}`}>
+                        {profileBio.length} / 500 अक्षर
+                      </span>
+                    </div>
+                    <textarea
+                      rows={3}
+                      value={profileBio}
+                      onChange={(e) => setProfileBio(e.target.value.slice(0, 500))}
+                      placeholder="उदा. 'वरिष्ठ संपादक, ब्लैक लेंस डिजिटल मीडिया। राष्ट्रीय, प्रादेशिक एवं स्थानीय समाचारों का निष्पक्ष एवं उत्तरदायी संपादन व विश्लेषण।'"
+                      className="w-full text-xs p-3 border border-stone-300 rounded-lg bg-white focus:border-amber-600 focus:outline-none leading-relaxed font-sans shadow-2xs"
+                    />
+                  </div>
+
+                  {/* Assigned Region / Beat */}
+                  <div>
+                    <label className="block text-xs font-bold text-stone-800 mb-1">
+                      कार्यक्षेत्र / डेस्क (Assigned Reporting Region / Desk)
+                    </label>
+                    <input
+                      type="text"
+                      value={profileRegion}
+                      onChange={(e) => setProfileRegion(e.target.value)}
+                      placeholder="उदा. मुख्य संपादकीय डेस्क / गाजियाबाद ब्यूरो"
+                      className="w-full text-xs p-2.5 border border-stone-300 rounded-md bg-white focus:border-amber-600 focus:outline-none font-medium"
+                    />
+                    <p className="text-[11px] text-stone-500 mt-1">
+                      यह कार्यक्षेत्र आपके प्रोफ़ाइल कार्ड और समाचार में प्रदर्शित होगा।
+                    </p>
+                  </div>
+
+                  {/* Live Reader Preview Box */}
+                  <div className="p-3 bg-white rounded-lg border border-amber-200/80 shadow-2xs space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-bold text-amber-800 uppercase tracking-wider flex items-center gap-1">
+                        <Eye className="w-3 h-3" />
+                        <span>लाइव पूर्वावलोकन (आपकी खबर के नीचे पाठकों को ऐसे दिखेगा):</span>
+                      </span>
+                      <span className="text-[9px] bg-amber-100 text-amber-900 font-bold px-1.5 py-0.5 rounded">
+                        Live Byline Preview
+                      </span>
+                    </div>
+                    <div className="flex items-start gap-3 p-2.5 bg-stone-50 rounded-md border border-stone-200">
+                      <div className="relative shrink-0">
+                        {profileAvatar ? (
+                          <img
+                            src={profileAvatar}
+                            alt="लेखक"
+                            className="w-10 h-10 rounded-full object-cover border-2 border-amber-600 shadow-2xs"
+                          />
+                        ) : (
+                          <div className="w-10 h-10 rounded-full bg-amber-600 text-white flex items-center justify-center font-bold text-xs shadow-2xs">
+                            {profileName ? profileName.slice(0, 2).toUpperCase() : 'ED'}
+                          </div>
+                        )}
+                        <span className="absolute -bottom-1 -right-1 bg-emerald-600 text-white p-0.5 rounded-full border-2 border-white shadow-2xs">
+                          <UserCheck className="w-2.5 h-2.5" />
+                        </span>
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span className="font-bold text-xs text-stone-900">{profileName || 'आपका नाम'}</span>
+                          <span className="text-[9px] bg-amber-50 text-amber-800 px-1.5 py-0.2 rounded border border-amber-300 font-semibold">
+                            {currentUser?.role_name || 'संपादक'}
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-stone-600 italic line-clamp-2 mt-0.5 font-sans">
+                          {profileBio || 'ब्लैक लेंस डिजिटल मीडिया हाउस के साथ निष्पक्ष एवं सटीक पत्रकारिता।'}
+                        </p>
+                        <span className="text-[10px] text-stone-500 flex items-center gap-1 mt-0.5">
+                          <MapPin className="w-2.5 h-2.5 text-amber-600 shrink-0" />
+                          <span>{profileRegion || 'मुख्य संपादकीय डेस्क'}</span>
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -6144,6 +6474,15 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   <UserCog className="w-4 h-4" />
                   <span>👤 व्यवस्थापक प्रोफ़ाइल व पासवर्ड (Admin Profile & Password)</span>
                 </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('seo')}
+                  className="pb-3 px-4 text-xs font-bold border-b-2 border-transparent text-emerald-700 hover:text-emerald-900 flex items-center gap-2 cursor-pointer transition-colors ml-auto sm:ml-0"
+                >
+                  <Search className="w-4 h-4 text-emerald-600" />
+                  <span>🚀 SEO एवं गूगल रैंकिंग हब (SEO Hub)</span>
+                  <span className="bg-emerald-100 text-emerald-800 text-[10px] px-1.5 py-0.5 rounded font-mono font-bold">Google #1</span>
+                </button>
               </div>
 
               {adminSettingsTab === 'profile' ? (
@@ -6208,10 +6547,141 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                                 फोटो हटाएं
                               </button>
                             )}
+                            <a
+                              href="#admin-about-journalist"
+                              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-700 text-xs font-bold rounded border border-red-200 transition-colors"
+                            >
+                              <Edit3 className="w-3.5 h-3.5 text-red-600" />
+                              <span>पत्रकारिता परिचय (Bio) लिखें / संपादित करें</span>
+                            </a>
                           </div>
                           <p className="text-[11px] text-stone-500">
                             यह फोटो आपके द्वारा प्रकाशित की गई खबरों में लेखक/संपादक बायलाइन में दिखेगी।
                           </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* पत्रकारिता परिचय एवं कार्यक्षेत्र (About Journalist / Bio) */}
+                    <div id="admin-about-journalist" className="p-4 sm:p-5 bg-gradient-to-br from-stone-50 to-red-50/30 border-2 border-red-200/80 rounded-xl space-y-4 shadow-2xs">
+                      <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-stone-200">
+                        <div className="flex items-center gap-2">
+                          <div className="w-7 h-7 rounded-lg bg-red-700 text-white flex items-center justify-center font-bold text-xs shadow-xs">
+                            BL
+                          </div>
+                          <div>
+                            <label className="block text-xs font-bold text-stone-900">
+                              पत्रकारिता परिचय एवं कार्यक्षेत्र (About Journalist / Chief Editor)
+                            </label>
+                            <p className="text-[11px] text-stone-500">
+                              प्रधान संपादक / व्यवस्थापक परिचय व कार्यक्षेत्र लिखें। जब आप खबर डालेंगे तो आपके नाम के नीचे यही परिचय दिखेगा।
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                          {profileBio && (
+                            <button
+                              type="button"
+                              onClick={() => setProfileBio('')}
+                              className="px-2.5 py-1 text-[11px] font-bold text-red-700 hover:text-red-900 bg-red-50 hover:bg-red-100 rounded border border-red-200 transition-colors cursor-pointer flex items-center gap-1"
+                              title="परिचय हटाएं / खाली करें"
+                            >
+                              <Trash2 className="w-3 h-3" />
+                              <span>परिचय हटाएं</span>
+                            </button>
+                          )}
+                          <button
+                            type="button"
+                            onClick={() => setProfileBio('प्रधान संपादक एवं संस्थापक, ब्लैक लेंस मीडिया नेटवर्क। गाजियाबाद, उत्तर प्रदेश और राष्ट्रीय सरोकारों पर निष्पक्ष, निडर एवं स्वतंत्र पत्रकारिता का 15+ वर्षों का अनुभव।')}
+                            className="px-2.5 py-1 text-[11px] font-bold text-stone-700 hover:text-stone-900 bg-white hover:bg-stone-100 rounded border border-stone-300 transition-colors cursor-pointer flex items-center gap-1"
+                            title="डिफ़ॉल्ट परिचय भरें"
+                          >
+                            <Sparkles className="w-3 h-3 text-amber-600" />
+                            <span>डिफ़ॉल्ट परिचय भरें</span>
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Bio Textarea */}
+                      <div>
+                        <div className="flex items-center justify-between mb-1.5">
+                          <label className="text-xs font-bold text-stone-800 flex items-center gap-1">
+                            <span>पत्रकारिता परिचय (Journalist Bio / About)</span>
+                            <span className="text-[10px] text-stone-400 font-normal">(लिखें, संपादित करें या हटाएं)</span>
+                          </label>
+                          <span className={`text-[10px] font-mono ${profileBio.length > 400 ? 'text-amber-600 font-bold' : 'text-stone-400'}`}>
+                            {profileBio.length} / 500 अक्षर
+                          </span>
+                        </div>
+                        <textarea
+                          rows={3}
+                          value={profileBio}
+                          onChange={(e) => setProfileBio(e.target.value.slice(0, 500))}
+                          placeholder="उदा. 'प्रधान संपादक एवं संस्थापक, ब्लैक लेंस मीडिया नेटवर्क। गाजियाबाद, उत्तर प्रदेश और राष्ट्रीय सरोकारों पर निष्पक्ष, निडर एवं स्वतंत्र पत्रकारिता।'"
+                          className="w-full text-xs p-3 border border-stone-300 rounded-lg bg-white focus:border-red-600 focus:outline-none leading-relaxed font-sans shadow-2xs"
+                        />
+                      </div>
+
+                      {/* Assigned Region / Beat */}
+                      <div>
+                        <label className="block text-xs font-bold text-stone-800 mb-1">
+                          कार्यक्षेत्र / डेस्क (Assigned Reporting Region / Desk)
+                        </label>
+                        <input
+                          type="text"
+                          value={profileRegion}
+                          onChange={(e) => setProfileRegion(e.target.value)}
+                          placeholder="उदा. राष्ट्रीय मुख्यालय एवं गाजियाबाद ब्यूरो"
+                          className="w-full text-xs p-2.5 border border-stone-300 rounded-md bg-white focus:border-red-600 focus:outline-none font-medium"
+                        />
+                        <p className="text-[11px] text-stone-500 mt-1">
+                          यह कार्यक्षेत्र आपके प्रोफ़ाइल कार्ड और समाचार में प्रदर्शित होगा।
+                        </p>
+                      </div>
+
+                      {/* Live Reader Preview Box */}
+                      <div className="p-3 bg-white rounded-lg border border-red-200/60 shadow-2xs space-y-1.5">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] font-bold text-red-700 uppercase tracking-wider flex items-center gap-1">
+                            <Eye className="w-3 h-3" />
+                            <span>लाइव पूर्वावलोकन (आपकी खबर के नीचे पाठकों को ऐसे दिखेगा):</span>
+                          </span>
+                          <span className="text-[9px] bg-red-100 text-red-800 font-bold px-1.5 py-0.5 rounded">
+                            Live Byline Preview
+                          </span>
+                        </div>
+                        <div className="flex items-start gap-3 p-2.5 bg-stone-50 rounded-md border border-stone-200">
+                          <div className="relative shrink-0">
+                            {profileAvatar ? (
+                              <img
+                                src={profileAvatar}
+                                alt="लेखक"
+                                className="w-10 h-10 rounded-full object-cover border-2 border-red-600 shadow-2xs"
+                              />
+                            ) : (
+                              <div className="w-10 h-10 rounded-full bg-red-700 text-white flex items-center justify-center font-bold text-xs shadow-2xs">
+                                {profileName ? profileName.slice(0, 2).toUpperCase() : 'BL'}
+                              </div>
+                            )}
+                            <span className="absolute -bottom-1 -right-1 bg-emerald-600 text-white p-0.5 rounded-full border-2 border-white shadow-2xs">
+                              <UserCheck className="w-2.5 h-2.5" />
+                            </span>
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-center gap-1.5 flex-wrap">
+                              <span className="font-bold text-xs text-stone-900">{profileName || 'आपका नाम'}</span>
+                              <span className="text-[9px] bg-red-50 text-red-700 px-1.5 py-0.2 rounded border border-red-200 font-semibold">
+                                {currentUser?.role_name || 'प्रधान संपादक'}
+                              </span>
+                            </div>
+                            <p className="text-[11px] text-stone-600 italic line-clamp-2 mt-0.5 font-sans">
+                              {profileBio || 'ब्लैक लेंस डिजिटल मीडिया हाउस के साथ निष्पक्ष एवं सटीक पत्रकारिता।'}
+                            </p>
+                            <span className="text-[10px] text-stone-500 flex items-center gap-1 mt-0.5">
+                              <MapPin className="w-2.5 h-2.5 text-red-600 shrink-0" />
+                              <span>{profileRegion || 'राष्ट्रीय मुख्यालय एवं गाजियाबाद ब्यूरो'}</span>
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -6809,6 +7279,804 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 </div>
               </form>
             )}
+            </div>
+          )}
+
+          {/* TAB: SEO & TRENDING KEYWORDS / GOOGLE SEARCH RANKING (USER REQUEST) */}
+          {activeTab === 'seo' && (currentUser.role_id === 1 || currentUser.role_id === 2 || isEditor) && (
+            <div className="space-y-6 max-w-5xl">
+              {/* Top Header */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-lg border border-stone-200 shadow-2xs">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold shadow-2xs">
+                      <Search className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h1 className="text-lg font-bold text-stone-900 flex items-center gap-2">
+                        <span>Google SEO एवं ट्रेंडिंग कीवर्ड्स हब</span>
+                        <span className="bg-emerald-100 text-emerald-800 text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border border-emerald-300">
+                          Google Search #1 Rank
+                        </span>
+                      </h1>
+                      <p className="text-xs text-stone-500 mt-0.5">
+                        वेबसाइट को Google सर्च के पहले पेज पर रैंक कराने हेतु ट्रेंडिंग हैशटैग्स, कीवर्ड्स, Search Console वेरिफिकेशन और XML साइटमैप प्रबंधित करें।
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2.5 shrink-0">
+                  <button
+                    type="button"
+                    onClick={handleManualRefresh}
+                    disabled={isRefreshing}
+                    className="flex items-center gap-1.5 px-3 py-2 bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-semibold rounded cursor-pointer transition-colors"
+                    title="ताज़ा डेटा रिफ्रेश करें"
+                  >
+                    <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin text-red-600' : ''}`} />
+                    <span className="hidden sm:inline">रिफ्रेश</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleSaveSettings}
+                    disabled={settingsSaving}
+                    className="flex items-center gap-2 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold px-5 py-2 rounded transition-colors cursor-pointer shadow-md disabled:opacity-50"
+                  >
+                    {settingsSaving ? (
+                      <>
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        <span>सुरक्षित हो रहा है...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Check className="w-4 h-4" />
+                        <span>SEO सेटिंग्स सुरक्षित करें</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              {/* Status Bar */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                <div className="bg-white p-3.5 rounded-lg border border-stone-200 shadow-2xs flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+                    <Globe className="w-4 h-4" />
+                  </div>
+                  <div className="min-w-0">
+                    <span className="text-[10px] text-stone-500 font-bold uppercase tracking-wider block">Googlebot स्थिति</span>
+                    <span className="text-xs font-bold text-emerald-700 flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                      इंडेक्सिंग सक्रिय
+                    </span>
+                  </div>
+                </div>
+
+                <div className="bg-white p-3.5 rounded-lg border border-stone-200 shadow-2xs flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center shrink-0">
+                    <FileText className="w-4 h-4" />
+                  </div>
+                  <div className="min-w-0">
+                    <span className="text-[10px] text-stone-500 font-bold uppercase tracking-wider block">Google News Sitemap</span>
+                    <a href="/sitemap-news.xml" target="_blank" rel="noreferrer" className="text-xs font-bold text-blue-700 hover:underline flex items-center gap-0.5 truncate">
+                      <span>/sitemap-news.xml</span>
+                      <ExternalLink className="w-2.5 h-2.5 shrink-0" />
+                    </a>
+                  </div>
+                </div>
+
+                <div className="bg-white p-3.5 rounded-lg border border-stone-200 shadow-2xs flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
+                    <FolderTree className="w-4 h-4" />
+                  </div>
+                  <div className="min-w-0">
+                    <span className="text-[10px] text-stone-500 font-bold uppercase tracking-wider block">वेबसाइट XML Sitemap</span>
+                    <a href="/sitemap.xml" target="_blank" rel="noreferrer" className="text-xs font-bold text-amber-800 hover:underline flex items-center gap-0.5 truncate">
+                      <span>/sitemap.xml</span>
+                      <ExternalLink className="w-2.5 h-2.5 shrink-0" />
+                    </a>
+                  </div>
+                </div>
+
+                <div className="bg-white p-3.5 rounded-lg border border-stone-200 shadow-2xs flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center shrink-0">
+                    <Shield className="w-4 h-4" />
+                  </div>
+                  <div className="min-w-0">
+                    <span className="text-[10px] text-stone-500 font-bold uppercase tracking-wider block">Schema.org JSON-LD</span>
+                    <span className="text-xs font-bold text-purple-700">NewsArticle मान्य</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Form Body */}
+              <form onSubmit={handleSaveSettings} className="space-y-6">
+
+                {/* ------------------------------------------------------------- */}
+                {/* SECTION 1: TRENDING TOPICS & HASHTAGS MANAGER */}
+                {/* ------------------------------------------------------------- */}
+                <div className="bg-white p-5 rounded-lg border border-stone-200 shadow-2xs space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-stone-200 pb-3">
+                    <div className="flex items-center gap-2">
+                      <div className="p-1.5 bg-orange-100 text-orange-700 rounded">
+                        <Flame className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <h2 className="text-sm font-bold text-stone-900">
+                          1. ट्रेंडिंग टॉपिक्स एवं हैशटैग्स (Trending News Topics & Hashtags)
+                        </h2>
+                        <p className="text-[11px] text-stone-500">
+                          Google Discover और ताज़ा ट्रेंड्स में वेबसाइट को तेज़ी से ऊपर लाने हेतु सक्रिय हैशटैग्स दर्ज करें
+                        </p>
+                      </div>
+                    </div>
+
+                    <span className="text-[11px] font-bold text-orange-700 bg-orange-50 border border-orange-200 px-2 py-0.5 rounded-full self-start sm:self-auto">
+                      वायरल ट्रैफ़िक बूस्टर
+                    </span>
+                  </div>
+
+                  {/* Active Hashtags Chips Display */}
+                  <div className="space-y-2">
+                    <label className="block text-xs font-bold text-stone-800">
+                      वर्तमान में सक्रिय ट्रेंडिंग हैशटैग्स (Active Hashtags):
+                    </label>
+
+                    <div className="flex flex-wrap items-center gap-1.5 p-3 bg-stone-50 rounded-md border border-stone-200 min-h-[46px]">
+                      {(() => {
+                        const tags = (settingsData.trending_topics || '')
+                          .split(/[\s,]+/)
+                          .map(t => t.trim())
+                          .filter(t => t.length > 0);
+
+                        if (tags.length === 0) {
+                          return (
+                            <span className="text-stone-400 text-xs italic">
+                              कोई ट्रेंडिंग हैशटैग अभी दर्ज नहीं है। नीचे दिए गए सुझाए गए हैशटैग पर क्लिक करके तुरंत जोड़ें।
+                            </span>
+                          );
+                        }
+
+                        return tags.map((tag, idx) => {
+                          const formattedTag = tag.startsWith('#') ? tag : `#${tag}`;
+                          return (
+                            <span
+                              key={idx}
+                              className="inline-flex items-center gap-1.5 bg-orange-50 text-orange-900 border border-orange-200 text-xs font-semibold px-2.5 py-1 rounded-full shadow-2xs"
+                            >
+                              <Hash className="w-3 h-3 text-orange-600" />
+                              <span>{formattedTag}</span>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const updated = tags.filter((_, i) => i !== idx).join(', ');
+                                  setSettingsData(prev => ({ ...prev, trending_topics: updated }));
+                                }}
+                                className="w-3.5 h-3.5 rounded-full hover:bg-orange-200 text-orange-700 flex items-center justify-center cursor-pointer"
+                                title="यह हैशटैग हटाएं"
+                              >
+                                ×
+                              </button>
+                            </span>
+                          );
+                        });
+                      })()}
+                    </div>
+                  </div>
+
+                  {/* Textarea for manual editing */}
+                  <div>
+                    <label className="block text-xs font-semibold text-stone-700 mb-1">
+                      हैशटैग्स / ट्रेंडिंग टॉपिक्स इनपुट (कॉमा या स्पेस से अलग करें):
+                    </label>
+                    <textarea
+                      rows={2}
+                      value={settingsData.trending_topics || ''}
+                      onChange={(e) => setSettingsData(prev => ({ ...prev, trending_topics: e.target.value }))}
+                      placeholder="#गाजियाबाद_न्यूज़, #यूपी_अपडेट्स, #अपराध_समाचार, #ट्रैफिक_अलर्ट, #क्रिकेट_लाइव, #राजनीति_समाचार"
+                      className="w-full p-2.5 border border-stone-300 rounded text-xs leading-relaxed focus:border-red-600 focus:outline-none font-mono"
+                    />
+                  </div>
+
+                  {/* Quick-Add Popular Hashtag Chips */}
+                  <div className="pt-2 border-t border-stone-100 space-y-2">
+                    <span className="text-[11px] font-bold text-stone-600 flex items-center gap-1">
+                      <Sparkles className="w-3 h-3 text-amber-500" />
+                      <span>एक क्लिक में लोकप्रिय ट्रेंडिंग हैशटैग जोड़ें (Quick Add Chips):</span>
+                    </span>
+
+                    <div className="flex flex-wrap gap-1.5">
+                      {[
+                        '#गाजियाबाद_न्यूज़',
+                        '#यूपी_अपडेट्स',
+                        '#दिल्ली_एनसीआर',
+                        '#अपराध_समाचार',
+                        '#ट्रैफिक_अलर्ट',
+                        '#नमो_भारत',
+                        '#राजनीति_हलचल',
+                        '#मौसम_अपडेट',
+                        '#क्रिकेट_लाइव',
+                        '#रोजगार_समाचार',
+                        '#उत्तर_प्रदेश_समाचार',
+                        '#ब्रेकिंग_न्यूज़'
+                      ].map((ht) => {
+                        const isAdded = (settingsData.trending_topics || '').includes(ht);
+                        return (
+                          <button
+                            key={ht}
+                            type="button"
+                            onClick={() => {
+                              const current = (settingsData.trending_topics || '').trim();
+                              if (isAdded) {
+                                // Remove
+                                const updated = current
+                                  .split(/[\s,]+/)
+                                  .filter(t => t !== ht && t !== ht.replace('#', ''))
+                                  .join(', ');
+                                setSettingsData(prev => ({ ...prev, trending_topics: updated }));
+                              } else {
+                                // Add
+                                const updated = current ? `${current}, ${ht}` : ht;
+                                setSettingsData(prev => ({ ...prev, trending_topics: updated }));
+                              }
+                            }}
+                            className={`text-xs px-2.5 py-1 rounded-full border transition-all cursor-pointer font-medium flex items-center gap-1 ${
+                              isAdded
+                                ? 'bg-orange-600 text-white border-orange-600 shadow-2xs font-bold'
+                                : 'bg-stone-50 hover:bg-stone-100 text-stone-700 border-stone-300'
+                            }`}
+                          >
+                            <span>{isAdded ? '✓' : '+'}</span>
+                            <span>{ht}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+
+                {/* ------------------------------------------------------------- */}
+                {/* SECTION 2: GOOGLE SEARCH RANKING TARGET KEYWORDS */}
+                {/* ------------------------------------------------------------- */}
+                <div className="bg-white p-5 rounded-lg border border-stone-200 shadow-2xs space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-stone-200 pb-3">
+                    <div className="flex items-center gap-2">
+                      <div className="p-1.5 bg-blue-100 text-blue-700 rounded">
+                        <TrendingUp className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <h2 className="text-sm font-bold text-stone-900">
+                          2. Google सर्च प्राथमिक कीवर्ड्स (Primary Search Ranking Keywords)
+                        </h2>
+                        <p className="text-[11px] text-stone-500">
+                          जब कोई पाठक गूगल पर सर्च करे, तो आपकी वेबसाइट पहले पेज पर दिखे—इसके लिए मुख्य सर्च वाक्यांश (Search Queries) जोड़ें
+                        </p>
+                      </div>
+                    </div>
+
+                    <span className="text-[11px] font-bold text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded-full self-start sm:self-auto">
+                      Page #1 Ranking Target
+                    </span>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-stone-700 mb-1">
+                      सर्च कीवर्ड्स (कॉमा से अलग करें - Comma Separated Keywords):
+                    </label>
+                    <textarea
+                      rows={2}
+                      value={settingsData.seo_keywords || ''}
+                      onChange={(e) => setSettingsData(prev => ({ ...prev, seo_keywords: e.target.value }))}
+                      placeholder="गाजियाबाद ताज़ा समाचार, यूपी न्यूज़, ब्रेकिंग हिंदी समाचार, Ghaziabad News Today, Crime News UP, Delhi NCR Hindi News, Black Lens News Portal"
+                      className="w-full p-2.5 border border-stone-300 rounded text-xs leading-relaxed focus:border-red-600 focus:outline-none"
+                    />
+                  </div>
+
+                  {/* Quick-Add Popular Search Keywords */}
+                  <div className="pt-2 border-t border-stone-100 space-y-2">
+                    <span className="text-[11px] font-bold text-stone-600 flex items-center gap-1">
+                      <Sparkles className="w-3 h-3 text-blue-500" />
+                      <span>सुझाए गए उच्च सर्च वॉल्यूम कीवर्ड्स (High Volume Search Phrases):</span>
+                    </span>
+
+                    <div className="flex flex-wrap gap-1.5">
+                      {[
+                        'गाजियाबाद ताज़ा समाचार',
+                        'यूपी न्यूज़',
+                        'ब्रेकिंग हिंदी समाचार',
+                        'Ghaziabad News Today',
+                        'Crime News UP',
+                        'Delhi NCR Hindi News',
+                        'Black Lens News Portal',
+                        'लाइव न्यूज़ अपडेट्स',
+                        'दैनिक हिंदी समाचार',
+                        'सच्ची और निष्पक्ष खबरें'
+                      ].map((kw) => {
+                        const isAdded = (settingsData.seo_keywords || '').includes(kw);
+                        return (
+                          <button
+                            key={kw}
+                            type="button"
+                            onClick={() => {
+                              const current = (settingsData.seo_keywords || '').trim();
+                              if (isAdded) {
+                                const updated = current
+                                  .split(',')
+                                  .map(s => s.trim())
+                                  .filter(s => s !== kw)
+                                  .join(', ');
+                                setSettingsData(prev => ({ ...prev, seo_keywords: updated }));
+                              } else {
+                                const updated = current ? `${current}, ${kw}` : kw;
+                                setSettingsData(prev => ({ ...prev, seo_keywords: updated }));
+                              }
+                            }}
+                            className={`text-xs px-2.5 py-1 rounded-full border transition-all cursor-pointer font-medium flex items-center gap-1 ${
+                              isAdded
+                                ? 'bg-blue-700 text-white border-blue-700 shadow-2xs font-bold'
+                                : 'bg-stone-50 hover:bg-stone-100 text-stone-700 border-stone-300'
+                            }`}
+                          >
+                            <span>{isAdded ? '✓' : '+'}</span>
+                            <span>{kw}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+
+                {/* ------------------------------------------------------------- */}
+                {/* SECTION 3: GOOGLE SEARCH CONSOLE & TRACKING VERIFICATION */}
+                {/* ------------------------------------------------------------- */}
+                <div className="bg-white p-5 rounded-lg border border-stone-200 shadow-2xs space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-stone-200 pb-3">
+                    <div className="flex items-center gap-2">
+                      <div className="p-1.5 bg-emerald-100 text-emerald-700 rounded">
+                        <Shield className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <h2 className="text-sm font-bold text-stone-900">
+                          3. Google Search Console वेरिफिकेशन एवं ट्रैकिंग टूल्स
+                        </h2>
+                        <p className="text-[11px] text-stone-500">
+                          वेबसाइट ओनरशिप प्रमाणित करें और Google Search Console में 1-क्लिक में प्रमाणित होकर त्वरित इंडेक्सिंग पाएं
+                        </p>
+                      </div>
+                    </div>
+
+                    <a
+                      href="https://search.google.com/search-console"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-xs font-bold text-emerald-700 hover:text-emerald-900 flex items-center gap-1 self-start sm:self-auto bg-emerald-50 px-2.5 py-1 rounded border border-emerald-200 hover:bg-emerald-100 transition-colors"
+                    >
+                      <span>Google Search Console खोलें</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                    {/* Google Site Verification Code */}
+                    <div className="space-y-1.5 sm:col-span-2">
+                      <div className="flex items-center justify-between">
+                        <label className="block font-bold text-stone-800">
+                          Google Search Console Verification Tag / Code:
+                        </label>
+                        {settingsData.google_site_verification ? (
+                          <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 flex items-center gap-1">
+                            <CheckCircle className="w-3 h-3 text-emerald-600" />
+                            <span>वेरिफिकेशन कोड सक्रिय है</span>
+                          </span>
+                        ) : (
+                          <span className="text-[10px] text-stone-400">वैकल्पिक / जब उपलब्ध हो</span>
+                        )}
+                      </div>
+
+                      <input
+                        type="text"
+                        value={settingsData.google_site_verification || ''}
+                        onChange={(e) => {
+                          let val = e.target.value.trim();
+                          // If full meta tag pasted: extract content attribute
+                          const match = val.match(/content=["']([^"']+)["']/i);
+                          if (match && match[1]) {
+                            val = match[1];
+                          }
+                          setSettingsData(prev => ({ ...prev, google_site_verification: val }));
+                        }}
+                        placeholder="उदा. google-site-verification कोड या HTML Tag सामग्री"
+                        className="w-full p-2.5 border border-stone-300 rounded font-mono text-[11px] focus:border-red-600 focus:outline-none"
+                      />
+
+                      <p className="text-[11px] text-stone-500 leading-relaxed">
+                        💡 <strong>सरल तरीका:</strong> Search Console में 'HTML Tag' विकल्प चुनें, कोड कॉपी करें और यहाँ पेस्ट करें। यह स्वचालित रूप से होमपेज के <code>&lt;head&gt;</code> में जुड़ जाएगा।
+                      </p>
+                    </div>
+
+                    {/* Canonical Base URL */}
+                    <div className="space-y-1">
+                      <label className="block font-bold text-stone-800">
+                        कैनोनिकल बेस URL (Canonical Domain):
+                      </label>
+                      <input
+                        type="url"
+                        value={settingsData.canonical_url || 'https://blacklens.co.in'}
+                        onChange={(e) => setSettingsData(prev => ({ ...prev, canonical_url: e.target.value }))}
+                        placeholder="https://blacklens.co.in"
+                        className="w-full p-2 border border-stone-300 rounded font-mono text-[11px]"
+                      />
+                      <p className="text-[10px] text-stone-500">
+                        डुप्लीकेट URL की समस्या से बचाने के लिए मुख्य डोमेन
+                      </p>
+                    </div>
+
+                    {/* Google Analytics 4 (GA4) ID */}
+                    <div className="space-y-1">
+                      <label className="block font-bold text-stone-800">
+                        Google Analytics 4 (GA4) ID:
+                      </label>
+                      <input
+                        type="text"
+                        value={settingsData.google_analytics_id || ''}
+                        onChange={(e) => setSettingsData(prev => ({ ...prev, google_analytics_id: e.target.value.trim() }))}
+                        placeholder="उदा. G-XXXXXXXXXX"
+                        className="w-full p-2 border border-stone-300 rounded font-mono text-[11px]"
+                      />
+                      <p className="text-[10px] text-stone-500">
+                        सर्च से आने वाले पाठकों और पेज व्यूज को ट्रैक करने के लिए
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* ------------------------------------------------------------- */}
+                {/* SECTION 4: LIVE GOOGLE SEARCH SERP SNIPPET PREVIEW */}
+                {/* ------------------------------------------------------------- */}
+                <div className="bg-white p-5 rounded-lg border border-stone-200 shadow-2xs space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-stone-200 pb-3">
+                    <div className="flex items-center gap-2">
+                      <div className="p-1.5 bg-purple-100 text-purple-700 rounded">
+                        <Eye className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <h2 className="text-sm font-bold text-stone-900">
+                          4. लाइव Google सर्च रिजल्ट पूर्वावलोकन (Live SERP Preview)
+                        </h2>
+                        <p className="text-[11px] text-stone-500">
+                          देखें कि Google सर्च में पाठकों को आपकी वेबसाइट का शीर्षक व विवरण कैसा दिखाई देगा
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Device Toggle */}
+                    <div className="flex items-center gap-1 bg-stone-100 p-1 rounded-md self-start sm:self-auto">
+                      <button
+                        type="button"
+                        onClick={() => setSeoDevicePreview('mobile')}
+                        className={`px-3 py-1 text-xs font-semibold rounded cursor-pointer transition-colors ${
+                          seoDevicePreview === 'mobile' ? 'bg-white text-stone-900 shadow-2xs' : 'text-stone-600 hover:text-stone-900'
+                        }`}
+                      >
+                        📱 मोबाइल (Mobile)
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setSeoDevicePreview('desktop')}
+                        className={`px-3 py-1 text-xs font-semibold rounded cursor-pointer transition-colors ${
+                          seoDevicePreview === 'desktop' ? 'bg-white text-stone-900 shadow-2xs' : 'text-stone-600 hover:text-stone-900'
+                        }`}
+                      >
+                        💻 डेस्कटॉप (Desktop)
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Realistic Google Search Card */}
+                  <div className={`p-4 bg-white rounded-lg border border-stone-300 shadow-xs transition-all ${
+                    seoDevicePreview === 'mobile' ? 'max-w-md mx-auto bg-stone-50/50' : 'w-full'
+                  }`}>
+                    {/* Google Search URL Bar */}
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <div className="w-6 h-6 rounded-full bg-red-700 text-white flex items-center justify-center font-bold text-[10px] shrink-0">
+                        BL
+                      </div>
+                      <div className="min-w-0">
+                        <div className="text-xs font-semibold text-stone-900 truncate">ब्लैक लेंस (Black Lens)</div>
+                        <div className="text-[11px] text-stone-500 font-mono truncate">
+                          {settingsData.canonical_url || 'https://blacklens.co.in'} › ताज़ा-समाचार
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Clickable Blue Google Search Title */}
+                    <h3 className="text-base sm:text-lg font-medium text-[#1a0dab] hover:underline cursor-pointer leading-tight mb-1">
+                      {settingsData.seo_title || 'ब्लैक लेंस | Black Lens Hindi News Portal - ताज़ा एवं निष्पक्ष खबरें'}
+                    </h3>
+
+                    {/* Snippet Description */}
+                    <p className="text-xs text-[#4d5156] leading-relaxed line-clamp-3">
+                      {settingsData.seo_description || 'ब्लैक लेंस (Black Lens) - एक संपूर्ण एवं अत्याधुनिक हिंदी डिजिटल न्यूज़ पोर्टल - गाजियाबाद, दिल्ली एनसीआर और देश-विदेश की ताज़ा एवं निष्पक्ष खबरें।'}
+                    </p>
+
+                    {/* Rich Result Features */}
+                    <div className="flex flex-wrap items-center gap-2 mt-2 pt-2 border-t border-stone-100 text-[10px] text-stone-600">
+                      <span className="bg-emerald-50 text-emerald-800 border border-emerald-200 px-1.5 py-0.2 rounded font-bold">
+                        ⭐ 4.9 रेटिंग
+                      </span>
+                      <span>·</span>
+                      <span className="bg-stone-100 text-stone-700 px-1.5 py-0.2 rounded font-mono">
+                        24x7 ताज़ा अपडेट
+                      </span>
+                      <span>·</span>
+                      <span className="text-stone-500">
+                        गाजियाबाद / उत्तर प्रदेश
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Title & Description Inputs */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs pt-2">
+                    <div>
+                      <div className="flex items-center justify-between mb-1">
+                        <label className="block font-bold text-stone-800">
+                          Google सर्च टाइटल (Meta Title):
+                        </label>
+                        <span className={`text-[10px] font-mono font-bold ${
+                          (settingsData.seo_title?.length || 0) > 65 ? 'text-amber-600' : 'text-emerald-700'
+                        }`}>
+                          {settingsData.seo_title?.length || 0} / 60 अक्षर
+                        </span>
+                      </div>
+                      <input
+                        type="text"
+                        value={settingsData.seo_title || ''}
+                        onChange={(e) => setSettingsData(prev => ({ ...prev, seo_title: e.target.value }))}
+                        placeholder="ब्लैक लेंस | Black Lens Hindi News Portal - ताज़ा एवं निष्पक्ष खबरें"
+                        className="w-full p-2 border border-stone-300 rounded focus:border-red-600 focus:outline-none"
+                      />
+                    </div>
+
+                    <div>
+                      <div className="flex items-center justify-between mb-1">
+                        <label className="block font-bold text-stone-800">
+                          Google सर्च विवरण (Meta Description):
+                        </label>
+                        <span className={`text-[10px] font-mono font-bold ${
+                          (settingsData.seo_description?.length || 0) > 165 ? 'text-amber-600' : 'text-emerald-700'
+                        }`}>
+                          {settingsData.seo_description?.length || 0} / 160 अक्षर
+                        </span>
+                      </div>
+                      <input
+                        type="text"
+                        value={settingsData.seo_description || ''}
+                        onChange={(e) => setSettingsData(prev => ({ ...prev, seo_description: e.target.value }))}
+                        placeholder="गाजियाबाद, दिल्ली एनसीआर और देश-विदेश की ताज़ा एवं निष्पक्ष खबरें पढ़ें"
+                        className="w-full p-2 border border-stone-300 rounded focus:border-red-600 focus:outline-none"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* ------------------------------------------------------------- */}
+                {/* SECTION 5: GOOGLE INDEXING & XML SITEMAPS HUB */}
+                {/* ------------------------------------------------------------- */}
+                <div className="bg-white p-5 rounded-lg border border-stone-200 shadow-2xs space-y-4">
+                  <div className="border-b border-stone-200 pb-3">
+                    <h2 className="text-sm font-bold text-stone-900 flex items-center gap-2">
+                      <FolderTree className="w-4 h-4 text-emerald-700" />
+                      <span>5. Google इंडेक्सिंग व XML साइटमैप टूल्स (Direct Submission Hub)</span>
+                    </h2>
+                    <p className="text-[11px] text-stone-500 mt-0.5">
+                      इन साइटमैप URLs को Google Search Console में सबमिट करें ताकि नई खबरें 5 से 15 मिनट के अंदर Google पर लाइव इंडेक्स हो सकें
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                    {/* Google News Sitemap Card */}
+                    <div className="p-3.5 bg-stone-50 rounded-lg border border-stone-200 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold text-stone-900 flex items-center gap-1.5">
+                          <Flame className="w-3.5 h-3.5 text-orange-600" />
+                          <span>Google News XML Sitemap</span>
+                        </span>
+                        <span className="text-[10px] font-mono bg-blue-100 text-blue-800 px-1.5 py-0.2 rounded font-bold">
+                          ताज़ा 48 घंटे
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-stone-600">
+                        Google News बॉट्स के लिए पिछले 48 घंटों में प्रकाशित सभी ताज़ा खबरों का विशेष साइटमैप
+                      </p>
+                      <div className="flex items-center gap-2 pt-1">
+                        <a
+                          href="/sitemap-news.xml"
+                          target="_blank"
+                          rel="noreferrer"
+                          className="flex items-center gap-1 text-blue-700 hover:text-blue-900 font-mono font-bold text-[11px] hover:underline"
+                        >
+                          <span>/sitemap-news.xml</span>
+                          <ExternalLink className="w-3 h-3" />
+                        </a>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const url = `${window.location.origin}/sitemap-news.xml`;
+                            navigator.clipboard.writeText(url);
+                            setSeoCopiedNotice('news_sitemap');
+                            setTimeout(() => setSeoCopiedNotice(''), 2500);
+                          }}
+                          className="ml-auto text-[10px] px-2 py-0.5 bg-white border border-stone-300 rounded hover:bg-stone-100 cursor-pointer text-stone-700 flex items-center gap-1 font-semibold"
+                        >
+                          {seoCopiedNotice === 'news_sitemap' ? (
+                            <>
+                              <Check className="w-3 h-3 text-emerald-600" />
+                              <span className="text-emerald-700">कॉपी हुआ!</span>
+                            </>
+                          ) : (
+                            <>
+                              <Copy className="w-3 h-3 text-stone-500" />
+                              <span>URL कॉपी करें</span>
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* General XML Sitemap Card */}
+                    <div className="p-3.5 bg-stone-50 rounded-lg border border-stone-200 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold text-stone-900 flex items-center gap-1.5">
+                          <Globe className="w-3.5 h-3.5 text-emerald-600" />
+                          <span>संपूर्ण वेबसाइट XML Sitemap</span>
+                        </span>
+                        <span className="text-[10px] font-mono bg-emerald-100 text-emerald-800 px-1.5 py-0.2 rounded font-bold">
+                          सभी पेज व श्रेणियां
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-stone-600">
+                        होमपेज, सभी समाचार श्रेणियां, टैग्स और पुरानी खबरों की स्थायी इंडेक्सिंग का साइटमैप
+                      </p>
+                      <div className="flex items-center gap-2 pt-1">
+                        <a
+                          href="/sitemap.xml"
+                          target="_blank"
+                          rel="noreferrer"
+                          className="flex items-center gap-1 text-emerald-700 hover:text-emerald-900 font-mono font-bold text-[11px] hover:underline"
+                        >
+                          <span>/sitemap.xml</span>
+                          <ExternalLink className="w-3 h-3" />
+                        </a>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const url = `${window.location.origin}/sitemap.xml`;
+                            navigator.clipboard.writeText(url);
+                            setSeoCopiedNotice('general_sitemap');
+                            setTimeout(() => setSeoCopiedNotice(''), 2500);
+                          }}
+                          className="ml-auto text-[10px] px-2 py-0.5 bg-white border border-stone-300 rounded hover:bg-stone-100 cursor-pointer text-stone-700 flex items-center gap-1 font-semibold"
+                        >
+                          {seoCopiedNotice === 'general_sitemap' ? (
+                            <>
+                              <Check className="w-3 h-3 text-emerald-600" />
+                              <span className="text-emerald-700">कॉपी हुआ!</span>
+                            </>
+                          ) : (
+                            <>
+                              <Copy className="w-3 h-3 text-stone-500" />
+                              <span>URL कॉपी करें</span>
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Useful External Links */}
+                  <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-stone-100 text-xs">
+                    <span className="text-stone-500 font-medium">त्वरित टूल्स:</span>
+                    <a
+                      href="https://search.google.com/search-console"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="px-2.5 py-1 bg-stone-100 hover:bg-stone-200 text-stone-800 rounded font-medium flex items-center gap-1"
+                    >
+                      <span>Google Search Console</span>
+                      <ExternalLink className="w-3 h-3 text-stone-500" />
+                    </a>
+                    <a
+                      href="https://publishercenter.google.com/"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="px-2.5 py-1 bg-stone-100 hover:bg-stone-200 text-stone-800 rounded font-medium flex items-center gap-1"
+                    >
+                      <span>Google Publisher Center</span>
+                      <ExternalLink className="w-3 h-3 text-stone-500" />
+                    </a>
+                    <a
+                      href="/robots.txt"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="px-2.5 py-1 bg-stone-100 hover:bg-stone-200 text-stone-800 rounded font-mono font-medium flex items-center gap-1"
+                    >
+                      <span>/robots.txt</span>
+                      <ExternalLink className="w-3 h-3 text-stone-500" />
+                    </a>
+                    <a
+                      href="/rss.xml"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="px-2.5 py-1 bg-stone-100 hover:bg-stone-200 text-stone-800 rounded font-mono font-medium flex items-center gap-1"
+                    >
+                      <span>/rss.xml</span>
+                      <ExternalLink className="w-3 h-3 text-stone-500" />
+                    </a>
+                  </div>
+                </div>
+
+                {/* ------------------------------------------------------------- */}
+                {/* SECTION 6: GOOGLE #1 RANKING CHECKLIST */}
+                {/* ------------------------------------------------------------- */}
+                <div className="bg-emerald-50/60 p-5 rounded-lg border border-emerald-200 text-xs space-y-3">
+                  <div className="flex items-center gap-2">
+                    <CheckCheck className="w-4 h-4 text-emerald-700" />
+                    <h3 className="font-bold text-emerald-950 text-sm">
+                      Google के पहले पेज पर आने के लिए महत्वपूर्ण निर्देश (Ranking Checklist)
+                    </h3>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-emerald-900 leading-relaxed text-[11px]">
+                    <div className="flex items-start gap-2">
+                      <span className="font-bold text-emerald-700 shrink-0">1.</span>
+                      <span><strong>दैनिक ताज़ा खबरें:</strong> Google ताज़ा और स्थानीय (Local/Hyperlocal) खबरों को सबसे पहले इंडेक्स करता है।</span>
+                    </div>
+
+                    <div className="flex items-start gap-2">
+                      <span className="font-bold text-emerald-700 shrink-0">2.</span>
+                      <span><strong>ट्रेंडिंग हैशटैग अपडेट:</strong> राज्य व शहर में जो खबर ट्रेंड कर रही हो, उसका हैशटैग यहाँ तुरंत जोड़ें।</span>
+                    </div>
+
+                    <div className="flex items-start gap-2">
+                      <span className="font-bold text-emerald-700 shrink-0">3.</span>
+                      <span><strong>Search Console में साइटमैप:</strong> <code>/sitemap-news.xml</code> को Search Console में सबमिट रखें।</span>
+                    </div>
+
+                    <div className="flex items-start gap-2">
+                      <span className="font-bold text-emerald-700 shrink-0">4.</span>
+                      <span><strong>स्पष्ट शीर्षक एवं तस्वीर:</strong> हर खबर में कम से कम 1 आकर्षक कवर तस्वीर और 60-70 शब्दों का सारांश अवश्य जोड़ें।</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Final Bottom Save Button */}
+                <div className="flex items-center justify-between gap-3 pt-2">
+                  <div className="text-[11px] text-stone-500">
+                    * परिवर्तन सहेजने पर Googlebot के लिए मेटा टैग और कीवर्ड्स तुरंत सक्रिय हो जाएंगे।
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={settingsSaving}
+                    className="flex items-center gap-2 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold px-7 py-3 rounded-md transition-colors cursor-pointer shadow-md disabled:opacity-50"
+                  >
+                    {settingsSaving ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span>सहेजा जा रहा है...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Check className="w-4 h-4" />
+                        <span>SEO एवं रैंकिंग सेटिंग्स सुरक्षित करें (Save All Changes)</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+
+              </form>
             </div>
           )}
 

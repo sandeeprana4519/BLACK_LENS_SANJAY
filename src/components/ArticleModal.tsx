@@ -334,6 +334,9 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({
                   <img
                     src={article.author_avatar}
                     alt={article.author_name || 'लेखक'}
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80';
+                    }}
                     className="w-10 h-10 rounded-full object-cover border-2 border-red-600 shadow-xs shrink-0 group-hover:scale-105 transition-transform"
                   />
                 ) : (
@@ -348,16 +351,26 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({
                   <UserCheck className="w-2.5 h-2.5" />
                 </span>
               </div>
-              <div>
+              <div className="min-w-0">
                 <span className="block font-bold text-stone-900 group-hover:text-red-700 transition-colors flex items-center gap-1.5">
-                  <span>{article.author_name || 'BLACK LENS विशेष डेस्क'}</span>
-                  <span className="text-[10px] font-medium px-1.5 py-0.2 bg-red-50 text-red-700 rounded border border-red-200 group-hover:bg-red-600 group-hover:text-white transition-colors">
+                  <span className="truncate">{article.author_name || 'BLACK LENS विशेष डेस्क'}</span>
+                  <span className="text-[10px] font-medium px-1.5 py-0.2 bg-red-50 text-red-700 rounded border border-red-200 group-hover:bg-red-600 group-hover:text-white transition-colors shrink-0">
                     प्रोफ़ाइल देखें ↗
                   </span>
                 </span>
-                <span className="text-[11px] text-stone-500 flex items-center gap-1 mt-0.5">
-                  <MapPin className="w-3 h-3 text-red-600" />
-                  {article.location || 'गाजियाबाद / नई दिल्ली'}
+                {/* पत्रकारिता परिचय एवं कार्यक्षेत्र (About Journalist) right under their name */}
+                <p className="text-[11px] text-stone-600 line-clamp-1 italic max-w-md mt-0.5 font-sans">
+                  {article.author_bio || 'ब्लैक लेंस डिजिटल मीडिया हाउस के साथ निष्पक्ष एवं सटीक पत्रकारिता।'}
+                </p>
+                <span className="text-[10px] text-stone-500 flex items-center gap-1 mt-0.5">
+                  <MapPin className="w-3 h-3 text-red-600 shrink-0" />
+                  <span>{article.location || 'गाजियाबाद / नई दिल्ली'}</span>
+                  {article.author_role && (
+                    <>
+                      <span>·</span>
+                      <span className="font-semibold text-stone-600">{article.author_role}</span>
+                    </>
+                  )}
                 </span>
               </div>
             </button>
@@ -383,8 +396,11 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({
                 className="aspect-[16/9] w-full rounded-md overflow-hidden bg-stone-100 shadow-xs cursor-pointer group"
               >
                 <img
-                  src={displayImages[0] || article.featured_image}
+                  src={displayImages[0] || article.featured_image || 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=1000&auto=format&fit=crop&q=80'}
                   alt={article.title}
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=1000&auto=format&fit=crop&q=80';
+                  }}
                   className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-300"
                 />
               </div>
@@ -416,6 +432,9 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({
                       <img
                         src={imgUrl}
                         alt={`${article.title} - तस्वीर ${idx + 1}`}
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=1000&auto=format&fit=crop&q=80';
+                        }}
                         className="w-full h-full object-cover select-none"
                         draggable={false}
                       />
@@ -571,6 +590,9 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({
                   <img
                     src={article.author_avatar}
                     alt={article.author_name || 'संवाददाता'}
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80';
+                    }}
                     className="w-12 h-12 rounded-full object-cover border-2 border-red-600 shadow-xs group-hover:scale-105 transition-transform"
                   />
                 ) : (
@@ -582,15 +604,23 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({
                   <UserCheck className="w-2.5 h-2.5" />
                 </span>
               </div>
-              <div className="min-w-0">
-                <span className="text-[10px] font-bold text-red-700 uppercase tracking-wider block">
-                  संपादक / संवाददाता
-                </span>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <span className="text-[10px] font-bold text-red-700 uppercase tracking-wider block">
+                    {article.author_role || 'संपादक / संवाददाता'}
+                  </span>
+                  <span className="text-[10px] text-stone-400">·</span>
+                  <span className="text-[11px] text-stone-500 flex items-center gap-0.5">
+                    <MapPin className="w-2.5 h-2.5 text-red-600" />
+                    <span>{article.location || 'गाजियाबाद / दिल्ली एनसीआर'}</span>
+                  </span>
+                </div>
                 <h4 className="text-sm font-bold text-stone-900 group-hover:text-red-700 transition-colors truncate">
                   {article.author_name || 'ब्लैक लेंस विशेष डेस्क'}
                 </h4>
-                <p className="text-[11px] text-stone-500 truncate">
-                  कार्यक्षेत्र: {article.location || 'गाजियाबाद / दिल्ली एनसीआर'}
+                {/* पत्रकारिता परिचय (About Journalist / Bio) */}
+                <p className="text-[11px] text-stone-600 italic line-clamp-2 mt-0.5 font-sans">
+                  "{article.author_bio || 'ब्लैक लेंस डिजिटल मीडिया हाउस के साथ निष्पक्ष एवं स्वतंत्र पत्रकारिता।'}"
                 </p>
               </div>
             </div>
